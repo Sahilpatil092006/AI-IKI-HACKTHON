@@ -1,0 +1,2794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IKIP — Industrial Knowledge Intelligence Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    :root {
+      --bg-0: #0a0e1a;
+      --bg-1: #111827;
+      --bg-2: #1e293b;
+      --panel: rgba(255, 255, 255, 0.05);
+      --panel-strong: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.1);
+      --text-1: #f1f5f9;
+      --text-2: #94a3b8;
+      --cyan: #06b6d4;
+      --amber: #f59e0b;
+      --emerald: #10b981;
+      --red: #ef4444;
+      --violet: #8b5cf6;
+      --blue: #3b82f6;
+      --shadow-cyan: 0 0 24px rgba(6, 182, 212, 0.28);
+      --shadow-amber: 0 0 24px rgba(245, 158, 11, 0.22);
+      --shadow-emerald: 0 0 24px rgba(16, 185, 129, 0.22);
+      --shadow-red: 0 0 24px rgba(239, 68, 68, 0.22);
+      --sidebar-width: 260px;
+      --radius: 16px;
+      --radius-lg: 22px;
+      --transition: 220ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--text-1);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.14), transparent 25%),
+        radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.14), transparent 22%),
+        linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-2) 100%);
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      pointer-events: none;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
+      opacity: 0.5;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sidebar {
+      position: relative;
+      background: linear-gradient(180deg, rgba(10, 14, 26, 0.98), rgba(15, 23, 42, 0.93));
+      border-right: 1px solid var(--border);
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+      box-shadow: 18px 0 60px rgba(0,0,0,0.18);
+    }
+
+    .brand {
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(12px);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: transform 220ms ease, border-color 220ms ease;
+    }
+
+    .brand:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      font-size: 1.4rem;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(6,182,212,0.22), rgba(8,145,178,0.08));
+      border: 1px solid rgba(6,182,212,0.4);
+      box-shadow: var(--shadow-cyan);
+      color: var(--cyan);
+    }
+
+    .brand-subtitle {
+      margin-top: 8px;
+      color: var(--cyan);
+      text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .nav button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: transform var(--transition), background-color var(--transition), color var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6,182,212,0.14), transparent 65%);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: var(--text-1);
+      background: rgba(255,255,255,0.05);
+      transform: translateX(4px);
+      box-shadow: inset 3px 0 0 var(--cyan), 0 12px 36px rgba(0,0,0,0.18);
+    }
+
+    .nav button:hover::before,
+    .nav button.active::before { opacity: 1; }
+
+    .nav button i { width: 18px; height: 18px; }
+
+    .sidebar-footer {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-2);
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    .pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--emerald);
+      box-shadow: 0 0 0 0 rgba(16,185,129,0.4);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16,185,129,0.45); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(16,185,129,0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+
+    .main {
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+
+    .hamburger {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text-1);
+      border-radius: 14px;
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .section {
+      display: none;
+      animation: sectionIn 260ms ease both;
+    }
+
+    .section.active { display: block; }
+
+    @keyframes sectionIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.6vw, 2.35rem);
+      line-height: 1.1;
+    }
+
+    .section-subtitle {
+      margin: 8px 0 0;
+      color: var(--text-2);
+      max-width: 860px;
+    }
+
+    .glass {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 18px 46px rgba(0,0,0,0.22);
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.kpis {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+
+    .kpi {
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      min-height: 148px;
+      transform: translateZ(0);
+    }
+
+    .kpi::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -30px auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 65%);
+      pointer-events: none;
+    }
+
+    .kpi-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .kpi-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .kpi-icon.cyan { color: var(--cyan); box-shadow: var(--shadow-cyan); }
+    .kpi-icon.emerald { color: var(--emerald); box-shadow: var(--shadow-emerald); }
+    .kpi-icon.amber { color: var(--amber); box-shadow: var(--shadow-amber); }
+    .kpi-icon.violet { color: var(--violet); box-shadow: 0 0 24px rgba(139,92,246,0.22); }
+
+    .kpi-label {
+      margin: 12px 0 6px;
+      color: var(--text-2);
+      font-size: 0.95rem;
+    }
+
+    .kpi-value {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      text-shadow: 0 0 16px rgba(6,182,212,0.16);
+    }
+
+    .kpi-value.cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(6,182,212,0.45); }
+    .kpi-value.emerald { color: var(--emerald); text-shadow: 0 0 20px rgba(16,185,129,0.35); }
+    .kpi-value.amber { color: var(--amber); text-shadow: 0 0 20px rgba(245,158,11,0.35); }
+    .kpi-value.violet { color: #c4b5fd; text-shadow: 0 0 20px rgba(139,92,246,0.4); }
+
+    .kpi-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--text-2);
+      font-size: 0.86rem;
+    }
+
+    .trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(16,185,129,0.12);
+      color: #86efac;
+      border: 1px solid rgba(16,185,129,0.26);
+    }
+
+    .trend.down {
+      background: rgba(239,68,68,0.11);
+      color: #fca5a5;
+      border-color: rgba(239,68,68,0.22);
+    }
+
+    .sparkline {
+      width: 84px;
+      height: 28px;
+      display: inline-block;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .chart-card,
+    .panel {
+      padding: 18px;
+      min-height: 320px;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .card-head h3,
+    .panel h3 {
+      margin: 0;
+      font-size: 1.02rem;
+    }
+
+    .card-meta {
+      color: var(--text-2);
+      font-size: 0.88rem;
+    }
+
+    canvas { max-width: 100%; }
+
+    .feed {
+      display: grid;
+      gap: 10px;
+    }
+
+    .alert-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .severity {
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      align-self: center;
+    }
+
+    .severity.critical { color: #fecaca; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.2); }
+    .severity.warning { color: #fde68a; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.2); }
+    .severity.info { color: #bae6fd; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2); }
+
+    .alert-message { color: var(--text-1); margin-bottom: 4px; }
+    .alert-time { color: var(--text-2); font-size: 0.82rem; }
+
+    .mini-graph {
+      height: 100%;
+      min-height: 280px;
+    }
+
+    .actions-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .action-btn,
+    .primary-btn,
+    .ghost-btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition);
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-1);
+      min-height: 56px;
+    }
+
+    .action-btn:hover,
+    .primary-btn:hover,
+    .ghost-btn:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.24);
+    }
+
+    .section-grid-2 {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 18px;
+    }
+
+    .upload-zone {
+      padding: 20px;
+      min-height: 220px;
+      border: 1.5px dashed rgba(6,182,212,0.35);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.03));
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .upload-zone strong { display: block; margin-top: 10px; font-size: 1.05rem; }
+    .upload-zone p { color: var(--text-2); margin: 8px 0 0; max-width: 260px; }
+
+    .file-icons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .file-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.82rem;
+      color: var(--text-1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pipeline {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .step-card {
+      position: relative;
+      padding: 16px;
+      min-height: 142px;
+      text-align: center;
+    }
+
+    .step-card::after {
+      content: "";
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      width: 18px;
+      border-top: 2px dotted rgba(125, 211, 252, 0.65);
+      transform: translateY(-50%);
+      animation: flow 2s linear infinite;
+    }
+
+    .step-card:last-child::after { display: none; }
+
+    @keyframes flow {
+      from { transform: translateY(-50%) translateX(-12px); opacity: 0.55; }
+      to { transform: translateY(-50%) translateX(12px); opacity: 1; }
+    }
+
+    .step-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      margin-top: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .step-status.done { background: rgba(16,185,129,0.12); color: #a7f3d0; }
+    .step-status.processing { background: rgba(6,182,212,0.12); color: #a5f3fc; }
+    .step-status.pending { background: rgba(148,163,184,0.12); color: #cbd5e1; }
+
+    .doc-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .doc-card {
+      padding: 16px;
+      min-height: 180px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doc-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(6,182,212,0.12);
+      color: #a5f3fc;
+      border: 1px solid rgba(6,182,212,0.22);
+      font-size: 0.74rem;
+      margin-bottom: 12px;
+    }
+
+    .doc-title { font-weight: 700; margin-bottom: 8px; line-height: 1.25; }
+    .doc-meta { color: var(--text-2); font-size: 0.86rem; display: grid; gap: 6px; }
+    .meter {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.15);
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .meter > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), #22d3ee);
+      box-shadow: var(--shadow-cyan);
+    }
+
+    .graph-toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      position: relative;
+      min-width: min(500px, 100%);
+      flex: 1;
+    }
+
+    .search-wrap input,
+    .text-input,
+    .select-input,
+    textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-1);
+      border-radius: 14px;
+      outline: none;
+      padding: 14px 15px;
+      font: inherit;
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+
+    .search-wrap input:focus,
+    .text-input:focus,
+    .select-input:focus,
+    textarea:focus {
+      border-color: rgba(6,182,212,0.4);
+      box-shadow: 0 0 0 3px rgba(6,182,212,0.12);
+    }
+
+    .suggestions {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 5;
+      background: rgba(15,23,42,0.98);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      box-shadow: 0 24px 54px rgba(0,0,0,0.35);
+      display: none;
+      overflow: hidden;
+    }
+
+    .suggestions button {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      background: transparent;
+      border: 0;
+      color: var(--text-1);
+      cursor: pointer;
+    }
+
+    .suggestions button:hover { background: rgba(255,255,255,0.05); }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-2);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+
+    .graph-shell {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 16px;
+      min-height: 680px;
+    }
+
+    .graph-area {
+      min-height: 640px;
+      padding: 14px;
+    }
+
+    .graph-canvas {
+      width: 100%;
+      height: 560px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .detail-panel {
+      padding: 16px;
+      min-height: 640px;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .detail-item {
+      display: grid;
+      gap: 4px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .detail-item span { color: var(--text-2); font-size: 0.84rem; }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat {
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+      color: var(--cyan);
+    }
+
+    .chat-shell {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 760px;
+      gap: 14px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(139,92,246,0.12);
+      color: #ddd6fe;
+      border: 1px solid rgba(139,92,246,0.22);
+      cursor: pointer;
+      transition: transform var(--transition), background-color var(--transition);
+    }
+
+    .chip:hover { transform: translateY(-2px); background: rgba(139,92,246,0.18); }
+
+    .chat-log {
+      padding: 18px;
+      overflow-y: auto;
+      display: grid;
+      gap: 14px;
+      min-height: 520px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      max-width: 88%;
+      animation: msgIn 220ms ease both;
+    }
+
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg.user { margin-left: auto; flex-direction: row-reverse; }
+    .bubble {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      line-height: 1.55;
+    }
+    .msg.user .bubble { background: rgba(15,23,42,0.88); }
+    .msg.ai .bubble { border-color: rgba(139,92,246,0.22); box-shadow: 0 0 0 1px rgba(139,92,246,0.06) inset; }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; flex: none;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .avatar.ai { color: #ddd6fe; box-shadow: 0 0 20px rgba(139,92,246,0.18); }
+    .avatar.user { color: var(--cyan); }
+    .typing { display: inline-flex; gap: 5px; padding: 12px 16px; }
+    .typing span {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--text-2); animation: bounce 1.1s infinite ease-in-out;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); opacity: 0.5; } 40% { transform: translateY(-5px); opacity: 1; } }
+
+    .sources {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 10px;
+    }
+
+    .source-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .chat-input {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-1);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      border-radius: 14px;
+      min-width: 120px;
+      padding: 0 18px;
+      height: 48px;
+      background: linear-gradient(135deg, rgba(6,182,212,0.96), rgba(37,99,235,0.92));
+      color: white;
+      font-weight: 700;
+      box-shadow: var(--shadow-cyan);
+    }
+
+    .maintenance-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .heatmap {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .equip-card {
+      min-height: 92px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .equip-card small { color: var(--text-2); }
+    .health {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .health.good { color: #86efac; }
+    .health.mid { color: #fde68a; }
+    .health.warn { color: #fbbf24; }
+    .health.bad { color: #fca5a5; }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 70px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .bar-track {
+      position: relative;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(16,185,129,0.95), rgba(6,182,212,0.92));
+      box-shadow: var(--shadow-emerald);
+    }
+
+    .fault-tree {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .fault-node {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+    }
+
+    .fault-node::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      top: -10px;
+      width: 2px;
+      height: 10px;
+      background: rgba(6,182,212,0.4);
+    }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .rec-card {
+      padding: 16px;
+      min-height: 150px;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .badge.high { color: #fecaca; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.22); }
+    .badge.medium { color: #fde68a; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.22); }
+    .badge.low { color: #bbf7d0; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.22); }
+
+    .compliance-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
+    }
+
+    .gauge-wrap {
+      display: grid;
+      place-items: center;
+      min-height: 320px;
+    }
+
+    .gauge {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background:
+        conic-gradient(var(--cyan) 0deg 342deg, rgba(255,255,255,0.08) 342deg 360deg);
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow-cyan);
+      position: relative;
+    }
+
+    .gauge::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(17,24,39,0.96), rgba(30,41,59,0.88));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .gauge strong {
+      position: relative;
+      z-index: 1;
+      font-size: 2.4rem;
+      color: var(--cyan);
+      text-shadow: var(--shadow-cyan);
+    }
+
+    .reg-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .reg-card {
+      padding: 16px;
+      min-height: 160px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { color: var(--text-2); font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    .status {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+    .status.ok { background: rgba(16,185,129,0.12); color: #bbf7d0; border: 1px solid rgba(16,185,129,0.2); }
+    .status.gap { background: rgba(239,68,68,0.12); color: #fecaca; border: 1px solid rgba(239,68,68,0.2); }
+    .status.risk { background: rgba(245,158,11,0.12); color: #fde68a; border: 1px solid rgba(245,158,11,0.2); }
+
+    .audit-box {
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--amber), var(--emerald), var(--cyan));
+      box-shadow: var(--shadow-cyan);
+      transition: width 380ms ease;
+    }
+
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pattern-card {
+      padding: 16px;
+      min-height: 170px;
+    }
+
+    .heat-table {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .heat-cell {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .heat-cell.low { background: rgba(16,185,129,0.12); }
+    .heat-cell.mid { background: rgba(245,158,11,0.16); }
+    .heat-cell.high { background: rgba(239,68,68,0.18); }
+
+    .capture-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    textarea { min-height: 160px; resize: vertical; }
+
+    .footer-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .ghost-btn {
+      border-radius: 14px;
+      padding: 13px 16px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .hidden { display: none !important; }
+
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.62);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+      z-index: 9;
+    }
+
+    .mobile-overlay.show { opacity: 1; pointer-events: auto; }
+
+    @media (max-width: 1280px) {
+      .grid.kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col, .maintenance-grid, .lessons-grid, .compliance-grid, .section-grid-2, .graph-shell { grid-template-columns: 1fr; }
+      .doc-grid, .reg-grid, .pattern-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pipeline .step-card::after { display: none; }
+    }
+
+    @media (max-width: 767px) {
+      body { overflow: auto; }
+      .app { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(86vw, 320px);
+        transform: translateX(-102%);
+        transition: transform var(--transition);
+        z-index: 11;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main { padding: 16px; }
+      .topbar { display: flex; }
+      .actions-row, .grid.kpis, .doc-grid, .reg-grid, .pattern-grid, .stats-bar, .heatmap { grid-template-columns: 1fr; }
+      .search-wrap { min-width: 100%; }
+      .form-row, .chat-input { grid-template-columns: 1fr; }
+      .timeline-row { grid-template-columns: 1fr; }
+      .chat-shell, .graph-shell { min-height: auto; }
+      .graph-canvas { height: 440px; }
+      .graph-area, .detail-panel { min-height: auto; }
+      .chart-card, .panel { min-height: auto; }
+      .msg { max-width: 100%; }
+      .chat-log { min-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-overlay" id="overlay"></div>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a href="index.html" class="brand glass">
+        <div class="brand-title"><span class="brand-badge"><i data-lucide="factory"></i></span>IKIP</div>
+        <div class="brand-subtitle">Industrial Brain</div>
+      </a>
+      <nav class="nav" id="nav">
+        <button class="active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
+        <button data-view="documents"><i data-lucide="folder-archive"></i><span>Document Hub</span></button>
+        <button data-view="graph"><i data-lucide="network"></i><span>Knowledge Graph</span></button>
+        <button data-view="copilot"><i data-lucide="bot"></i><span>AI Copilot</span></button>
+        <button data-view="maintenance"><i data-lucide="wrench"></i><span>Maintenance Intelligence</span></button>
+        <button data-view="compliance"><i data-lucide="shield-check"></i><span>Compliance Center</span></button>
+        <button data-view="lessons"><i data-lucide="book-open-text"></i><span>Lessons Learned</span></button>
+      </nav>
+      <div class="sidebar-footer glass">
+        <div style="font-weight:700; margin-bottom:8px;">Bharat Petrochemicals</div>
+        <div style="color:var(--text-2); font-size:0.92rem;">Jamnagar Refinery · Unified intelligence across documents, assets, incidents, and regulations.</div>
+        <div class="status-line"><span class="pulse"></span> Live refinery memory online</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <button class="hamburger" id="menuBtn" aria-label="Open navigation"><i data-lucide="menu"></i></button>
+        <div class="topbar-title">IKIP — Industrial Knowledge Intelligence Platform</div>
+        <div style="width:46px"></div>
+      </div>
+
+      <section class="section active" id="dashboard">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">Refinery intelligence center</div>
+            <h1 class="section-title">Operational knowledge, compliance, and maintenance in one industrial cockpit.</h1>
+            <p class="section-subtitle">Simulated live feed for Bharat Petrochemicals — Jamnagar Refinery, spanning documents, equipment, incidents, personnel, and regulatory memory from 2021-2026.</p>
+          </div>
+        </div>
+
+        <div class="grid kpis">
+          <article class="kpi glass">
+            <div class="kpi-head">
+              <div>
+                <div class="kpi-label">Documents Ingested</div>
+                <div class="kpi-value cyan" data-count="12847">0</div>
+              </div>
+              <div class="kpi-icon cyan"><i data-lucide="file-text"></i></div>
+            </div>
+            <div class="kpi-foot"><span class="trend"><i data-lucide="trending-up"></i> +12.3%</span><svg class="sparkline" viewBox="0 0 100 32"><path d="M0 24 L12 20 L24 22 L36 15 L48 19 L60 11 L72 13 L84 9 L100 6" fill="none" stroke="#06b6d4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          </article>
+          <article class="kpi glass">
+            <div class="kpi-head">
+              <div>
+                <div class="kpi-label">Knowledge Entities</div>
+                <div class="kpi-value emerald" data-count="48293">0</div>
+              </div>
+              <div class="kpi-icon emerald"><i data-lucide="brain"></i></div>
+            </div>
+            <div class="kpi-foot"><span class="trend"><i data-lucide="trending-up"></i> +8.1%</span><svg class="sparkline" viewBox="0 0 100 32"><path d="M0 26 L10 22 L20 23 L32 18 L44 19 L56 14 L68 16 L82 10 L100 8" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          </article>
+          <article class="kpi glass">
+            <div class="kpi-head">
+              <div>
+                <div class="kpi-label">Active Equipment</div>
+                <div class="kpi-value amber" data-count="2156">0</div>
+              </div>
+              <div class="kpi-icon amber"><i data-lucide="activity"></i></div>
+            </div>
+            <div class="kpi-foot"><span class="trend down"><i data-lucide="trending-down"></i> -0.7%</span><svg class="sparkline" viewBox="0 0 100 32"><path d="M0 10 L10 14 L20 13 L32 17 L46 15 L58 18 L72 20 L86 22 L100 19" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          </article>
+          <article class="kpi glass">
+            <div class="kpi-head">
+              <div>
+                <div class="kpi-label">Compliance Score</div>
+                <div class="kpi-value violet" data-count="947">0</div>
+              </div>
+              <div class="kpi-icon violet"><i data-lucide="shield-check"></i></div>
+            </div>
+            <div class="kpi-foot"><span class="trend"><i data-lucide="shield"></i> 94.7% ready</span><svg class="sparkline" viewBox="0 0 100 32"><path d="M0 20 L12 18 L24 17 L36 14 L48 13 L60 10 L72 11 L84 8 L100 7" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          </article>
+        </div>
+
+        <div class="two-col">
+          <div class="glass chart-card">
+            <div class="card-head"><h3>Document Ingestion Trend</h3><div class="card-meta">12 months rolling</div></div>
+            <canvas id="ingestionChart" height="250"></canvas>
+          </div>
+          <div class="glass chart-card">
+            <div class="card-head"><h3>System Health</h3><div class="card-meta">Freshness distribution</div></div>
+            <canvas id="healthChart" height="250"></canvas>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="glass panel">
+            <div class="card-head"><h3>Recent Alerts</h3><div class="card-meta">Live refinery event stream</div></div>
+            <div class="feed" id="alertFeed"></div>
+          </div>
+          <div class="glass panel">
+            <div class="card-head"><h3>Knowledge Graph Preview</h3><div class="card-meta">15-20 entity snapshot</div></div>
+            <div id="previewGraph" class="mini-graph"></div>
+          </div>
+        </div>
+
+        <div class="glass panel">
+          <div class="card-head"><h3>Quick Actions</h3><div class="card-meta">Operator shortcuts</div></div>
+          <div class="actions-row">
+            <button class="action-btn"><i data-lucide="upload"></i>Upload Documents</button>
+            <button class="action-btn"><i data-lucide="bot"></i>Ask AI Copilot</button>
+            <button class="action-btn"><i data-lucide="shield-check"></i>Check Compliance</button>
+            <button class="action-btn"><i data-lucide="calendar-range"></i>View Maintenance Schedule</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="documents">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">Document intelligence</div>
+            <h2 class="section-title">Document Hub</h2>
+            <p class="section-subtitle">Ingest refinery drawings, logs, emails, and audit records into structured knowledge with a simulated 5-stage pipeline.</p>
+          </div>
+        </div>
+        <div class="section-grid-2">
+          <div class="glass upload-zone" id="uploadZone" style="cursor: pointer; position: relative;">
+            <input type="file" id="fileInput" style="display: none;" multiple />
+            <div>
+              <i data-lucide="cloud-upload" style="width:44px;height:44px;color:var(--cyan)"></i>
+              <strong>Drop files here or browse</strong>
+              <p>PDF, DWG, XLS, EMAIL, and inspection records are automatically parsed into knowledge entities.</p>
+              <div class="file-icons">
+                <span class="file-pill"><i data-lucide="file-text"></i>PDF</span>
+                <span class="file-pill"><i data-lucide="ruler"></i>DWG</span>
+                <span class="file-pill"><i data-lucide="sheet"></i>XLS</span>
+                <span class="file-pill"><i data-lucide="mail"></i>EMAIL</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="pipeline" id="pipeline"></div>
+            <div class="doc-grid" id="documentGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="graph">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">Entity relationships</div>
+            <h2 class="section-title">Knowledge Graph</h2>
+            <p class="section-subtitle">Explore 50+ refinery entities connected by maintenance, compliance, incident, and documentation relationships.</p>
+          </div>
+        </div>
+        <div class="graph-toolbar glass panel">
+          <div class="search-wrap">
+            <input id="graphSearch" type="search" placeholder="Search equipment, personnel, documents, or incidents" autocomplete="off" />
+            <div id="suggestions" class="suggestions"></div>
+          </div>
+          <div class="filters" id="graphFilters"></div>
+        </div>
+        <div class="graph-shell">
+          <div class="glass graph-area">
+            <div id="fullGraph" class="graph-canvas"></div>
+            <div class="stats-bar">
+              <div class="glass stat"><strong id="statNodes">0</strong><span>Total Nodes</span></div>
+              <div class="glass stat"><strong id="statEdges">0</strong><span>Total Edges</span></div>
+              <div class="glass stat"><strong id="statClusters">0</strong><span>Clusters Detected</span></div>
+              <div class="glass stat"><strong id="statDensity">0%</strong><span>Graph Density</span></div>
+            </div>
+          </div>
+          <aside class="glass detail-panel">
+            <div class="card-head"><h3>Node Details</h3><div class="card-meta">Click a node</div></div>
+            <div id="nodeDetails" style="color:var(--text-2)">Select an entity in the graph to inspect linked documents, related personnel, and contextual notes.</div>
+            <div class="detail-list" id="nodeDetailsList"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="copilot">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">AI decision support</div>
+            <h2 class="section-title">AI Copilot</h2>
+            <p class="section-subtitle">Ask operational questions and receive grounded responses with citations from refinery documents and maintenance records.</p>
+          </div>
+        </div>
+        <div class="glass chat-shell">
+          <div class="chips" id="questionChips"></div>
+          <div class="glass chat-log" id="chatLog"></div>
+          <div class="chat-input">
+            <input class="text-input" id="chatInput" placeholder="Ask about equipment history, incidents, compliance, or maintenance planning" />
+            <button class="icon-btn" id="attachBtn" aria-label="Attach file"><i data-lucide="paperclip"></i></button>
+            <button class="primary-btn" id="sendBtn">Send</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="maintenance">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">Reliability intelligence</div>
+            <h2 class="section-title">Maintenance Intelligence</h2>
+            <p class="section-subtitle">Prioritize preventive interventions across high-value refinery assets with predicted windows and fault-tree context.</p>
+          </div>
+        </div>
+        <div class="maintenance-grid">
+          <div class="glass panel">
+            <div class="card-head"><h3>Equipment Health Heatmap</h3><div class="card-meta">4x6 operational sample</div></div>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+          <div class="glass panel">
+            <div class="card-head"><h3>Predicted Failures Timeline</h3><div class="card-meta">Next 90 days</div></div>
+            <div class="timeline" id="timeline"></div>
+          </div>
+        </div>
+        <div class="maintenance-grid" style="margin-top:18px;">
+          <div class="glass panel">
+            <div class="card-head"><h3>Root Cause Analysis</h3><div class="card-meta">Selected asset: C-201</div></div>
+            <div id="faultTree" class="fault-tree"></div>
+          </div>
+          <div class="glass panel">
+            <div class="card-head"><h3>AI Recommendations</h3><div class="card-meta">Priority-ranked actions</div></div>
+            <div class="rec-grid" id="recommendations"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="compliance">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">Regulatory posture</div>
+            <h2 class="section-title">Compliance Center</h2>
+            <p class="section-subtitle">Track inspection readiness against Factory Act 1948, OISD-116, PESO, and environmental norms with a live gap view.</p>
+          </div>
+        </div>
+        <div class="compliance-grid">
+          <div class="glass gauge-wrap">
+            <div class="gauge"><strong>94.7%</strong></div>
+            <div style="margin-top:14px; text-align:center; color:var(--text-2)">Overall compliance score across operational, safety, and environmental controls.</div>
+          </div>
+          <div>
+            <div class="reg-grid" id="regGrid"></div>
+            <div class="glass panel">
+              <div class="card-head"><h3>Gap Analysis</h3><div class="card-meta">10 open items</div></div>
+              <table>
+                <thead><tr><th>Requirement</th><th>Regulation</th><th>Status</th><th>Evidence Documents</th><th>Due Date</th><th>Action Required</th></tr></thead>
+                <tbody id="gapTable"></tbody>
+              </table>
+            </div>
+            <div class="glass audit-box">
+              <div class="card-head"><h3>Audit Package</h3><div class="card-meta">Generate export bundle</div></div>
+              <button class="primary-btn" id="generateAudit">Generate Compliance Package</button>
+              <div class="progress-track"><div class="progress-fill" id="auditProgress"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="lessons">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">Organizational memory</div>
+            <h2 class="section-title">Lessons Learned</h2>
+            <p class="section-subtitle">Capture patterns from incidents, operator wisdom, and historical faults to accelerate future decisions.</p>
+          </div>
+        </div>
+        <div class="lessons-grid">
+          <div>
+            <div class="pattern-grid" id="patternCards"></div>
+            <div class="glass panel" style="margin-top:18px;">
+              <div class="card-head"><h3>Incident Heatmap</h3><div class="card-meta">Month vs equipment area</div></div>
+              <div class="heat-table" id="incidentHeatmap"></div>
+            </div>
+          </div>
+          <div class="glass panel">
+            <div class="card-head"><h3>Similar Incident Finder</h3><div class="card-meta">AI matching</div></div>
+            <select class="select-input" id="incidentSelect"></select>
+            <div id="similarIncidents" class="detail-list"></div>
+            <div class="card-head" style="margin-top:18px;"><h3>Knowledge Capture</h3><div class="card-meta">Retiring engineer note</div></div>
+            <form class="capture-form" id="captureForm">
+              <div class="form-row">
+                <input class="text-input" id="engName" placeholder="Retiring engineer name" required />
+                <input class="text-input" id="engArea" placeholder="Equipment area (e.g., P-104)" required />
+              </div>
+              <div class="form-row">
+                <input class="text-input" id="engCategory" placeholder="Knowledge category" required />
+                <input class="text-input" id="engDate" placeholder="Shift / date" required />
+              </div>
+              <textarea id="engText" placeholder="Free-text wisdom entry: operating tips, recurring failure cues, supplier quirks, and safety lessons..." required></textarea>
+              <div class="footer-actions">
+                <button class="primary-btn" type="submit">Save Knowledge</button>
+                <button class="ghost-btn" type="button">Export to Repository</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      currentView: 'dashboard',
+      graph: null,
+      previewGraph: null,
+      charts: {},
+      typingTimer: null,
+      auditTimer: null,
+      activeFilters: new Set(['Equipment', 'Documents', 'Personnel', 'Regulations', 'Incidents'])
+    };
+
+    const views = ['dashboard', 'documents', 'graph', 'copilot', 'maintenance', 'compliance', 'lessons'];
+    const viewLabels = {
+      dashboard: 'Dashboard',
+      documents: 'Document Hub',
+      graph: 'Knowledge Graph',
+      copilot: 'AI Copilot',
+      maintenance: 'Maintenance Intelligence',
+      compliance: 'Compliance Center',
+      lessons: 'Lessons Learned'
+    };
+
+    const alertData = [
+      { severity: 'critical', time: '06:18', message: 'Pump P-104 vibration exceeded alarm threshold during CDU transfer to tank farm.' },
+      { severity: 'warning', time: '07:42', message: 'OISD-116 inspection evidence for firewater valve 3F-22 missing the latest calibration certificate.' },
+      { severity: 'info', time: '08:05', message: 'Compressor C-201 oil analysis indicates elevated ferrous particles, trending over three weeks.' },
+      { severity: 'warning', time: '09:13', message: 'Regulatory filing for CPCB emission report awaiting sign-off from environmental cell.' },
+      { severity: 'critical', time: '10:01', message: 'Unit 3 incident note references gasket leak on E-304 during night shift 2B.' },
+      { severity: 'info', time: '10:34', message: 'Daily toolbox talk on confined space entry completed for maintenance crew led by Sandeep Kulkarni.' }
+    ];
+
+    const documentCards = [
+      ['P&ID Drawing', 'P-101 Suction and Discharge Loop', 142, 98, '2026-06-28'],
+      ['SOP', 'Start-up Procedure for C-201', 88, 96, '2026-05-19'],
+      ['Work Order', 'Bearing Replacement P-104', 36, 92, '2026-07-09'],
+      ['Inspection Report', 'Heat Exchanger E-303 NDT Review', 64, 95, '2026-06-03'],
+      ['Incident Report', 'Unit 3 Leak and Isolation Event', 53, 90, '2025-11-17'],
+      ['OEM Manual', 'Sulzer Pump PM Guide Rev 8', 115, 97, '2024-09-11'],
+      ['Regulatory Filing', 'OISD-116 Fire Audit Bundle', 79, 94, '2026-02-22'],
+      ['Email Archive', 'Shift Handover - Refinery South Block', 24, 88, '2026-07-11']
+    ];
+
+    const pipelineSteps = [
+      ['Upload', 'upload', 'done'],
+      ['OCR / Parse', 'scan-text', 'done'],
+      ['Entity Extraction', 'scan-search', 'processing'],
+      ['Graph Linking', 'network', 'pending'],
+      ['Indexed', 'database', 'pending']
+    ];
+
+    const chips = [
+      'What is the maintenance history of Compressor C-201?',
+      'Show all safety incidents in Unit 3 last year',
+      'Which equipment is due for OISD compliance renewal?',
+      'What caused the pump P-101 failure pattern?'
+    ];
+
+    const maintenanceData = [
+      ['P-101', 91], ['P-102', 86], ['P-103', 77], ['P-104', 53], ['P-105', 48], ['P-106', 95],
+      ['P-107', 68], ['P-108', 82], ['C-201', 74], ['C-202', 88], ['C-203', 61], ['C-204', 84],
+      ['E-301', 93], ['E-302', 81], ['E-303', 72], ['E-304', 56], ['E-305', 90], ['E-306', 66],
+      ['T-401', 79], ['T-402', 87], ['T-403', 58], ['V-501', 92], ['V-502', 76], ['V-503', 62]
+    ];
+
+    const timelineData = [
+      ['P-104', '12 days', 22], ['C-201', '19 days', 34], ['E-304', '27 days', 46], ['T-403', '41 days', 58], ['V-502', '63 days', 71]
+    ];
+
+    const recommendations = [
+      ['high', 'P-104', 'Schedule seal and bearing overhaul before monsoon humidity spike', '96%', '₹4.2 lakh'],
+      ['medium', 'C-201', 'Increase oil sampling frequency and perform laser alignment check', '91%', '₹1.3 lakh'],
+      ['low', 'E-304', 'Plan bundle cleaning during turnaround window in August', '88%', '₹2.8 lakh'],
+      ['high', 'V-502', 'Validate PSV test records and corrosion allowance trend', '94%', '₹3.7 lakh']
+    ];
+
+    const regulations = [
+      ['Factory Act 1948', 96, '2026-06-17', '2026-08-20', 2],
+      ['OISD-116', 93, '2026-05-29', '2026-09-01', 4],
+      ['PESO Rules', 95, '2026-04-14', '2026-07-31', 1],
+      ['CPCB / Environmental Norms', 94, '2026-03-18', '2026-08-12', 3]
+    ];
+
+    const gaps = [
+      ['Permit to Work closure evidence', 'OISD-116', 'At Risk', 'PTW-441, HSE-21', '2026-07-20', 'Attach gas test logs and supervisor sign-off'],
+      ['Firewater pump weekly run record', 'Factory Act 1948', 'Gap', 'FW-Run-022', '2026-07-16', 'Upload test run and vibration sheet'],
+      ['Hazardous waste manifest linkage', 'CPCB / Environmental Norms', 'Compliant', 'Env-118, Waste-44', '2026-10-01', 'No action required'],
+      ['Pressure vessel thickness survey', 'PESO Rules', 'At Risk', 'PV-504, UT-33', '2026-08-04', 'Schedule UT recheck for vessel shell course'],
+      ['Emergency drill attendance', 'Factory Act 1948', 'Compliant', 'Drill-12, Sign-in-7', '2026-09-12', 'No action required'],
+      ['Solvent storage labeling', 'OISD-116', 'Gap', 'Store-09', '2026-07-23', 'Relabel drum bay and capture photo evidence'],
+      ['Boiler logbook digital export', 'Factory Act 1948', 'Compliant', 'Boiler-Log-06', '2026-11-05', 'No action required'],
+      ['Stack emission calibration', 'CPCB / Environmental Norms', 'At Risk', 'Stack-88', '2026-08-14', 'Complete calibration certificate update'],
+      ['Near-miss review closure', 'OISD-116', 'Gap', 'NM-2026-41', '2026-07-19', 'Close RCA and assign corrective owners'],
+      ['Explosive atmosphere zoning map', 'PESO Rules', 'Compliant', 'ZoneMap-2025', '2026-12-01', 'No action required']
+    ];
+
+    const patternCards = [
+      ['Recurring bearing failures in centrifugal pumps correlate with Q3 monsoon humidity levels and delayed grease change-outs.', 'High confidence · 14 incidents matched'],
+      ['Unit 3 gasket leaks cluster after weekend shutdowns when line warm-up ramps too quickly.', 'Medium confidence · 9 incidents matched'],
+      ['Calibration slippage in OISD evidence submission frequently follows staffing changes during annual leave blocks.', 'High confidence · 11 audit cycles matched']
+    ];
+
+    const similarIncidentOptions = [
+      'Incident: Pump seal leakage after line-up reversal',
+      'Incident: Compressor trip due to oil pressure dip',
+      'Incident: E-304 flange leak during night shift',
+      'Incident: PSV lifting during warm restart'
+    ];
+
+    const similarIncidentResponses = {
+      'Incident: Pump seal leakage after line-up reversal': [
+        ['INC-24-118', 'Pump P-104 seal leakage after line-up reversal', 'Root cause: reverse differential pressure, early start-up, and insufficient priming.'],
+        ['INC-23-094', 'Pump P-101 suction strainer blockage event', 'Root cause: debris ingress and missed flushing step after maintenance.'],
+        ['INC-22-077', 'Pump P-107 gland overheating complaint', 'Root cause: misalignment compounded by degraded bearing lubrication.']
+      ],
+      'Incident: Compressor trip due to oil pressure dip': [
+        ['INC-25-044', 'Compressor C-201 low lube oil pressure trip', 'Root cause: clogged filter element and delayed operator escalation.'],
+        ['INC-24-166', 'C-203 anti-surge valve instability', 'Root cause: control loop tuning drift and fouled transmitter impulse line.'],
+        ['INC-23-031', 'C-202 vibration spike during start-up', 'Root cause: baseplate looseness and coupling wear.']
+      ],
+      'Incident: E-304 flange leak during night shift': [
+        ['INC-26-011', 'E-304 flange seepage from exchanger channel head', 'Root cause: torque inconsistency and gasket reuse.'],
+        ['INC-25-129', 'E-303 inspection cover leak', 'Root cause: corrosion under insulation and delayed bolt retensioning.'],
+        ['INC-22-082', 'E-306 thermal cycling crack indication', 'Root cause: repeated temperature swings during partial load operation.']
+      ],
+      'Incident: PSV lifting during warm restart': [
+        ['INC-24-205', 'V-502 PSV lift during restart', 'Root cause: trapped thermal expansion and inadequate venting.'],
+        ['INC-23-188', 'T-403 vacuum breaker issue', 'Root cause: sticky valve stem and poor housekeeping.'],
+        ['INC-21-047', 'V-501 overpressure alarm during purge', 'Root cause: control setpoint mismatch and operator sequence deviation.']
+      ]
+    };
+
+    const chatAnswers = {
+      'What is the maintenance history of Compressor C-201?': {
+        text: 'Compressor C-201 has shown a steady deterioration pattern over the last 14 months, with the highest maintenance density in Q2 2026. The dominant issues are lube oil contamination, intermittent low-pressure trips, and one coupling alignment correction after a turnaround restart. I would treat the oil system as the leading risk driver rather than the compressor train itself.',
+        table: [
+          ['2026-06-21', 'Oil filter differential pressure high', 'Preventive action', '99%'],
+          ['2026-04-08', 'Laser alignment after motor coupling drift', 'Corrective action', '97%'],
+          ['2025-11-15', 'Low lube oil pressure trip', 'Troubleshoot and clean filter housing', '95%']
+        ],
+        sources: [
+          ['C-201 O&M Logbook 2026', 'Work Order', '97%'],
+          ['Compressor C-201 Start-up SOP', 'SOP', '94%'],
+          ['Lube Oil Analysis Summary Q2 2026', 'Inspection Report', '96%']
+        ]
+      },
+      'Show all safety incidents in Unit 3 last year': {
+        text: 'Unit 3 recorded five reportable safety events in the last calendar year, dominated by minor hydrocarbon seepage, one hot-work permit deviation, and a temporary barricade breach near the exchange corridor. None escalated to a major lost-time event, but two incidents share the same contributing factor: incomplete isolation verification.',
+        table: [
+          ['2025-11-17', 'Flange leak at E-304', 'Hydrocarbon seepage'],
+          ['2025-08-09', 'Permit mismatch during welding', 'Hot-work control gap'],
+          ['2025-03-22', 'Barricade breach near exchanger lane', 'Access control issue']
+        ],
+        sources: [
+          ['Unit 3 Incident Register 2025', 'Incident Report', '96%'],
+          ['Shift Handover Book - South Block', 'Email Archive', '88%'],
+          ['HSE Corrective Action Tracker', 'SOP', '93%']
+        ]
+      },
+      'Which equipment is due for OISD compliance renewal?': {
+        text: 'The most urgent OISD renewals are concentrated around firewater systems, pressure vessels, and the solvent storage bay. Based on the current schedule, P-104 ancillary fire loop checks and V-502 PSV documentation should be handled first, followed by the zoning map update for the chemical storage area.',
+        table: [
+          ['P-104 firewater loop', 'Next due in 12 days', 'High'],
+          ['V-502 PSV package', 'Next due in 18 days', 'High'],
+          ['Solvent storage zone map', 'Next due in 25 days', 'Medium']
+        ],
+        sources: [
+          ['OISD-116 Audit Bundle', 'Regulatory Filing', '97%'],
+          ['Firewater Pump Test Register', 'Inspection Report', '94%'],
+          ['Pressure Vessel Compliance Index', 'Work Order', '95%']
+        ]
+      },
+      'What caused the pump P-101 failure pattern?': {
+        text: 'P-101 failure mode is a compound pattern rather than a single root cause. The strongest signals point to suction-side fouling, repeated operation near the low-NPSH region, and inconsistent warm-up discipline after short outages. The data does not support an intrinsic OEM defect; it supports an operating window and maintenance discipline issue.',
+        table: [
+          ['Suction strainer blockage', 'Contributing factor', 'High'],
+          ['Low-NPSH operation', 'Primary trigger', 'High'],
+          ['Warm-up shortcut after outages', 'Process factor', 'Medium']
+        ],
+        sources: [
+          ['Pump P-101 Failure Review', 'Incident Report', '98%'],
+          ['P-101 P&ID and Start-up Checklist', 'P&ID Drawing', '95%'],
+          ['Operator Logbook, May-June 2026', 'Email Archive', '91%']
+        ]
+      }
+    };
+
+    const graphNodes = [];
+    const graphEdges = [];
+    const graphData = buildGraph();
+
+    function buildGraph() {
+      const nodes = [];
+      const edges = [];
+      const nodeIndex = new Map();
+      const addNode = (id, label, type, title, group) => {
+        nodes.push({ id, label, title, group, type, shape: nodeShape(type), color: nodeColor(type), font: { color: '#e2e8f0', size: 13, face: 'Inter' }, borderWidth: 1.4, margin: 10 });
+        nodeIndex.set(id, { id, label, type, title, group });
+      };
+      const link = (from, to, label) => edges.push({ from, to, label, arrows: 'to', color: { color: 'rgba(148,163,184,0.55)' }, font: { color: '#94a3b8', size: 10, align: 'middle' }, smooth: { type: 'dynamic' } });
+
+      const equipments = [
+        ...Array.from({ length: 8 }, (_, i) => `P-${101 + i}`),
+        ...Array.from({ length: 4 }, (_, i) => `C-${201 + i}`),
+        ...Array.from({ length: 6 }, (_, i) => `E-${301 + i}`),
+        ...Array.from({ length: 3 }, (_, i) => `T-${401 + i}`),
+        ...Array.from({ length: 4 }, (_, i) => `V-${501 + i}`)
+      ];
+      const personnel = [
+        ['PR-01', 'Arun Deshmukh', 'Senior Reliability Engineer'],
+        ['PR-02', 'Neha Iyer', 'Shift Superintendent'],
+        ['PR-03', 'Rakesh Patil', 'Mechanical Inspector'],
+        ['PR-04', 'Farah Khan', 'HSE Lead'],
+        ['PR-05', 'Sandeep Kulkarni', 'Maintenance Planner'],
+        ['PR-06', 'Priya Nair', 'Process Engineer']
+      ];
+      const regulations = [
+        ['RG-01', 'OISD-116', 'Fire protection standard'],
+        ['RG-02', 'PESO Rules', 'Pressure and storage safety'],
+        ['RG-03', 'Factory Act 1948', 'Worker health and safety'],
+        ['RG-04', 'CPCB Norms', 'Environmental compliance']
+      ];
+      const docs = [
+        ['D-01', 'P-101 P&ID', 'P&ID'], ['D-02', 'C-201 O&M Log', 'Log'], ['D-03', 'E-304 Inspection Report', 'Report'],
+        ['D-04', 'OISD Audit Bundle', 'Audit'], ['D-05', 'Firewater Test Record', 'Record'], ['D-06', 'Unit 3 Incident Register', 'Incident']
+      ];
+      const incidents = [
+        ['I-01', 'Pump Seal Leak', 'Incident'], ['I-02', 'Compressor Trip', 'Incident'], ['I-03', 'Flange Leak', 'Incident'], ['I-04', 'PSV Lift', 'Incident']
+      ];
+
+      addNode('plant', 'Bharat Petrochemicals', 'Equipment', 'Refinery master node', 'core');
+      equipments.forEach((eq, i) => addNode(eq, eq, 'Equipment', `${eq} operating asset`, 'asset'));
+      personnel.forEach(([id, name, role]) => addNode(id, name, 'Personnel', role, 'people'));
+      regulations.forEach(([id, name, title]) => addNode(id, name, 'Regulations', title, 'rule'));
+      docs.forEach(([id, name, title]) => addNode(id, name, 'Documents', title, 'doc'));
+      incidents.forEach(([id, name, title]) => addNode(id, name, 'Incidents', title, 'incident'));
+
+      equipments.forEach((eq, i) => {
+        link('plant', eq, i % 2 === 0 ? 'maintained_by' : 'references');
+        link(eq, docs[i % docs.length][0], 'references');
+        link(eq, personnel[i % personnel.length][0], 'maintained_by');
+        if (i % 3 === 0) link(eq, incidents[i % incidents.length][0], 'caused_by');
+        if (i % 2 === 1) link(eq, regulations[i % regulations.length][0], 'governs');
+        link(docs[i % docs.length][0], personnel[(i + 1) % personnel.length][0], 'authored_by');
+      });
+      incidents.forEach((inc, i) => {
+        link(inc[0], equipments[(i * 3) % equipments.length], 'caused_by');
+        link(inc[0], docs[(i + 2) % docs.length][0], 'references');
+        link(inc[0], personnel[(i + 2) % personnel.length][0], 'inspected_on');
+      });
+      personnel.forEach((p, i) => {
+        link(p[0], docs[(i + 1) % docs.length][0], 'authored_by');
+        link(p[0], regulations[i % regulations.length][0], 'inspected_on');
+      });
+      regulations.forEach((r, i) => {
+        link(r[0], docs[(i + 3) % docs.length][0], 'governs');
+        link(r[0], incidents[i % incidents.length][0], 'references');
+      });
+      docs.forEach((d, i) => {
+        link(d[0], equipments[(i + 2) % equipments.length], 'references');
+        link(d[0], incidents[i % incidents.length][0], 'references');
+      });
+
+      const density = (edges.length / ((nodes.length * (nodes.length - 1)) / 2)) * 100;
+      return { nodes, edges, index: nodeIndex, density };
+    }
+
+    function nodeColor(type) {
+      const palette = {
+        Equipment: { background: '#06b6d4', border: '#22d3ee' },
+        Documents: { background: '#3b82f6', border: '#93c5fd' },
+        Personnel: { background: '#10b981', border: '#6ee7b7' },
+        Regulations: { background: '#f59e0b', border: '#fcd34d' },
+        Incidents: { background: '#ef4444', border: '#fca5a5' }
+      };
+      return palette[type] || palette.Documents;
+    }
+
+    function nodeShape(type) {
+      const shapes = {
+        Equipment: 'dot',
+        Documents: 'square',
+        Personnel: 'triangle',
+        Regulations: 'diamond',
+        Incidents: 'star'
+      };
+      return shapes[type] || 'dot';
+    }
+
+    function money(value) { return `₹${value}`; }
+
+    function renderAlerts() {
+      const feed = document.getElementById('alertFeed');
+      feed.innerHTML = alertData.map(item => `
+        <div class="alert-item">
+          <div class="severity ${item.severity}">${item.severity}</div>
+          <div>
+            <div class="alert-message">${item.message}</div>
+            <div class="alert-time">${item.time} · Jamnagar Refinery</div>
+          </div>
+          <i data-lucide="bell-ring"></i>
+        </div>
+      `).join('');
+    }
+
+    function renderPipeline() {
+      const host = document.getElementById('pipeline');
+      host.innerHTML = pipelineSteps.map(([name, icon, status]) => `
+        <div class="step-card glass">
+          <i data-lucide="${icon}" style="width:28px;height:28px;color:${status === 'done' ? 'var(--emerald)' : status === 'processing' ? 'var(--cyan)' : 'var(--text-2)'}"></i>
+          <div style="margin-top:10px;font-weight:700;">${name}</div>
+          <div class="step-status ${status}">${status === 'done' ? 'Completed' : status === 'processing' ? 'Processing' : 'Queued'}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderDocuments() {
+      const host = document.getElementById('documentGrid');
+      host.innerHTML = documentCards.map(([type, title, entities, confidence, date]) => `
+        <article class="glass doc-card">
+          <div class="doc-type"><i data-lucide="folder-open"></i>${type}</div>
+          <div class="doc-title">${title}</div>
+          <div class="doc-meta">
+            <div>Extracted entities: ${entities}</div>
+            <div>Confidence: ${confidence}%</div>
+            <div class="meter"><span style="width:${confidence}%"></span></div>
+            <div>Indexed on ${date}</div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function renderQuestionChips() {
+      const host = document.getElementById('questionChips');
+      host.innerHTML = chips.map(q => `<button class="chip" type="button">${q}</button>`).join('');
+      host.querySelectorAll('.chip').forEach(btn => btn.addEventListener('click', () => askCopilot(btn.textContent)));
+    }
+
+    function renderChatBase() {
+      const chat = document.getElementById('chatLog');
+      chat.innerHTML = `
+        <div class="msg ai">
+          <div class="avatar ai"><i data-lucide="bot"></i></div>
+          <div class="bubble">I am connected to refinery documents, maintenance logs, and regulatory records. Ask for an equipment history, an incident summary, or a compliance explanation.</div>
+        </div>
+      `;
+    }
+
+    function renderHeatmap() {
+      const host = document.getElementById('heatmap');
+      if (!state.selectedAsset) state.selectedAsset = 'C-201';
+      
+      host.innerHTML = maintenanceData.map(([name, score]) => {
+        const cls = score >= 85 ? 'good' : score >= 72 ? 'mid' : score >= 58 ? 'warn' : 'bad';
+        const isSelected = name === state.selectedAsset;
+        const baseColor = score >= 85 ? '16,185,129' : score >= 72 ? '245,158,11' : score >= 58 ? '245,158,11' : '239,68,68';
+        const alpha = isSelected ? 0.35 : 0.15;
+        const borderStyle = isSelected ? 'border: 2px solid var(--cyan); box-shadow: var(--shadow-cyan);' : '';
+        
+        return `
+          <div class="equip-card" style="background:rgba(${baseColor}, ${alpha}); ${borderStyle}; cursor:pointer;" onclick="selectAsset('${name}')">
+            <div><strong>${name}</strong><br><small>Jamnagar refinery asset</small></div>
+            <div class="health ${cls}">${score}% health</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTimeline() {
+      const host = document.getElementById('timeline');
+      host.innerHTML = timelineData.map(([equip, due, start]) => `
+        <div class="timeline-row" style="cursor:pointer;" onclick="selectAsset('${equip}')">
+          <div><strong>${equip}</strong></div>
+          <div class="bar-track"><div class="bar-fill" style="left:${start}%; width:${Math.max(16, 100 - start)}%"></div></div>
+          <div style="color:var(--text-2)">${due}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderFaultTree() {
+      const host = document.getElementById('faultTree');
+      host.innerHTML = [
+        ['Bearing Failure', 'Primary observed fault in C-201 train'],
+        ['Vibration Rise', 'Detected during peak load and hot restart windows'],
+        ['Misalignment', 'Probable coupling drift after maintenance'],
+        ['Installation Error', 'Likely contributor during last overhaul']
+      ].map(([title, desc]) => `<div class="fault-node"><strong>${title}</strong><div style="color:var(--text-2); margin-top:4px;">${desc}</div></div>`).join('');
+    }
+
+    function renderRecommendations() {
+      const host = document.getElementById('recommendations');
+      host.innerHTML = recommendations.map(([badge, equipment, action, confidence, cost]) => `
+        <article class="glass rec-card">
+          <span class="badge ${badge}">${badge} priority</span>
+          <div style="margin-top:10px; font-weight:700;">${equipment}</div>
+          <div style="margin-top:8px; color:var(--text-2); line-height:1.5;">${action}</div>
+          <div style="display:flex; justify-content:space-between; margin-top:14px; color:var(--text-2); font-size:0.9rem;"><span>${confidence} confidence</span><span>${cost} impact</span></div>
+        </article>
+      `).join('');
+    }
+
+    function renderRegulations() {
+      const host = document.getElementById('regGrid');
+      host.innerHTML = regulations.map(([name, pct, lastAudit, nextDue, gaps]) => `
+        <article class="glass reg-card">
+          <div class="card-head"><h3>${name}</h3><span class="badge ${pct >= 95 ? 'low' : pct >= 92 ? 'medium' : 'high'}">${pct}%</span></div>
+          <div style="color:var(--text-2); display:grid; gap:6px; line-height:1.5;">
+            <div>Last audit: ${lastAudit}</div>
+            <div>Next due: ${nextDue}</div>
+            <div>Gap count: ${gaps}</div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function renderGaps() {
+      const host = document.getElementById('gapTable');
+      host.innerHTML = gaps.map(([req, reg, status, evidence, due, action]) => `
+        <tr>
+          <td>${req}</td>
+          <td>${reg}</td>
+          <td><span class="status ${status === 'Compliant' ? 'ok' : status === 'Gap' ? 'gap' : 'risk'}">${status}</span></td>
+          <td>${evidence}</td>
+          <td>${due}</td>
+          <td>${action}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPatterns() {
+      document.getElementById('patternCards').innerHTML = patternCards.map(([text, meta], index) => `
+        <article class="glass pattern-card">
+          <span class="badge ${index === 0 ? 'medium' : index === 1 ? 'low' : 'high'}">Pattern ${index + 1}</span>
+          <div style="margin-top:12px; line-height:1.6;">${text}</div>
+          <div style="margin-top:14px; color:var(--text-2);">${meta}</div>
+        </article>
+      `).join('');
+    }
+
+    function renderIncidentHeatmap() {
+      const host = document.getElementById('incidentHeatmap');
+      const colors = ['low', 'low', 'mid', 'high', 'mid', 'low', 'mid', 'high', 'mid', 'low', 'mid', 'high'];
+      host.innerHTML = Array.from({ length: 60 }, (_, i) => `<div class="heat-cell ${colors[i % colors.length]}"></div>`).join('');
+    }
+
+    function renderIncidentFinder() {
+      const select = document.getElementById('incidentSelect');
+      select.innerHTML = similarIncidentOptions.map(v => `<option>${v}</option>`).join('');
+      const host = document.getElementById('similarIncidents');
+      const renderList = () => {
+        const rows = similarIncidentResponses[select.value];
+        host.innerHTML = rows.map(([id, title, rootCause]) => `
+          <div class="detail-item">
+            <strong>${id} · ${title}</strong>
+            <span>${rootCause}</span>
+          </div>
+        `).join('');
+      };
+      select.addEventListener('change', renderList);
+      renderList();
+    }
+
+    function animateCounters() {
+      document.querySelectorAll('[data-count]').forEach(el => {
+        const target = Number(el.dataset.count);
+        const duration = 1300;
+        const start = performance.now();
+        const suffix = el.textContent.includes('%') ? '%' : '';
+        const format = el.dataset.count === '947' ? (n) => `${(n / 10).toFixed(1)}%` : (n) => Math.round(n).toLocaleString('en-IN');
+        const tick = (now) => {
+          const progress = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = format(target * eased);
+          if (progress < 1) requestAnimationFrame(tick);
+          else if (suffix) el.textContent = `${format(target)}${suffix}`;
+        };
+        requestAnimationFrame(tick);
+      });
+    }
+
+    function createChartConfigs() {
+      const lineCtx = document.getElementById('ingestionChart');
+      const doughnutCtx = document.getElementById('healthChart');
+      if (state.charts.ingestion) state.charts.ingestion.destroy();
+      if (state.charts.health) state.charts.health.destroy();
+      state.charts.ingestion = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: ['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'],
+          datasets: [{
+            label: 'Documents',
+            data: [820, 900, 980, 1110, 1180, 1250, 1330, 1410, 1500, 1610, 1730, 1815],
+            tension: 0.38,
+            fill: true,
+            borderColor: '#06b6d4',
+            backgroundColor: (ctx) => {
+              const { chart } = ctx;
+              const { ctx: c, chartArea } = chart;
+              if (!chartArea) return 'rgba(6,182,212,0.3)';
+              const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+              gradient.addColorStop(0, 'rgba(6,182,212,0.42)');
+              gradient.addColorStop(1, 'rgba(6,182,212,0.02)');
+              return gradient;
+            },
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: '#e0f2fe',
+            pointBorderWidth: 0,
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          animation: { duration: 1200, easing: 'easeOutQuart' },
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' } }
+          }
+        }
+      });
+      state.charts.health = new Chart(doughnutCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Fresh', 'Aging', 'Stale'],
+          datasets: [{ data: [65, 25, 10], backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], borderWidth: 0, hoverOffset: 8 }]
+        },
+        options: {
+          responsive: true,
+          cutout: '68%',
+          animation: { animateRotate: true, duration: 1200 },
+          plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', padding: 18 } } }
+        }
+      });
+    }
+
+    function createGraph(hostId, dataset, detailCallback) {
+      const container = document.getElementById(hostId);
+      const network = new vis.Network(container, dataset, {
+        autoResize: true,
+        nodes: {
+          borderWidth: 1,
+          font: { color: '#e2e8f0', face: 'Inter' },
+          scaling: { min: 10, max: 26 }
+        },
+        edges: {
+          color: { color: 'rgba(148,163,184,0.46)' },
+          smooth: { type: 'dynamic' },
+          font: { color: '#94a3b8', size: 10, align: 'middle' }
+        },
+        groups: {
+          core: { color: { background: '#0f172a', border: '#06b6d4' }, shape: 'dot', size: 24 },
+          asset: { shape: 'dot' },
+          people: { shape: 'triangle' },
+          rule: { shape: 'diamond' },
+          doc: { shape: 'square' },
+          incident: { shape: 'star' }
+        },
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -18000, springLength: 120, springConstant: 0.04 } },
+        interaction: { hover: true, tooltipDelay: 100 }
+      });
+      network.once('stabilizationIterationsDone', () => network.setOptions({ physics: false }));
+      network.on('click', params => {
+        if (params.nodes.length) detailCallback(params.nodes[0], network);
+      });
+      return network;
+    }
+
+    function renderNodeDetails(nodeId) {
+      const node = graphData.index.get(nodeId);
+      const detail = document.getElementById('nodeDetails');
+      const list = document.getElementById('nodeDetailsList');
+      if (!node) return;
+      const relatedDocs = graphData.edges.filter(edge => edge.from === nodeId || edge.to === nodeId).slice(0, 4).map(edge => {
+        const other = edge.from === nodeId ? edge.to : edge.from;
+        const otherNode = graphData.index.get(other);
+        return `${edge.label} · ${otherNode ? otherNode.label : other}`;
+      });
+      detail.innerHTML = `<div style="color:var(--text-1); font-weight:700; font-size:1.06rem; margin-bottom:8px;">${node.label}</div><div>Type: ${node.type}</div><div style="margin-top:8px; color:var(--text-2);">${node.title}</div>`;
+      list.innerHTML = [
+        ['Connected Entities', String(graphData.edges.filter(e => e.from === nodeId || e.to === nodeId).length)],
+        ['Related Documents', relatedDocs.slice(0, 3).join('<br>') || 'No direct document references'],
+        ['Refinery Area', node.group === 'asset' ? 'Process / Utilities' : node.group === 'people' ? 'Operations' : 'Compliance / Knowledge']
+      ].map(([label, value]) => `<div class="detail-item"><span>${label}</span><strong>${value}</strong></div>`).join('');
+    }
+
+    function initializeGraphs() {
+      state.previewGraph = createGraph('previewGraph', {
+        nodes: new vis.DataSet(graphData.nodes.slice(0, 19)),
+        edges: new vis.DataSet(graphData.edges.filter((_, i) => i < 22))
+      }, renderNodeDetails);
+      state.graph = createGraph('fullGraph', {
+        nodes: new vis.DataSet(graphData.nodes),
+        edges: new vis.DataSet(graphData.edges)
+      }, renderNodeDetails);
+      document.getElementById('statNodes').textContent = graphData.nodes.length;
+      document.getElementById('statEdges').textContent = graphData.edges.length;
+      document.getElementById('statClusters').textContent = '9';
+      document.getElementById('statDensity').textContent = `${graphData.density.toFixed(2)}%`;
+      if (graphData.nodes.length) renderNodeDetails(graphData.nodes[0].id);
+    }
+
+    function renderGraphFilters() {
+      const host = document.getElementById('graphFilters');
+      const types = ['Equipment', 'Documents', 'Personnel', 'Regulations', 'Incidents'];
+      host.innerHTML = types.map(type => `
+        <label class="check"><input type="checkbox" checked data-filter="${type}"> ${type}</label>
+      `).join('');
+      host.querySelectorAll('input').forEach(input => input.addEventListener('change', () => {
+        if (input.checked) state.activeFilters.add(input.dataset.filter);
+        else state.activeFilters.delete(input.dataset.filter);
+        applyGraphFilters();
+      }));
+    }
+
+    function applyGraphFilters() {
+      const filteredNodes = graphData.nodes.filter(node => state.activeFilters.has(node.type));
+      const filteredIds = new Set(filteredNodes.map(n => n.id));
+      const filteredEdges = graphData.edges.filter(edge => filteredIds.has(edge.from) && filteredIds.has(edge.to));
+      if (state.graph) {
+        state.graph.setData({ nodes: new vis.DataSet(filteredNodes), edges: new vis.DataSet(filteredEdges) });
+      }
+      if (state.previewGraph) {
+        state.previewGraph.setData({ nodes: new vis.DataSet(filteredNodes.slice(0, 19)), edges: new vis.DataSet(filteredEdges.slice(0, 22)) });
+      }
+      document.getElementById('statNodes').textContent = filteredNodes.length;
+      document.getElementById('statEdges').textContent = filteredEdges.length;
+      document.getElementById('statDensity').textContent = `${((filteredEdges.length / Math.max(1, (filteredNodes.length * (filteredNodes.length - 1)) / 2)) * 100).toFixed(2)}%`;
+    }
+
+    function setupGraphSearch() {
+      const input = document.getElementById('graphSearch');
+      const menu = document.getElementById('suggestions');
+      const showMatches = () => {
+        const query = input.value.trim().toLowerCase();
+        if (!query) {
+          menu.style.display = 'none';
+          menu.innerHTML = '';
+          return;
+        }
+        const matches = graphData.nodes.filter(node => node.label.toLowerCase().includes(query) || node.title.toLowerCase().includes(query)).slice(0, 6);
+        menu.innerHTML = matches.map(node => `<button type="button" data-id="${node.id}">${node.label} · ${node.type}</button>`).join('');
+        menu.style.display = matches.length ? 'block' : 'none';
+        menu.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          input.value = graphData.index.get(id)?.label || '';
+          menu.style.display = 'none';
+          focusGraphNode(id);
+        }));
+      };
+      input.addEventListener('input', showMatches);
+      input.addEventListener('focus', showMatches);
+      input.addEventListener('blur', () => setTimeout(() => menu.style.display = 'none', 120));
+    }
+
+    function focusGraphNode(nodeId) {
+      const node = graphData.index.get(nodeId);
+      if (!node || !state.graph) return;
+      state.graph.focus(nodeId, { scale: 1.2, animation: { duration: 700, easingFunction: 'easeInOutCubic' } });
+      renderNodeDetails(nodeId);
+      document.querySelectorAll('#graphFilters input').forEach(input => {
+        if (!input.checked && input.dataset.filter === node.type) {
+          input.checked = true;
+          state.activeFilters.add(node.type);
+          applyGraphFilters();
+        }
+      });
+    }
+
+    function askCopilot(question) {
+      const chatLog = document.getElementById('chatLog');
+      const lowerQ = question.toLowerCase();
+      let answer;
+
+      if (chatAnswers[question]) {
+        answer = chatAnswers[question];
+      } else {
+        let matchedAsset = null;
+        let matchedReg = null;
+        
+        // Find if they are mentioning an equipment
+        const equipmentsList = ['P-101', 'P-102', 'P-103', 'P-104', 'P-105', 'P-106', 'P-107', 'P-108', 'C-201', 'C-202', 'C-203', 'C-204', 'E-301', 'E-302', 'E-303', 'E-304', 'T-401', 'T-402', 'T-403', 'V-501', 'V-502', 'V-503'];
+        for (let eq of equipmentsList) {
+          if (lowerQ.includes(eq.toLowerCase())) {
+            matchedAsset = eq;
+            break;
+          }
+        }
+        
+        // Find if they are mentioning regulations
+        const regsList = ['oisd', 'peso', 'factories act', 'cpcb'];
+        for (let reg of regsList) {
+          if (lowerQ.includes(reg.toLowerCase())) {
+            matchedReg = reg;
+            break;
+          }
+        }
+        
+        if (matchedAsset) {
+          const healthEntry = maintenanceData.find(item => item[0] === matchedAsset);
+          const healthScore = healthEntry ? healthEntry[1] : 75;
+          const statusText = healthScore >= 85 ? 'Good' : healthScore >= 72 ? 'Moderate' : 'Critical Risk';
+          
+          answer = {
+            text: `Based on a semantic scan of the refinery brain, equipment <strong>${matchedAsset}</strong> is currently operating at <strong>${healthScore}% health</strong> (${statusText}). Recent logbook entries indicate normal parameter envelopes with no high-vibration flags. I have cross-referenced the maintenance work orders and found related manuals.`,
+            table: [
+              ['2026-07-11', `${matchedAsset} Parameters Checked`, 'Operator round logging complete', '98%'],
+              ['2026-06-15', 'Scheduled Calibration Run', 'Instrument drift corrected', '92%']
+            ],
+            sources: [
+              [`${matchedAsset} Equipment Profile`, 'Technical Datasheet', '99%'],
+              ['Shift Operations Logs - South Block', 'Email Archive', '87%']
+            ]
+          };
+        } else if (matchedReg) {
+          const matchedGaps = gaps.filter(g => g[1].toLowerCase().includes(matchedReg.toLowerCase()));
+          const gapListText = matchedGaps.map(g => `- Requirement: ${g[0]} (${g[2]})`).join('<br>');
+          
+          answer = {
+            text: `Analyzing compliance records for <strong>${matchedReg.toUpperCase()}</strong>. Our system tracks active operations against these requirements. There are currently ${matchedGaps.length} outstanding gaps identified for this regulation.<br><br>${gapListText || 'All safety and administrative controls are currently 100% compliant.'}`,
+            table: matchedGaps.map(g => [g[4], g[0], g[5], '95%']),
+            sources: [
+              [`${matchedReg.toUpperCase()} Compliance Standard Guidelines`, 'Regulatory Reference', '99%'],
+              ['Annual Safety Readiness Bundle', 'Audit Evidence', '96%']
+            ]
+          };
+        } else if (lowerQ.includes('incident') || lowerQ.includes('fault') || lowerQ.includes('fail')) {
+          answer = {
+            text: `I searched the refinery memory for historical incidents. The system detects a cluster of events related to pump suction strainer clogging and flange leaks near Unit 3 during shutdown phases. Operation warm-up speed and torque wrench calibration check-offs were highlighted as principal lessons.`,
+            table: [
+              ['INC-26-011', 'Flange leak at E-304 channel head', 'Gasket thermal stress', 'High'],
+              ['INC-24-118', 'Pump P-104 seal leakage', 'Line-up reversal pressure', 'Medium']
+            ],
+            sources: [
+              ['Refinery Major Incident Register 2021-2026', 'Incident Database', '97%'],
+              ['Operator Lessons Learned Repository', 'Wisdom Log', '91%']
+            ]
+          };
+        } else {
+          answer = {
+            text: `I searched the platform database for "<em>${question}</em>". I couldn't find a direct reference to that phrase. However, I found related entity links in the Jamnagar Refinery Knowledge Graph. You can try asking: <br>- "What is the maintenance history of Compressor C-201?"<br>- "Show all safety incidents in Unit 3 last year"<br>- "Which equipment is due for OISD compliance renewal?"`,
+            table: [],
+            sources: []
+          };
+        }
+      }
+
+      const userMsg = `
+        <div class="msg user">
+          <div class="avatar user"><i data-lucide="user"></i></div>
+          <div class="bubble">${question}</div>
+        </div>
+      `;
+      const typing = `
+        <div class="msg ai" id="typingMsg">
+          <div class="avatar ai"><i data-lucide="bot"></i></div>
+          <div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>
+        </div>
+      `;
+      chatLog.insertAdjacentHTML('beforeend', userMsg + typing);
+      chatLog.scrollTop = chatLog.scrollHeight;
+      clearTimeout(state.typingTimer);
+      state.typingTimer = setTimeout(() => {
+        document.getElementById('typingMsg')?.remove();
+        const tableHtml = answer.table.length ? `
+          <table style="margin-top:12px;">
+            <thead><tr><th>Date</th><th>Event</th><th>Action / Observation</th><th>Confidence</th></tr></thead>
+            <tbody>${answer.table.map(row => `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td></tr>`).join('')}</tbody>
+          </table>` : '';
+        const sourcesHtml = answer.sources.length ? `
+          <div class="sources">
+            <div style="font-weight:700; color:var(--text-1);">Sources cited</div>
+            ${answer.sources.map(([title, type, confidence]) => `
+              <div class="source-card">
+                <div><strong>${title}</strong><div style="color:var(--text-2); font-size:0.86rem;">${type}</div></div>
+                <div style="text-align:right; color:#c4b5fd; font-family:'JetBrains Mono', monospace;">${confidence}<br><span style="color:var(--cyan)">View Document</span></div>
+              </div>
+            `).join('')}
+          </div>` : '';
+        chatLog.insertAdjacentHTML('beforeend', `
+          <div class="msg ai">
+            <div class="avatar ai"><i data-lucide="bot"></i></div>
+            <div class="bubble">
+              ${answer.text}
+              ${tableHtml}
+              ${sourcesHtml}
+            </div>
+          </div>
+        `);
+        lucide.createIcons();
+        chatLog.scrollTop = chatLog.scrollHeight;
+      }, 900);
+    }
+
+    function setupChat() {
+      document.getElementById('sendBtn').addEventListener('click', () => {
+        const input = document.getElementById('chatInput');
+        const question = input.value.trim();
+        if (!question) return;
+        askCopilot(question);
+        input.value = '';
+      });
+      document.getElementById('chatInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('sendBtn').click();
+        }
+      });
+      document.getElementById('attachBtn').addEventListener('click', () => {
+        askCopilot('Can you analyze this uploaded maintenance note for key risks?');
+      });
+    }
+
+    function setupAudit() {
+      document.getElementById('generateAudit').addEventListener('click', () => {
+        const bar = document.getElementById('auditProgress');
+        bar.style.width = '0%';
+        clearInterval(state.auditTimer);
+        let progress = 0;
+        state.auditTimer = setInterval(() => {
+          progress += 11;
+          bar.style.width = `${Math.min(progress, 100)}%`;
+          if (progress >= 100) {
+            clearInterval(state.auditTimer);
+            downloadAuditReport();
+          }
+        }, 240);
+      });
+    }
+
+    function downloadAuditReport() {
+      const reportTitle = "IKIP Compliance Audit Package — Jamnagar Refinery\n";
+      const timestamp = `Generated: ${new Date().toLocaleString()}\n`;
+      const line = "==================================================\n";
+      
+      let content = reportTitle + timestamp + line + "\n";
+      content += "1. COMPLIANCE SUMMARY\n";
+      content += `Overall compliance score: 94.7%\n\n`;
+      
+      content += "2. REGULATIONS STATUS\n";
+      regulations.forEach(([name, pct, lastAudit, nextDue, gapCount]) => {
+        content += `- ${name}: ${pct}% (Gaps: ${gapCount}, Next due: ${nextDue})\n`;
+      });
+      content += "\n" + line + "\n";
+      
+      content += "3. DETECTED COMPLIANCE GAPS & EVIDENCE\n";
+      gaps.forEach(([req, reg, status, evidence, due, action]) => {
+        content += `[${status}] Requirement: ${req}\n`;
+        content += `   Regulation: ${reg}\n`;
+        content += `   Evidence Documents: ${evidence}\n`;
+        content += `   Due Date: ${due}\n`;
+        content += `   Action Required: ${action}\n\n`;
+      });
+      
+      content += "4. LESSONS LEARNED SUMMARY\n";
+      patternCards.forEach(([text, meta]) => {
+        content += `- Pattern: ${text} (${meta})\n`;
+      });
+      
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'ikip-compliance-audit-package.txt';
+      link.click();
+      
+      showToast("Compliance Audit Package generated and downloaded successfully.");
+    }
+
+    window.selectAsset = function(name) {
+      state.selectedAsset = name;
+      renderHeatmap();
+      updateAssetIntelligence(name);
+    }
+
+    function updateAssetIntelligence(name) {
+      const faultTreeHost = document.getElementById('faultTree');
+      const rcaHeader = faultTreeHost.previousElementSibling.querySelector('.card-meta');
+      if (rcaHeader) {
+        rcaHeader.textContent = `Selected asset: ${name}`;
+      }
+      
+      let faults = [];
+      if (name.startsWith('P-')) {
+        faults = [
+          ['Mechanical Seal Wear', 'Primary suction pressure fluctuations detected'],
+          ['Impeller Cavitation', 'Low NPSH margins during high temperature transfers'],
+          ['Vibration Peak', 'Sub-synchronous frequency detected near 0.48x run speed'],
+          ['Over-greasing Check', 'Delayed maintenance shift log from late Q2 2026']
+        ];
+      } else if (name.startsWith('C-')) {
+        faults = [
+          ['Bearing Temperature Rise', 'Primary thermal sensor alert triggered'],
+          ['Lube Oil Degradation', 'Metallic wear debris identified in lab scan'],
+          ['Coupling Alignment Drift', 'Laser scan correction advised post turnaround'],
+          ['Vibration Transients', 'Observed during start-up critical speed ramps']
+        ];
+      } else if (name.startsWith('E-')) {
+        faults = [
+          ['Tube-bundle Fouling', 'Thermal conductivity reduced by 14%'],
+          ['Shell-side Pressure Drop', 'Debris collection near bypass valve'],
+          ['Thermal Stress Strain', 'Large transient delta-T during startup'],
+          ['Gasket Degradation', 'Awaiting flange bolt torque recheck']
+        ];
+      } else {
+        faults = [
+          ['Corrosion Under Insulation', 'Wall thickness scanning flag'],
+          ['PSV Relief Drift', 'Calibration verification schedule slip'],
+          ['Zoning Isolation Gap', 'Incorrect hazard barrier placement'],
+          ['Valve Seat Seepage', 'Trace gas detected at secondary flange']
+        ];
+      }
+      
+      faultTreeHost.innerHTML = faults.map(([title, desc]) => `
+        <div class="fault-node">
+          <strong>${title}</strong>
+          <div style="color:var(--text-2); margin-top:4px;">${desc}</div>
+        </div>
+      `).join('');
+
+      const recHost = document.getElementById('recommendations');
+      let recs = [];
+      if (name.startsWith('P-')) {
+        recs = [
+          ['high', name, 'Overhaul mechanical seal faces and check flush line alignment', '95%', '₹2.4 lakh'],
+          ['medium', name, 'Install continuous acoustic vibration logging sensor', '88%', '₹0.8 lakh']
+        ];
+      } else if (name.startsWith('C-')) {
+        recs = [
+          ['high', name, 'Flush lube oil console and inspect filter cartridge element', '96%', '₹4.2 lakh'],
+          ['medium', name, 'Re-verify rotor dynamic alignment under operating heat', '91%', '₹1.3 lakh']
+        ];
+      } else if (name.startsWith('E-')) {
+        recs = [
+          ['high', name, 'Plan high-pressure hydro-jetting during next block outage', '92%', '₹1.8 lakh'],
+          ['low', name, 'Torque flange bolt set to standard 240 Nm spec', '85%', '₹0.2 lakh']
+        ];
+      } else {
+        recs = [
+          ['high', name, 'Perform ultrasonic wall profiling check-up', '94%', '₹3.1 lakh'],
+          ['medium', name, 'Calibrate pressure relief valve setpoint', '89%', '₹0.7 lakh']
+        ];
+      }
+      
+      recHost.innerHTML = recs.map(([badge, equipment, action, confidence, cost]) => `
+        <article class="glass rec-card" style="animation: sectionIn 200ms ease both;">
+          <span class="badge ${badge}">${badge} priority</span>
+          <div style="margin-top:10px; font-weight:700;">${equipment}</div>
+          <div style="margin-top:8px; color:var(--text-2); line-height:1.5;">${action}</div>
+          <div style="display:flex; justify-content:space-between; margin-top:14px; color:var(--text-2); font-size:0.9rem;">
+            <span>${confidence} confidence</span>
+            <span>${cost} impact</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function setupDocumentUpload() {
+      const zone = document.getElementById('uploadZone');
+      const input = document.getElementById('fileInput');
+      if (!zone || !input) return;
+
+      zone.addEventListener('click', () => input.click());
+
+      input.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          handleUploadedFiles(e.target.files);
+        }
+      });
+
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.style.borderColor = 'var(--cyan)';
+        zone.style.background = 'rgba(6, 182, 212, 0.06)';
+      });
+
+      zone.addEventListener('dragleave', () => {
+        zone.style.borderColor = 'rgba(6,182,212,0.35)';
+        zone.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.03))';
+      });
+
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.style.borderColor = 'rgba(6,182,212,0.35)';
+        zone.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.03))';
+        if (e.dataTransfer.files.length) {
+          handleUploadedFiles(e.dataTransfer.files);
+        }
+      });
+    }
+
+    function handleUploadedFiles(files) {
+      const file = files[0];
+      const stepsHost = document.getElementById('pipeline');
+      if (!stepsHost) return;
+
+      const steps = [
+        ['Upload', 'upload', 'processing'],
+        ['OCR / Parse', 'scan-text', 'pending'],
+        ['Entity Extraction', 'scan-search', 'pending'],
+        ['Graph Linking', 'network', 'pending'],
+        ['Indexed', 'database', 'pending']
+      ];
+
+      function renderTempPipeline() {
+        stepsHost.innerHTML = steps.map(([name, icon, status]) => `
+          <div class="step-card glass">
+            <i data-lucide="${icon}" style="width:28px;height:28px;color:${status === 'done' ? 'var(--emerald)' : status === 'processing' ? 'var(--cyan)' : 'var(--text-2)'}"></i>
+            <div style="margin-top:10px;font-weight:700;">${name}</div>
+            <div class="step-status ${status}">${status === 'done' ? 'Completed' : status === 'processing' ? 'Processing' : 'Queued'}</div>
+          </div>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      renderTempPipeline();
+
+      let currentStep = 0;
+      const interval = setInterval(() => {
+        steps[currentStep][2] = 'done';
+        currentStep++;
+        
+        if (currentStep < steps.length) {
+          steps[currentStep][2] = 'processing';
+          renderTempPipeline();
+        } else {
+          clearInterval(interval);
+          renderPipeline();
+          
+          const entitiesCount = Math.floor(Math.random() * 85) + 35;
+          const confidence = Math.floor(Math.random() * 12) + 87;
+          const dateString = new Date().toISOString().split('T')[0];
+          
+          documentCards.unshift([
+            'PDF Document',
+            file.name,
+            entitiesCount,
+            confidence,
+            dateString
+          ]);
+          
+          renderDocuments();
+          updateDocCount(1);
+          
+          const nodeId = 'D-' + (graphData.nodes.length + 1);
+          const label = file.name.substring(0, 15) + (file.name.length > 15 ? '...' : '');
+          
+          graphData.nodes.push({
+            id: nodeId,
+            label: label,
+            type: 'Documents',
+            title: `Uploaded document: ${file.name}`,
+            group: 'doc',
+            shape: 'square',
+            color: nodeColor('Documents'),
+            font: { color: '#e2e8f0', size: 13, face: 'Inter' },
+            borderWidth: 1.4,
+            margin: 10
+          });
+          
+          graphData.index.set(nodeId, {
+            id: nodeId,
+            label: label,
+            type: 'Documents',
+            title: `Uploaded document: ${file.name}`,
+            group: 'doc'
+          });
+          
+          const equips = ['P-101', 'P-104', 'C-201', 'E-304'];
+          const randomEq = equips[Math.floor(Math.random() * equips.length)];
+          
+          graphData.edges.push({
+            from: nodeId,
+            to: randomEq,
+            label: 'references',
+            arrows: 'to',
+            color: { color: 'rgba(148,163,184,0.55)' }
+          });
+          
+          applyGraphFilters();
+          showToast(`Ingestion complete: ${file.name} resolved to ${entitiesCount} graph nodes.`);
+        }
+      }, 700);
+    }
+
+    function updateDocCount(increment) {
+      const docCounters = document.querySelectorAll('[data-count="12847"]');
+      docCounters.forEach(docCounter => {
+        const currentTarget = parseInt(docCounter.getAttribute('data-count') || docCounter.textContent.replace(/,/g, ''));
+        const newTarget = currentTarget + increment;
+        docCounter.setAttribute('data-count', newTarget);
+        docCounter.textContent = newTarget.toLocaleString('en-IN');
+      });
+    }
+
+    function setupLessonsCapture() {
+      const form = document.getElementById('captureForm');
+      if (!form) return;
+      
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const engName = document.getElementById('engName').value.trim();
+        const engArea = document.getElementById('engArea').value.trim();
+        const engCategory = document.getElementById('engCategory').value.trim();
+        const engDate = document.getElementById('engDate').value.trim();
+        const engText = document.getElementById('engText').value.trim();
+        
+        if (!engName || !engArea || !engCategory || !engDate || !engText) return;
+        
+        patternCards.unshift([
+          engText,
+          `${engName} (${engCategory}) · Shift ${engDate} · Area ${engArea}`
+        ]);
+        renderPatterns();
+        
+        const wisdomId = 'W-' + (graphData.nodes.length + 1);
+        graphData.nodes.push({
+          id: wisdomId,
+          label: engName,
+          type: 'Personnel',
+          title: `Operator wisdom: ${engText}`,
+          group: 'people',
+          shape: 'triangle',
+          color: nodeColor('Personnel'),
+          font: { color: '#e2e8f0', size: 13, face: 'Inter' },
+          borderWidth: 1.4,
+          margin: 10
+        });
+        
+        graphData.index.set(wisdomId, {
+          id: wisdomId,
+          label: engName,
+          type: 'Personnel',
+          title: `Operator wisdom: ${engText}`,
+          group: 'people'
+        });
+        
+        const matchEq = engArea.toUpperCase().trim();
+        const existNode = graphData.nodes.find(n => n.id.toUpperCase() === matchEq);
+        const linkTarget = existNode ? existNode.id : 'plant';
+        
+        graphData.edges.push({
+          from: wisdomId,
+          to: linkTarget,
+          label: 'authored_by',
+          arrows: 'to',
+          color: { color: 'rgba(148,163,184,0.55)' }
+        });
+        
+        applyGraphFilters();
+        showToast(`Wisdom indexed: Added ${engName}'s note to Jamnagar platform brain.`);
+        form.reset();
+      });
+    }
+
+    function showToast(msg) {
+      let container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.style.position = 'fixed';
+        container.style.bottom = '24px';
+        container.style.right = '24px';
+        container.style.zIndex = '9999';
+        container.style.display = 'grid';
+        container.style.gap = '10px';
+        document.body.appendChild(container);
+      }
+      
+      const toast = document.createElement('div');
+      toast.style.background = 'rgba(15, 23, 42, 0.96)';
+      toast.style.backdropFilter = 'blur(8px)';
+      toast.style.border = '1px solid var(--cyan)';
+      toast.style.boxShadow = 'var(--shadow-cyan)';
+      toast.style.color = '#fff';
+      toast.style.padding = '14px 20px';
+      toast.style.borderRadius = '14px';
+      toast.style.fontFamily = 'Inter, sans-serif';
+      toast.style.fontSize = '0.92rem';
+      toast.style.display = 'flex';
+      toast.style.alignItems = 'center';
+      toast.style.gap = '12px';
+      toast.style.animation = 'sectionIn 260ms cubic-bezier(.2,.8,.2,1) both';
+      
+      toast.innerHTML = `<i data-lucide="info" style="color:var(--cyan);width:18px;height:18px;"></i><span>${msg}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons({ attrs: { style: 'color: var(--cyan); width: 18px; height: 18px;' } });
+      
+      setTimeout(() => {
+        toast.style.animation = 'msgIn 220ms ease reverse both';
+        setTimeout(() => toast.remove(), 250);
+      }, 4000);
+    }
+
+    function setupNav() {
+      const nav = document.getElementById('nav');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      document.getElementById('menuBtn').addEventListener('click', () => {
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+      });
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      });
+      nav.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+        setView(btn.dataset.view);
+        nav.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+        if (window.innerWidth < 768) {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+        }
+      }));
+    }
+
+    function setView(view) {
+      state.currentView = view;
+      views.forEach(v => document.getElementById(v).classList.toggle('active', v === view));
+      if (view === 'graph' || view === 'dashboard') setTimeout(() => { state.graph?.redraw(); state.previewGraph?.redraw(); }, 80);
+      if (view === 'dashboard') createChartConfigs();
+    }
+
+    function init() {
+      renderAlerts();
+      renderPipeline();
+      renderDocuments();
+      renderQuestionChips();
+      renderChatBase();
+      renderHeatmap();
+      renderTimeline();
+      renderFaultTree();
+      renderRecommendations();
+      renderRegulations();
+      renderGaps();
+      renderPatterns();
+      renderIncidentHeatmap();
+      renderIncidentFinder();
+      renderGraphFilters();
+      setupGraphSearch();
+      setupChat();
+      setupAudit();
+      setupDocumentUpload();
+      setupLessonsCapture();
+      setupNav();
+      createChartConfigs();
+      initializeGraphs();
+      animateCounters();
+      lucide.createIcons();
+      window.addEventListener('resize', () => { state.graph?.redraw(); state.previewGraph?.redraw(); });
+
+      // Support dynamic view routing via URL query parameters (e.g., ?view=graph)
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlView = urlParams.get('view');
+      if (urlView && views.includes(urlView)) {
+        setView(urlView);
+        const nav = document.getElementById('nav');
+        if (nav) {
+          nav.querySelectorAll('button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.view === urlView);
+          });
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
