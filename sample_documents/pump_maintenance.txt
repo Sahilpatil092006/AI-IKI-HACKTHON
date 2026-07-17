@@ -1,0 +1,9 @@
+Date: 12-Jun-2026
+Equipment Tag: P-101
+Inspector: A. Sharma
+
+MAINTENANCE WORK LOG:
+Bearing housing of the main feedstock pump P-101 was inspected. The technician detected thermal anomalies during the run. Bearing temperatures were recorded at 92 degrees Celsius, which is above normal limits.
+The team performed bearing replacement and lubrication alignment. Followed the safety protocols, including isolating the power source and locking out the main circuit breaker. The supervisor verified the Lock-Out Tag-Out (LOTO) isolation permit and checked the physical guard fencing.
+Return to service was successful. No leakage observed.
+By: A. Sharma

@@ -1,0 +1,10 @@
+Date: 14-Jun-2026
+Audit Reference: AUD-2026-09
+Auditor: R. Patel
+
+SAFETY & COMPLIANCE REPORT:
+A walkthrough of Process Area 2 was completed to review compliance against Factory Act 1948 and OISD-STD-105 standards.
+1. The machine guard fence around the compressor unit C-202 is secure and functional. All moving components are guarded to prevent accidental contact.
+2. Verified that Lock-Out Tag-Out (LOTO) isolation procedures were strictly implemented during the P-101 overhaul last week.
+3. GAP IDENTIFIED: Hydrostatic pressure testing documentation for pressure vessels V-303 and V-304 is missing. No records of testing by a competent person were found in the digital maintenance log. This violates PESO Rules. Action required: schedule hydrostatic testing immediately.
+Supervisor: J. Miller

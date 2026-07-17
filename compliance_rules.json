@@ -1,0 +1,28 @@
+{
+  "rules": [
+    {
+      "rule_id": "RULE-OISD-105",
+      "regulation": "OISD-STD-105",
+      "requirement": "Lock-Out Tag-Out (LOTO) isolation permit must be verified by a certified safety officer prior to opening any pump casing.",
+      "keywords": ["LOTO", "isolation", "permit"]
+    },
+    {
+      "rule_id": "RULE-FAC-1948-21",
+      "regulation": "Factory Act Section 21",
+      "requirement": "Fencing of machinery: Every moving part of a transmission machinery and every dangerous part of any other machinery shall be securely fenced.",
+      "keywords": ["fenc", "guard", "barrier"]
+    },
+    {
+      "rule_id": "RULE-PESO-HE-02",
+      "regulation": "PESO Rules",
+      "requirement": "Hydrostatic pressure testing of all pressure vessels must be conducted every 5 years by a competent person.",
+      "keywords": ["hydrostatic", "pressure test", "vessel"]
+    },
+    {
+      "rule_id": "RULE-SOP-OP-12",
+      "regulation": "SOP-MAINT-12",
+      "requirement": "Daily thermal imaging scan on bearing housings of P-101 and other critical process pumps to monitor overheating.",
+      "keywords": ["thermal", "bearing", "P-101"]
+    }
+  ]
+}
