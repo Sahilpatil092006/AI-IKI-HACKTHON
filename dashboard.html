@@ -1221,6 +1221,197 @@
       .msg { max-width: 100%; }
       .chat-log { min-height: 420px; }
     }
+
+    /* CMS-inspired visual refresh */
+    :root {
+      --bg-0: #f8fafc;
+      --bg-1: #eef2ff;
+      --bg-2: #e2e8f0;
+      --panel: rgba(255, 255, 255, 0.88);
+      --panel-strong: rgba(255, 255, 255, 0.96);
+      --border: rgba(148, 163, 184, 0.18);
+      --text-1: #0f172a;
+      --text-2: #64748b;
+      --cyan: #2563eb;
+      --amber: #f59e0b;
+      --emerald: #10b981;
+      --red: #ef4444;
+      --violet: #7c3aed;
+      --blue: #0f766e;
+      --shadow-cyan: 0 12px 30px rgba(37, 99, 235, 0.15);
+      --shadow-amber: 0 12px 30px rgba(245, 158, 11, 0.12);
+      --shadow-emerald: 0 12px 30px rgba(16, 185, 129, 0.12);
+      --shadow-red: 0 12px 30px rgba(239, 68, 68, 0.12);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.08), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(124, 58, 237, 0.08), transparent 22%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+      color: var(--text-1);
+    }
+
+    body::before {
+      opacity: 0.35;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.4));
+    }
+
+    .app {
+      padding: 18px;
+      gap: 18px;
+    }
+
+    .sidebar {
+      background: rgba(255, 255, 255, 0.88);
+      border-right: 1px solid rgba(148, 163, 184, 0.14);
+      box-shadow: 12px 0 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .brand,
+    .sidebar-footer,
+    .glass,
+    .kpi,
+    .panel,
+    .chart-card,
+    .detail-panel,
+    .graph-area,
+    .reg-card,
+    .rec-card,
+    .doc-card,
+    .pattern-card,
+    .step-card,
+    .equip-card,
+    .audit-box,
+    .source-card,
+    .msg .bubble,
+    .chat-shell,
+    .chat-log,
+    .upload-zone {
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: inset 3px 0 0 var(--cyan), 0 10px 24px rgba(37, 99, 235, 0.08);
+    }
+
+    .topbar {
+      display: none;
+    }
+
+    .glass,
+    .panel,
+    .chart-card,
+    .detail-panel,
+    .graph-area,
+    .reg-card,
+    .rec-card,
+    .doc-card,
+    .pattern-card,
+    .step-card,
+    .equip-card,
+    .audit-box,
+    .chat-shell,
+    .chat-log,
+    .upload-zone {
+      background: var(--panel);
+      border-color: rgba(148, 163, 184, 0.16);
+    }
+
+    .section-title,
+    .kpi-value,
+    .doc-title,
+    .doc-type,
+    .card-head h3,
+    .panel h3,
+    .section-header,
+    th,
+    .brand-title {
+      color: var(--text-1);
+    }
+
+    .section-subtitle,
+    .card-meta,
+    .doc-meta,
+    .alert-time,
+    .alert-message,
+    .kpi-label,
+    .status-line,
+    .footer-text,
+    .footer-status,
+    .detail-item span,
+    .timeline-row div:last-child {
+      color: var(--text-2);
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      box-shadow: 0 16px 28px rgba(37, 99, 235, 0.18);
+    }
+
+    .ghost-btn,
+    .action-btn,
+    .icon-btn,
+    .chip,
+    .check,
+    .status-line,
+    .footer-status {
+      border-radius: 14px;
+    }
+
+    .action-btn,
+    .ghost-btn,
+    .chip,
+    .check,
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.86);
+      border-color: rgba(148, 163, 184, 0.16);
+      color: var(--text-1);
+    }
+
+    .badge.high,
+    .badge.medium,
+    .badge.low,
+    .severity.critical,
+    .severity.warning,
+    .severity.info,
+    .status.ok,
+    .status.gap,
+    .status.risk,
+    .step-status.done,
+    .step-status.processing,
+    .step-status.pending {
+      border-width: 1px;
+    }
+
+    table {
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    th {
+      background: rgba(248, 250, 252, 0.96);
+    }
+
+    .graph-canvas,
+    .mini-graph {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(248, 250, 252, 0.9));
+      border-color: rgba(148, 163, 184, 0.12);
+    }
+
+    .bubble,
+    .msg.user .bubble {
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .msg.ai .bubble {
+      border-color: rgba(37, 99, 235, 0.18);
+    }
+
+    .mobile-overlay {
+      background: rgba(15, 23, 42, 0.28);
+    }
   </style>
 </head>
 <body>

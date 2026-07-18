@@ -1,0 +1,4 @@
+Date,Equipment_Tag,Issue,Action_Taken
+2026-06-12,P-101,Seal leakage detected during operation,"Pump isolated, seal inspected, replacement scheduled"
+2026-06-13,P-101,Bearing temperature exceeded threshold,Bearing lubrication and alignment completed
+2026-06-14,V-303,Hydrostatic test overdue,Testing request raised for compliance closure

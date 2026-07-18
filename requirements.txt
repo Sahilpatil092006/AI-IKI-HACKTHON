@@ -1,0 +1,10 @@
+streamlit
+openai
+chromadb
+pypdf
+pandas
+python-dotenv
+Pillow
+PyMuPDF
+reportlab
+openpyxl
