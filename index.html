@@ -1059,61 +1059,74 @@
       </div>
       <div class="footer-status">
         <span class="badge-dot" style="background-color: var(--emerald); box-shadow: 0 0 8px var(--emerald);"></span>
-        <span>Memory Ingestion active · 12,847 documents indexed</span>
+        <span id="footerDashboardStatus">Memory Ingestion active · 0 documents indexed</span>
       </div>
     </div>
   </footer>
 
   <script>
+    const dashboardSnapshotKey = 'ikip.dashboardSnapshot.v1';
+    const fallbackDashboardSnapshot = {
+      documentCount: 10,
+      knowledgeEntities: 691,
+      activeEquipment: 26,
+      complianceScore: 94.7,
+      updatedAt: null
+    };
+
+    function readDashboardSnapshot() {
+      try {
+        const raw = localStorage.getItem(dashboardSnapshotKey);
+        if (!raw) return fallbackDashboardSnapshot;
+        const parsed = JSON.parse(raw);
+        return {
+          documentCount: Number(parsed.documentCount) || fallbackDashboardSnapshot.documentCount,
+          knowledgeEntities: Number(parsed.knowledgeEntities) || fallbackDashboardSnapshot.knowledgeEntities,
+          activeEquipment: Number(parsed.activeEquipment) || fallbackDashboardSnapshot.activeEquipment,
+          complianceScore: Number(parsed.complianceScore) || fallbackDashboardSnapshot.complianceScore,
+          updatedAt: parsed.updatedAt || null
+        };
+      } catch {
+        return fallbackDashboardSnapshot;
+      }
+    }
+
+    function renderLandingMetrics() {
+      const snapshot = readDashboardSnapshot();
+      const updates = [
+        { id: 'stat-docs', value: snapshot.documentCount, suffix: '', format: true },
+        { id: 'stat-entities', value: snapshot.knowledgeEntities, suffix: '', format: true },
+        { id: 'stat-compliance', value: snapshot.complianceScore, suffix: '%', format: false },
+        { id: 'stat-latency', value: 14, suffix: 'ms', format: false }
+      ];
+
+      updates.forEach(item => {
+        const element = document.getElementById(item.id);
+        if (!element) return;
+        if (item.format) {
+          element.textContent = Math.round(item.value).toLocaleString('en-IN') + item.suffix;
+        } else {
+          element.textContent = `${item.value.toFixed(item.id === 'stat-compliance' ? 1 : 0)}${item.suffix}`;
+        }
+      });
+
+      const footerStatus = document.getElementById('footerDashboardStatus');
+      if (footerStatus) {
+        footerStatus.textContent = `Memory Ingestion active · ${Math.round(snapshot.documentCount).toLocaleString('en-IN')} documents indexed`;
+      }
+    }
+
     // Initialize Lucide Icons
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-      animateStats();
+      renderLandingMetrics();
       initNetworkCanvas();
       setupPillarLinks();
     });
 
     // 1. Stats Counter Animation
     function animateStats() {
-      const stats = [
-        { id: 'stat-docs', target: 12847, suffix: '', format: true },
-        { id: 'stat-entities', target: 48293, suffix: '', format: true },
-        { id: 'stat-compliance', target: 94.7, suffix: '%', format: false },
-        { id: 'stat-latency', target: 14, suffix: 'ms', format: false }
-      ];
-
-      stats.forEach(stat => {
-        const el = document.getElementById(stat.id);
-        if (!el) return;
-
-        let start = 0;
-        const duration = 2000; // 2 seconds animation
-        const frameTime = 1000 / 60; // 60 FPS
-        const totalFrames = duration / frameTime;
-        const increment = stat.target / totalFrames;
-
-        let frame = 0;
-
-        function update() {
-          frame++;
-          let current = increment * frame;
-          if (frame >= totalFrames) {
-            current = stat.target;
-          }
-
-          if (stat.format) {
-            el.textContent = Math.floor(current).toLocaleString() + stat.suffix;
-          } else {
-            el.textContent = current.toFixed(stat.id === 'stat-compliance' ? 1 : 0) + stat.suffix;
-          }
-
-          if (frame < totalFrames) {
-            requestAnimationFrame(update);
-          }
-        }
-
-        update();
-      });
+      renderLandingMetrics();
     }
 
     // 2. Interactive Background Network Canvas
@@ -1236,6 +1249,12 @@
             window.location.href = link.getAttribute('href');
           }
         });
+      });
+
+      window.addEventListener('storage', (event) => {
+        if (event.key === dashboardSnapshotKey) {
+          renderLandingMetrics();
+        }
       });
     }
   </script>

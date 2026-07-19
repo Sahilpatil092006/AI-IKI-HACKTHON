@@ -38,12 +38,12 @@
 
     * { box-sizing: border-box; }
     html, body { height: 100%; }
-    body {
+      refreshDashboardMetrics(false);
       margin: 0;
       font-family: Inter, system-ui, sans-serif;
       color: var(--text-1);
       background:
-        radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.14), transparent 25%),
+    refreshDashboardMetrics(false);
         radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.14), transparent 22%),
         linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-2) 100%);
       overflow: hidden;
@@ -597,6 +597,244 @@
       min-height: 180px;
       position: relative;
       overflow: hidden;
+    }
+
+    .doc-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .doc-action-btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: var(--text-1);
+      border-radius: 12px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform var(--transition), border-color var(--transition), background-color var(--transition);
+    }
+
+    .doc-action-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(6,182,212,0.35);
+      background: rgba(6,182,212,0.08);
+    }
+
+    .doc-action-btn.delete {
+      border-color: rgba(239,68,68,0.25);
+      color: #fecaca;
+      background: rgba(239,68,68,0.08);
+    }
+
+    .doc-action-btn.delete:hover {
+      border-color: rgba(239,68,68,0.4);
+      background: rgba(239,68,68,0.14);
+    }
+
+    .section-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .doc-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 40;
+    }
+
+    .doc-modal.show { display: flex; }
+
+    .doc-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(8px);
+    }
+
+    .doc-modal-panel {
+      position: relative;
+      z-index: 1;
+      width: min(980px, calc(100vw - 32px));
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+      padding: 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+    }
+
+    .doc-modal-close {
+      position: sticky;
+      top: 0;
+      margin-left: auto;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: var(--text-1);
+      cursor: pointer;
+    }
+
+    .doc-modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      margin-bottom: 18px;
+    }
+
+    .doc-preview-card {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .doc-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .doc-preview-item {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .doc-preview-title {
+      margin: 10px 0 8px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .doc-preview-meta {
+      color: var(--text-2);
+      font-size: 0.9rem;
+      display: grid;
+      gap: 5px;
+    }
+
+    .doc-preview-note {
+      margin-top: 16px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    .doc-accordion-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .doc-accordion {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      overflow: hidden;
+    }
+
+    .doc-accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .doc-accordion summary::-webkit-details-marker { display: none; }
+
+    .doc-accordion-title {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .doc-accordion-title strong {
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+
+    .doc-accordion-title span {
+      color: var(--text-2);
+      font-size: 0.88rem;
+    }
+
+    .doc-accordion-chevron {
+      color: var(--cyan);
+      flex: 0 0 auto;
+    }
+
+    .doc-accordion[open] {
+      border-color: rgba(6,182,212,0.28);
+      box-shadow: 0 0 0 1px rgba(6,182,212,0.08) inset;
+    }
+
+    .doc-accordion-body {
+      padding: 0 18px 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .doc-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .doc-info-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--text-2);
+    }
+
+    .doc-info-item strong {
+      display: block;
+      color: var(--text-1);
+      margin-top: 4px;
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    .doc-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .doc-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      color: var(--text-1);
+      font-size: 0.82rem;
     }
 
     .doc-type {
@@ -1459,7 +1697,7 @@
             <div class="kpi-head">
               <div>
                 <div class="kpi-label">Documents Ingested</div>
-                <div class="kpi-value cyan" data-count="12847">0</div>
+                <div class="kpi-value cyan" id="documentsIngestedValue" data-count="0">0</div>
               </div>
               <div class="kpi-icon cyan"><i data-lucide="file-text"></i></div>
             </div>
@@ -1469,7 +1707,7 @@
             <div class="kpi-head">
               <div>
                 <div class="kpi-label">Knowledge Entities</div>
-                <div class="kpi-value emerald" data-count="48293">0</div>
+                <div class="kpi-value emerald" id="knowledgeEntitiesValue" data-count="0">0</div>
               </div>
               <div class="kpi-icon emerald"><i data-lucide="brain"></i></div>
             </div>
@@ -1479,7 +1717,7 @@
             <div class="kpi-head">
               <div>
                 <div class="kpi-label">Active Equipment</div>
-                <div class="kpi-value amber" data-count="2156">0</div>
+                <div class="kpi-value amber" id="activeEquipmentValue" data-count="0">0</div>
               </div>
               <div class="kpi-icon amber"><i data-lucide="activity"></i></div>
             </div>
@@ -1489,7 +1727,7 @@
             <div class="kpi-head">
               <div>
                 <div class="kpi-label">Compliance Score</div>
-                <div class="kpi-value violet" data-count="947">0</div>
+                <div class="kpi-value violet" id="complianceScoreValue" data-count="0" data-format="percent">0</div>
               </div>
               <div class="kpi-icon violet"><i data-lucide="shield-check"></i></div>
             </div>
@@ -1536,6 +1774,9 @@
             <div class="eyebrow">Document intelligence</div>
             <h2 class="section-title">Document Hub</h2>
             <p class="section-subtitle">Ingest refinery drawings, logs, emails, and audit records into structured knowledge with a simulated 5-stage pipeline.</p>
+          </div>
+          <div class="section-actions">
+            <button class="action-btn" type="button" id="openAllDocumentsBtn"><i data-lucide="book-open"></i>Open All Documents</button>
           </div>
         </div>
         <div class="section-grid-2">
@@ -1652,8 +1893,8 @@
         </div>
         <div class="compliance-grid">
           <div class="glass gauge-wrap">
-            <div class="gauge"><strong>94.7%</strong></div>
-            <div style="margin-top:14px; text-align:center; color:var(--text-2)">Overall compliance score across operational, safety, and environmental controls.</div>
+            <div class="gauge"><strong id="complianceGaugeValue">94.7%</strong></div>
+            <div id="complianceGaugeCaption" style="margin-top:14px; text-align:center; color:var(--text-2)">Overall compliance score across operational, safety, and environmental controls.</div>
           </div>
           <div>
             <div class="reg-grid" id="regGrid"></div>
@@ -1715,6 +1956,14 @@
     </main>
   </div>
 
+  <div class="doc-modal" id="documentModal" aria-hidden="true">
+    <div class="doc-modal-backdrop" data-close-document-modal></div>
+    <div class="doc-modal-panel glass">
+      <button class="doc-modal-close" type="button" id="closeDocumentModal" aria-label="Close document preview"><i data-lucide="x"></i></button>
+      <div id="documentModalBody"></div>
+    </div>
+  </div>
+
   <script>
     const state = {
       currentView: 'dashboard',
@@ -1723,7 +1972,14 @@
       charts: {},
       typingTimer: null,
       auditTimer: null,
-      activeFilters: new Set(['Equipment', 'Documents', 'Personnel', 'Regulations', 'Incidents'])
+      activeFilters: new Set(['Equipment', 'Documents', 'Personnel', 'Regulations', 'Incidents']),
+      documentModalMode: null,
+      documentModalDocId: null
+    };
+
+    const storageKeys = {
+      documents: 'ikip.documentCards.v1',
+      dashboard: 'ikip.dashboardSnapshot.v1'
     };
 
     const views = ['dashboard', 'documents', 'graph', 'copilot', 'maintenance', 'compliance', 'lessons'];
@@ -1746,16 +2002,81 @@
       { severity: 'info', time: '10:34', message: 'Daily toolbox talk on confined space entry completed for maintenance crew led by Sandeep Kulkarni.' }
     ];
 
-    const documentCards = [
-      ['P&ID Drawing', 'P-101 Suction and Discharge Loop', 142, 98, '2026-06-28'],
-      ['SOP', 'Start-up Procedure for C-201', 88, 96, '2026-05-19'],
-      ['Work Order', 'Bearing Replacement P-104', 36, 92, '2026-07-09'],
-      ['Inspection Report', 'Heat Exchanger E-303 NDT Review', 64, 95, '2026-06-03'],
-      ['Incident Report', 'Unit 3 Leak and Isolation Event', 53, 90, '2025-11-17'],
-      ['OEM Manual', 'Sulzer Pump PM Guide Rev 8', 115, 97, '2024-09-11'],
-      ['Regulatory Filing', 'OISD-116 Fire Audit Bundle', 79, 94, '2026-02-22'],
-      ['Email Archive', 'Shift Handover - Refinery South Block', 24, 88, '2026-07-11']
+    const documentCardSeed = [
+      {
+        id: 'doc-pid-p101', type: 'P&ID Drawing', title: 'P-101 Suction and Discharge Loop', entities: 142, confidence: 98, date: '2026-06-28', uploaded: false,
+        summary: 'Suction strainer, discharge isolation, and bypass routing for the P-101 pump train.',
+        owner: 'Process Engineering', source: 'Drawing archive', department: 'Utilities', status: 'Authoritative', reviewCycle: 'Annually', retention: 'Permanent',
+        linkedAssets: ['P-101', 'P-102', 'E-301'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['P&ID', 'Pump Train', 'Critical'], notes: 'Use this sheet to confirm line-up before start-up and maintenance isolation.'
+      },
+      {
+        id: 'doc-sop-c201', type: 'SOP', title: 'Start-up Procedure for C-201', entities: 88, confidence: 96, date: '2026-05-19', uploaded: false,
+        summary: 'Stepwise start-up sequence with oil checks, permissives, and load ramp guidance.',
+        owner: 'Operations', source: 'SOP library', department: 'Compression', status: 'Controlled', reviewCycle: 'Quarterly', retention: '5 years',
+        linkedAssets: ['C-201', 'C-202'], regulations: ['Factory Act 1948'], tags: ['Start-up', 'Commissioning', 'Operations'], notes: 'Matches the operating envelope used during turnaround restarts.'
+      },
+      {
+        id: 'doc-wo-p104', type: 'Work Order', title: 'Bearing Replacement P-104', entities: 36, confidence: 92, date: '2026-07-09', uploaded: false,
+        summary: 'Corrective maintenance work order for bearing replacement, alignment, and post-run vibration check.',
+        owner: 'Maintenance Planning', source: 'CMMS export', department: 'Rotating Equipment', status: 'Closed', reviewCycle: 'Per event', retention: '7 years',
+        linkedAssets: ['P-104', 'P-105'], regulations: ['Factory Act 1948'], tags: ['Work Order', 'Bearing', 'Corrective'], notes: 'Includes post-job inspection and sign-off references.'
+      },
+      {
+        id: 'doc-ir-e303', type: 'Inspection Report', title: 'Heat Exchanger E-303 NDT Review', entities: 64, confidence: 95, date: '2026-06-03', uploaded: false,
+        summary: 'NDT findings, thickness readings, and repair recommendation for E-303 channel head inspection.',
+        owner: 'Mechanical Integrity', source: 'Inspection archive', department: 'Heat Transfer', status: 'Reviewed', reviewCycle: 'Semiannual', retention: '10 years',
+        linkedAssets: ['E-303', 'E-304'], regulations: ['PESO Rules'], tags: ['NDT', 'Inspection', 'Thickness'], notes: 'Use this report when planning bundle cleaning or repair scopes.'
+      },
+      {
+        id: 'doc-inc-unit3', type: 'Incident Report', title: 'Unit 3 Leak and Isolation Event', entities: 53, confidence: 90, date: '2025-11-17', uploaded: false,
+        summary: 'Incident chronology, isolation failures, and corrective actions for a Unit 3 hydrocarbon leak.',
+        owner: 'HSE', source: 'Incident register', department: 'Safety', status: 'Actioned', reviewCycle: 'Per incident', retention: '10 years',
+        linkedAssets: ['E-304', 'Unit 3'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['Incident', 'Safety', 'RCA'], notes: 'Root cause emphasizes verification discipline before hot work.'
+      },
+      {
+        id: 'doc-oem-sulzer', type: 'OEM Manual', title: 'Sulzer Pump PM Guide Rev 8', entities: 115, confidence: 97, date: '2024-09-11', uploaded: false,
+        summary: 'Vendor preventive maintenance guidance for overhaul intervals, bearing checks, and seal handling.',
+        owner: 'Reliability', source: 'OEM library', department: 'Rotating Equipment', status: 'Reference', reviewCycle: 'On revision', retention: 'Permanent',
+        linkedAssets: ['P-101', 'P-104'], regulations: ['OISD-116'], tags: ['OEM', 'Pump', 'PM'], notes: 'Useful for torque values and seal replacement steps.'
+      },
+      {
+        id: 'doc-reg-oisd', type: 'Regulatory Filing', title: 'OISD-116 Fire Audit Bundle', entities: 79, confidence: 94, date: '2026-02-22', uploaded: false,
+        summary: 'Inspection evidence pack containing firewater checks, drill logs, and sign-off sheets.',
+        owner: 'Compliance', source: 'Audit archive', department: 'Safety', status: 'Certified', reviewCycle: 'Annual', retention: '7 years',
+        linkedAssets: ['Firewater Loop', 'P-104'], regulations: ['OISD-116', 'Factory Act 1948'], tags: ['Audit', 'Fire Safety', 'Evidence'], notes: 'Open this when preparing regulator submissions.'
+      },
+      {
+        id: 'doc-email-handover', type: 'Email Archive', title: 'Shift Handover - Refinery South Block', entities: 24, confidence: 88, date: '2026-07-11', uploaded: false,
+        summary: 'Shift-to-shift notes covering alarms, minor leaks, and maintenance reminders for South Block.',
+        owner: 'Operations', source: 'Mail archive', department: 'South Block', status: 'Current', reviewCycle: 'Daily', retention: '1 year',
+        linkedAssets: ['P-101', 'E-304'], regulations: ['Factory Act 1948'], tags: ['Handover', 'Email', 'Operations'], notes: 'Useful for tracing recent warnings that did not escalate to incidents.'
+      },
+      {
+        id: 'doc-maint-datasheet', type: 'Maintenance Log', title: 'P-104 Vibration Trend Log', entities: 61, confidence: 93, date: '2026-07-14', uploaded: false,
+        summary: 'Trending log with vibration, temperature, and alignment readings across the latest running cycle.',
+        owner: 'Condition Monitoring', source: 'Sensor export', department: 'Rotating Equipment', status: 'Live', reviewCycle: 'Weekly', retention: '3 years',
+        linkedAssets: ['P-104'], regulations: ['Factory Act 1948'], tags: ['Trend', 'Condition Monitoring', 'Pump'], notes: 'Best used alongside the work order for predictive planning.'
+      },
+      {
+        id: 'doc-safety-drill', type: 'Safety Drill Record', title: 'Confined Space Drill Attendance - Q2 2026', entities: 29, confidence: 91, date: '2026-06-30', uploaded: false,
+        summary: 'Attendance, observations, and corrective actions from the latest confined-space drill.',
+        owner: 'HSE', source: 'Training record', department: 'Safety', status: 'Completed', reviewCycle: 'Quarterly', retention: '5 years',
+        linkedAssets: ['Unit 3', 'E-303'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['Drill', 'Safety', 'Training'], notes: 'Good evidence for compliance closure and toolbox talks.'
+      }
     ];
+
+    function loadDocumentCards() {
+      try {
+        const raw = localStorage.getItem(storageKeys.documents);
+        if (!raw) return JSON.parse(JSON.stringify(documentCardSeed));
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) && parsed.length ? parsed : JSON.parse(JSON.stringify(documentCardSeed));
+      } catch {
+        return JSON.parse(JSON.stringify(documentCardSeed));
+      }
+    }
+
+    let documentCards = loadDocumentCards();
 
     const pipelineSteps = [
       ['Upload', 'upload', 'done'],
@@ -2030,20 +2351,295 @@
       `).join('');
     }
 
+    function saveDocumentCards() {
+      localStorage.setItem(storageKeys.documents, JSON.stringify(documentCards));
+    }
+
+    function buildDashboardSnapshot() {
+      const documentCount = documentCards.length;
+      const knowledgeEntities = documentCards.reduce((total, doc) => total + Number(doc.entities || 0), 0);
+      const activeEquipment = graphData.nodes.filter(node => node.type === 'Equipment').length;
+      const complianceScore = 94.7;
+      return {
+        documentCount,
+        knowledgeEntities,
+        activeEquipment,
+        complianceScore,
+        updatedAt: new Date().toISOString()
+      };
+    }
+
+    function saveDashboardSnapshot() {
+      localStorage.setItem(storageKeys.dashboard, JSON.stringify(buildDashboardSnapshot()));
+    }
+
+    function getDashboardMetrics() {
+      const documentCount = documentCards.length;
+      const knowledgeEntities = documentCards.reduce((total, doc) => total + Number(doc.entities || 0), 0);
+      const activeEquipment = graphData.nodes.filter(node => node.type === 'Equipment').length;
+      const complianceScore = 94.7;
+      return { documentCount, knowledgeEntities, activeEquipment, complianceScore };
+    }
+
+    function setMetricValue(elementId, value, formatter) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      element.dataset.count = String(value);
+      element.textContent = formatter(value);
+    }
+
+    function refreshDashboardMetrics(animate = false) {
+      const metrics = buildDashboardSnapshot();
+      saveDocumentCards();
+      saveDashboardSnapshot();
+      setMetricValue('documentsIngestedValue', metrics.documentCount, value => value.toLocaleString('en-IN'));
+      setMetricValue('knowledgeEntitiesValue', metrics.knowledgeEntities, value => value.toLocaleString('en-IN'));
+      setMetricValue('activeEquipmentValue', metrics.activeEquipment, value => value.toLocaleString('en-IN'));
+      setMetricValue('complianceScoreValue', Math.round(metrics.complianceScore * 10), value => `${(value / 10).toFixed(1)}%`);
+
+      const complianceGauge = document.getElementById('complianceGaugeValue');
+      if (complianceGauge) complianceGauge.textContent = `${metrics.complianceScore.toFixed(1)}%`;
+
+      if (animate) animateCounters();
+    }
+
+    function getDocumentById(documentId) {
+      return documentCards.find(doc => doc.id === documentId);
+    }
+
+    function docList(value) {
+      return Array.isArray(value) && value.length ? value.join(', ') : 'None';
+    }
+
+    function renderDocumentAccordion(doc, expanded = false) {
+      const openAttribute = expanded ? ' open' : '';
+      return `
+        <details class="doc-accordion"${openAttribute} data-document-id="${doc.id}">
+          <summary>
+            <div class="doc-accordion-title">
+              <strong>${doc.title}</strong>
+              <span>${doc.type} · ${doc.summary}</span>
+            </div>
+            <i data-lucide="chevron-down" class="doc-accordion-chevron"></i>
+          </summary>
+          <div class="doc-accordion-body">
+            <div class="doc-info-grid">
+              <div class="doc-info-item">Owner<strong>${doc.owner}</strong></div>
+              <div class="doc-info-item">Source<strong>${doc.source}</strong></div>
+              <div class="doc-info-item">Department<strong>${doc.department}</strong></div>
+              <div class="doc-info-item">Status<strong>${doc.status}</strong></div>
+              <div class="doc-info-item">Review cycle<strong>${doc.reviewCycle}</strong></div>
+              <div class="doc-info-item">Retention<strong>${doc.retention}</strong></div>
+              <div class="doc-info-item">Extracted entities<strong>${doc.entities}</strong></div>
+              <div class="doc-info-item">Confidence<strong>${doc.confidence}%</strong></div>
+            </div>
+            <div>
+              <div class="doc-preview-note" style="margin-top:0;">${doc.notes}</div>
+            </div>
+            <div>
+              <div class="doc-preview-meta" style="margin-bottom:8px;"><strong style="color:var(--text-1);">Linked assets and standards</strong></div>
+              <div class="doc-tag-row">
+                ${doc.linkedAssets.map(item => `<span class="doc-tag"><i data-lucide="link-2"></i>${item}</span>`).join('')}
+                ${doc.regulations.map(item => `<span class="doc-tag"><i data-lucide="shield-check"></i>${item}</span>`).join('')}
+                ${doc.tags.map(item => `<span class="doc-tag"><i data-lucide="tag"></i>${item}</span>`).join('')}
+              </div>
+            </div>
+            <div class="doc-card-actions">
+              <button class="doc-action-btn" type="button" data-document-action="open" data-document-id="${doc.id}"><i data-lucide="eye"></i>Open</button>
+              ${doc.uploaded ? `<button class="doc-action-btn delete" type="button" data-document-action="delete" data-document-id="${doc.id}"><i data-lucide="trash-2"></i>Delete</button>` : ''}
+            </div>
+          </div>
+        </details>
+      `;
+    }
+
+    function getDocumentById(documentId) {
+      return documentCards.find(doc => doc.id === documentId);
+    }
+
+    function recalculateGraphDensity() {
+      graphData.density = (graphData.edges.length / Math.max(1, (graphData.nodes.length * (graphData.nodes.length - 1)) / 2)) * 100;
+    }
+
+    function removeDocumentGraphNode(documentId) {
+      const documentNodeId = documentId;
+      graphData.nodes = graphData.nodes.filter(node => node.id !== documentNodeId);
+      graphData.edges = graphData.edges.filter(edge => edge.from !== documentNodeId && edge.to !== documentNodeId);
+      graphData.index.delete(documentNodeId);
+      recalculateGraphDensity();
+    }
+
+    function refreshGraphViews() {
+      applyGraphFilters();
+      if (graphData.nodes.length) {
+        renderNodeDetails(graphData.nodes[0].id);
+      }
+    }
+
+    function documentItemTemplate(doc, compact = false) {
+      const buttonLabel = compact ? 'Open' : 'Open Document';
+      return `
+        <div class="doc-preview-item" data-document-id="${doc.id}">
+          <div class="doc-type"><i data-lucide="folder-open"></i>${doc.type}</div>
+          <div class="doc-preview-title">${doc.title}</div>
+          <div class="doc-preview-meta">
+            <div>Summary: ${doc.summary}</div>
+            <div>Indexed on ${doc.date}</div>
+            <div>Owner: ${doc.owner}</div>
+          </div>
+          <div class="doc-card-actions">
+            <button class="doc-action-btn" type="button" data-document-action="open" data-document-id="${doc.id}"><i data-lucide="eye"></i>${buttonLabel}</button>
+            ${doc.uploaded ? `<button class="doc-action-btn delete" type="button" data-document-action="delete" data-document-id="${doc.id}"><i data-lucide="trash-2"></i>Delete</button>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function openDocument(documentId) {
+      const doc = getDocumentById(documentId);
+      if (!doc) return;
+      state.documentModalMode = 'single';
+      state.documentModalDocId = documentId;
+      renderDocumentModal();
+      showDocumentModal();
+    }
+
+    function openAllDocuments() {
+      state.documentModalMode = 'all';
+      state.documentModalDocId = null;
+      renderDocumentModal();
+      showDocumentModal();
+    }
+
+    function showDocumentModal() {
+      const modal = document.getElementById('documentModal');
+      if (!modal) return;
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeDocumentPreview() {
+      const modal = document.getElementById('documentModal');
+      if (!modal) return;
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      state.documentModalMode = null;
+      state.documentModalDocId = null;
+    }
+
+    function renderDocumentModal() {
+      const host = document.getElementById('documentModalBody');
+      if (!host) return;
+
+      if (state.documentModalMode === 'single') {
+        const doc = getDocumentById(state.documentModalDocId);
+        if (!doc) {
+          closeDocumentPreview();
+          return;
+        }
+        host.innerHTML = `
+          <button class="doc-modal-close" type="button" id="closeDocumentModalInner" data-document-action="close" aria-label="Close document preview"><i data-lucide="x"></i></button>
+          <div class="doc-modal-header">
+            <div>
+              <div class="doc-type"><i data-lucide="folder-open"></i>${doc.type}</div>
+              <h3 class="section-title" style="margin-top:12px; font-size:1.5rem;">${doc.title}</h3>
+              <p class="section-subtitle" style="margin-top:10px; max-width:none;">A structured preview of the selected document. Uploaded documents can be deleted from this view.</p>
+            </div>
+            <div class="section-actions">
+              <button class="action-btn" type="button" data-document-action="open-all"><i data-lucide="book-open"></i>Open All Documents</button>
+              <button class="action-btn" type="button" data-document-action="open" data-document-id="${doc.id}"><i data-lucide="eye"></i>Refresh Preview</button>
+              ${doc.uploaded ? `<button class="action-btn" type="button" data-document-action="delete" data-document-id="${doc.id}"><i data-lucide="trash-2"></i>Delete Upload</button>` : ''}
+            </div>
+          </div>
+          <div class="doc-preview-card">
+            <div class="doc-accordion-list">
+              ${renderDocumentAccordion(doc, true)}
+              <details class="doc-accordion">
+                <summary>
+                  <div class="doc-accordion-title">
+                    <strong>Processing snapshot</strong>
+                    <span>How the document was indexed and linked</span>
+                  </div>
+                  <i data-lucide="chevron-down" class="doc-accordion-chevron"></i>
+                </summary>
+                <div class="doc-accordion-body">
+                  <div class="doc-info-grid">
+                    <div class="doc-info-item">Pipeline stage<strong>Indexed</strong></div>
+                    <div class="doc-info-item">Entity extraction<strong>Complete</strong></div>
+                    <div class="doc-info-item">Graph linking<strong>Enabled</strong></div>
+                    <div class="doc-info-item">Audit trail<strong>Available</strong></div>
+                  </div>
+                  <div class="doc-preview-note" style="margin-top:0;">This preview represents the ingested document record inside the knowledge hub. Use Open All Documents to browse the full catalog.</div>
+                </div>
+              </details>
+            </div>
+          </div>
+        `;
+      } else {
+        host.innerHTML = `
+          <button class="doc-modal-close" type="button" id="closeDocumentModalInner" data-document-action="close" aria-label="Close document preview"><i data-lucide="x"></i></button>
+          <div class="doc-modal-header">
+            <div>
+              <div class="doc-type"><i data-lucide="book-open"></i>All Documents</div>
+              <h3 class="section-title" style="margin-top:12px; font-size:1.5rem;">Open any document</h3>
+              <p class="section-subtitle" style="margin-top:10px; max-width:none;">Select a document to open its preview. Uploaded documents include delete controls.</p>
+            </div>
+            <div class="section-actions">
+              <button class="action-btn" type="button" data-document-action="close"><i data-lucide="x"></i>Close</button>
+            </div>
+          </div>
+          <div class="doc-accordion-list">
+            ${documentCards.map(doc => renderDocumentAccordion(doc, false)).join('')}
+          </div>
+        `;
+      }
+
+      lucide.createIcons();
+    }
+
+    function deleteDocument(documentId) {
+      const docIndex = documentCards.findIndex(doc => doc.id === documentId);
+      const doc = docIndex >= 0 ? documentCards[docIndex] : null;
+      if (!doc || !doc.uploaded) return;
+
+      const confirmed = window.confirm(`Delete uploaded document "${doc.title}"?`);
+      if (!confirmed) return;
+
+      documentCards.splice(docIndex, 1);
+      removeDocumentGraphNode(documentId);
+      renderDocuments();
+      refreshDashboardMetrics(false);
+      refreshGraphViews();
+
+      if (state.documentModalMode === 'single' && state.documentModalDocId === documentId) {
+        closeDocumentPreview();
+      } else if (state.documentModalMode) {
+        renderDocumentModal();
+      }
+
+      showToast(`Deleted uploaded document: ${doc.title}`);
+    }
+
     function renderDocuments() {
       const host = document.getElementById('documentGrid');
-      host.innerHTML = documentCards.map(([type, title, entities, confidence, date]) => `
-        <article class="glass doc-card">
-          <div class="doc-type"><i data-lucide="folder-open"></i>${type}</div>
-          <div class="doc-title">${title}</div>
+      host.innerHTML = documentCards.map(doc => `
+        <article class="glass doc-card" data-document-id="${doc.id}">
+          <div class="doc-type"><i data-lucide="folder-open"></i>${doc.type}</div>
+          <div class="doc-title">${doc.title}</div>
           <div class="doc-meta">
-            <div>Extracted entities: ${entities}</div>
-            <div>Confidence: ${confidence}%</div>
-            <div class="meter"><span style="width:${confidence}%"></span></div>
-            <div>Indexed on ${date}</div>
+            <div>${doc.summary}</div>
+            <div>Extracted entities: ${doc.entities}</div>
+            <div>Confidence: ${doc.confidence}%</div>
+            <div class="meter"><span style="width:${doc.confidence}%"></span></div>
+            <div>Indexed on ${doc.date}</div>
+          </div>
+          <div class="doc-card-actions">
+            <button class="doc-action-btn" type="button" data-document-action="open" data-document-id="${doc.id}"><i data-lucide="eye"></i>Open</button>
+            ${doc.uploaded ? `<button class="doc-action-btn delete" type="button" data-document-action="delete" data-document-id="${doc.id}"><i data-lucide="trash-2"></i>Delete</button>` : ''}
           </div>
         </article>
       `).join('');
+      lucide.createIcons();
     }
 
     function renderQuestionChips() {
@@ -2181,12 +2777,12 @@
         const target = Number(el.dataset.count);
         const duration = 1300;
         const start = performance.now();
-        const suffix = el.textContent.includes('%') ? '%' : '';
-        const format = el.dataset.count === '947' ? (n) => `${(n / 10).toFixed(1)}%` : (n) => Math.round(n).toLocaleString('en-IN');
+        const suffix = el.dataset.format === 'percent' ? '%' : '';
+        const format = el.dataset.format === 'percent' ? (n) => `${(n / 10).toFixed(1)}` : (n) => Math.round(n).toLocaleString('en-IN');
         const tick = (now) => {
           const progress = Math.min(1, (now - start) / duration);
           const eased = 1 - Math.pow(1 - progress, 3);
-          el.textContent = format(target * eased);
+          el.textContent = `${format(target * eased)}${suffix}`;
           if (progress < 1) requestAnimationFrame(tick);
           else if (suffix) el.textContent = `${format(target)}${suffix}`;
         };
@@ -2745,19 +3341,33 @@
           const entitiesCount = Math.floor(Math.random() * 85) + 35;
           const confidence = Math.floor(Math.random() * 12) + 87;
           const dateString = new Date().toISOString().split('T')[0];
+          const documentId = `upload-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
           
-          documentCards.unshift([
-            'PDF Document',
-            file.name,
-            entitiesCount,
+          documentCards.unshift({
+            id: documentId,
+            type: 'PDF Document',
+            title: file.name,
+            entities: entitiesCount,
             confidence,
-            dateString
-          ]);
+            date: dateString,
+            uploaded: true,
+            summary: `Uploaded file ${file.name} ingested from the document upload zone.`,
+            owner: 'Current user',
+            source: 'Manual upload',
+            department: 'Document Hub',
+            status: 'Uploaded',
+            reviewCycle: 'On demand',
+            retention: 'User managed',
+            linkedAssets: ['Auto-linked assets'],
+            regulations: ['Factory Act 1948'],
+            tags: ['Upload', 'User file', file.type || 'Unknown format'],
+            notes: 'This record was created from a live upload and can be opened or deleted from the hub.'
+          });
           
           renderDocuments();
-          updateDocCount(1);
+          refreshDashboardMetrics(false);
           
-          const nodeId = 'D-' + (graphData.nodes.length + 1);
+          const nodeId = documentId;
           const label = file.name.substring(0, 15) + (file.name.length > 15 ? '...' : '');
           
           graphData.nodes.push({
@@ -2791,21 +3401,13 @@
             arrows: 'to',
             color: { color: 'rgba(148,163,184,0.55)' }
           });
+
+          recalculateGraphDensity();
           
           applyGraphFilters();
           showToast(`Ingestion complete: ${file.name} resolved to ${entitiesCount} graph nodes.`);
         }
       }, 700);
-    }
-
-    function updateDocCount(increment) {
-      const docCounters = document.querySelectorAll('[data-count="12847"]');
-      docCounters.forEach(docCounter => {
-        const currentTarget = parseInt(docCounter.getAttribute('data-count') || docCounter.textContent.replace(/,/g, ''));
-        const newTarget = currentTarget + increment;
-        docCounter.setAttribute('data-count', newTarget);
-        docCounter.textContent = newTarget.toLocaleString('en-IN');
-      });
     }
 
     function setupLessonsCapture() {
@@ -2866,6 +3468,55 @@
         applyGraphFilters();
         showToast(`Wisdom indexed: Added ${engName}'s note to Jamnagar platform brain.`);
         form.reset();
+      });
+    }
+
+    function setupDocumentActions() {
+      const grid = document.getElementById('documentGrid');
+      const openAllButton = document.getElementById('openAllDocumentsBtn');
+      const modal = document.getElementById('documentModal');
+      const modalBody = document.getElementById('documentModalBody');
+      const closeButton = document.getElementById('closeDocumentModal');
+
+      if (grid) {
+        grid.addEventListener('click', (event) => {
+          const actionButton = event.target.closest('[data-document-action]');
+          if (!actionButton) return;
+          const action = actionButton.dataset.documentAction;
+          const documentId = actionButton.dataset.documentId;
+
+          if (action === 'open') openDocument(documentId);
+          if (action === 'delete') deleteDocument(documentId);
+        });
+      }
+
+      if (openAllButton) openAllButton.addEventListener('click', openAllDocuments);
+      if (closeButton) closeButton.addEventListener('click', closeDocumentPreview);
+      if (modalBody) {
+        modalBody.addEventListener('click', (event) => {
+          const actionButton = event.target.closest('[data-document-action]');
+          if (!actionButton) return;
+          const action = actionButton.dataset.documentAction;
+          const documentId = actionButton.dataset.documentId;
+
+          if (action === 'open') openDocument(documentId);
+          if (action === 'delete') deleteDocument(documentId);
+          if (action === 'open-all') openAllDocuments();
+          if (action === 'close') closeDocumentPreview();
+        });
+      }
+      if (modal) {
+        modal.addEventListener('click', (event) => {
+          if (event.target?.dataset?.closeDocumentModal !== undefined) {
+            closeDocumentPreview();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal?.classList.contains('show')) {
+          closeDocumentPreview();
+        }
       });
     }
 
@@ -2957,11 +3608,12 @@
       setupChat();
       setupAudit();
       setupDocumentUpload();
+      setupDocumentActions();
       setupLessonsCapture();
       setupNav();
       createChartConfigs();
       initializeGraphs();
-      animateCounters();
+      refreshDashboardMetrics(false);
       lucide.createIcons();
       window.addEventListener('resize', () => { state.graph?.redraw(); state.previewGraph?.redraw(); });
 
