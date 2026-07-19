@@ -268,12 +268,14 @@ def _metadata_from_entities(
     source_hash: str,
     chunk_index: int,
     entities: dict[str, list[str]],
+    uploaded_by: str = "",
 ) -> dict[str, str | int]:
     return {
         "document_name": document_name,
         "source_type": source_type,
         "source_hash": source_hash,
         "chunk_index": chunk_index,
+        "uploaded_by": uploaded_by,
         "equipment_tags": "|".join(entities.get("tags", [])),
         "entity_types": "|".join(entities.get("type", [])),
         "failure_modes": "|".join(entities.get("failure_modes", [])),
@@ -327,6 +329,7 @@ def ingest_sources(
     client: OpenAI | None = None,
     chunk_size: int = 1000,
     overlap: int = 200,
+    uploaded_by: str = "",
 ) -> dict[str, Any]:
     collection = get_collection(chroma_dir=chroma_dir, collection_name=collection_name)
     llm_client = client
@@ -338,6 +341,7 @@ def ingest_sources(
 
     added = 0
     processed_documents: list[str] = []
+    processed_entries: list[dict[str, str | int]] = []
     warnings: list[str] = []
 
     for source in sources:
@@ -348,6 +352,13 @@ def ingest_sources(
         chunks = chunk_text(parsed.text, chunk_size=chunk_size, overlap=overlap)
         if not chunks:
             warnings.append(f"No text extracted from {parsed.name}.")
+            processed_entries.append(
+                {
+                    "document_name": parsed.name,
+                    "source_type": parsed.source_type,
+                    "chunks_added": 0,
+                }
+            )
             continue
 
         documents: list[str] = []
@@ -362,6 +373,7 @@ def ingest_sources(
                 source_hash=parsed.source_hash,
                 chunk_index=idx,
                 entities=entities,
+                uploaded_by=uploaded_by.strip(),
             )
             documents.append(chunk)
             metadatas.append(metadata)
@@ -369,9 +381,17 @@ def ingest_sources(
 
         collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
         added += len(ids)
+        processed_entries.append(
+            {
+                "document_name": parsed.name,
+                "source_type": parsed.source_type,
+                "chunks_added": len(ids),
+            }
+        )
 
     return {
         "processed_documents": processed_documents,
+        "processed_entries": processed_entries,
         "chunks_added": added,
         "warnings": warnings,
     }

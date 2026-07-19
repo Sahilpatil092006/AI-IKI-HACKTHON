@@ -1,4 +1,4 @@
-Date,Equipment_Tag,Issue,Action_Taken
-2026-06-12,P-101,Seal leakage detected during operation,"Pump isolated, seal inspected, replacement scheduled"
-2026-06-13,P-101,Bearing temperature exceeded threshold,Bearing lubrication and alignment completed
-2026-06-14,V-303,Hydrostatic test overdue,Testing request raised for compliance closure
+Date,Equipment_Tag,Issue,Inspection_Engineer,Maintenance_Engineer,Inspection_Details,Maintenance_Details,Action_Taken
+2026-06-12,P-101,Seal leakage detected during operation,A. Sharma,K. Verma,Detected seal leakage during round inspection and isolated the pump.,Replaced worn seal and completed alignment check before restart.,"Pump isolated, seal inspected, seal replaced, and restart checks completed"
+2026-06-13,P-101,Bearing temperature exceeded threshold,R. Kulkarni,M. Iyer,Recorded bearing temperature at 92 C and flagged overheating.,"Performed lubrication, corrected misalignment, and verified normal temperature.",Bearing lubrication and alignment completed
+2026-06-14,V-303,Hydrostatic test overdue,S. Nair,P. Rao,Audit found no recent hydrostatic test certificate for vessel V-303.,Raised hydrostatic test work order and scheduled certified testing team.,Testing request raised for compliance closure

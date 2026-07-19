@@ -12,6 +12,12 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 CHAT_MODEL = "gpt-4o-mini"
 
 
+def _is_maintenance_report_query(question: str) -> bool:
+    normalized = question.lower()
+    maintenance_terms = ("maintenance report", "maintenance", "maintanence", "inspection")
+    return any(term in normalized for term in maintenance_terms)
+
+
 def get_openai_client(api_key: str | None = None) -> OpenAI:
     key = api_key or os.getenv("OPENAI_API_KEY")
     if not key:
@@ -76,14 +82,29 @@ def ask_question(
             "source_documents": [],
         }
 
+    response_sections = (
+        "1. Direct Answer\n"
+        "2. Source Document Name\n"
+        "3. Related Equipment Tags"
+    )
+    if _is_maintenance_report_query(question):
+        response_sections = (
+            "1. Maintenance Report Summary\n"
+            "2. Inspection Engineer\n"
+            "3. Maintenance Engineer\n"
+            "4. Inspection and Maintenance Details\n"
+            "5. Source Document Name\n"
+            "6. Related Equipment Tags"
+        )
+
     system_prompt = (
         "You are a senior industrial engineer. Answer based ONLY on the provided context. "
         "If the answer is not in the context, reply exactly: Information not found in current documents. "
         "Do not invent facts. Cite document names inline in the answer. "
+        "For maintenance-report questions, include engineer names and work details only when explicitly present "
+        "in the context. If a specific field is missing, write: Not specified in source context. "
         "Return a concise answer with these sections:\n"
-        "1. Direct Answer\n"
-        "2. Source Document Name\n"
-        "3. Related Equipment Tags"
+        f"{response_sections}"
     )
 
     user_prompt = (
