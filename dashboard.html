@@ -37,13 +37,12 @@
     }
 
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
-      refreshDashboardMetrics(false);
+    html, body {
+      height: 100%;
       margin: 0;
       font-family: Inter, system-ui, sans-serif;
       color: var(--text-1);
       background:
-    refreshDashboardMetrics(false);
         radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.14), transparent 22%),
         linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-2) 100%);
       overflow: hidden;
@@ -1650,9 +1649,268 @@
     .mobile-overlay {
       background: rgba(15, 23, 42, 0.28);
     }
+
+    /* Login Screen Gate Styles */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: radial-gradient(circle at 50% 50%, rgba(10, 14, 26, 0.95), rgba(5, 8, 16, 0.98));
+      backdrop-filter: blur(28px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 300ms ease;
+    }
+    .login-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+      display: none !important;
+    }
+
+    /* ── Session Inactivity Warning Banner ── */
+    #sessionWarningBanner {
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10001;
+      background: linear-gradient(135deg, #7c2d12, #991b1b);
+      border: 1px solid rgba(252,165,165,0.3);
+      border-radius: 14px;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 380px;
+      max-width: 90vw;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+      transition: top 420ms cubic-bezier(.2,.8,.2,1);
+      color: #fecaca;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    #sessionWarningBanner.visible {
+      top: 16px;
+    }
+    #sessionWarningBanner .warn-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    #sessionWarningBanner .warn-text strong {
+      display: block;
+      color: #fca5a5;
+      font-size: 0.92rem;
+      margin-bottom: 2px;
+    }
+    #sessionWarningBanner .warn-countdown {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #f87171;
+      min-width: 38px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+    #sessionWarningBanner .warn-dismiss {
+      margin-left: auto;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: #fecaca;
+      font-size: 0.8rem;
+      padding: 5px 12px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 200ms;
+    }
+    #sessionWarningBanner .warn-dismiss:hover {
+      background: rgba(255,255,255,0.22);
+    }
+    .login-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 40px;
+      width: 440px;
+      max-width: 90%;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      text-align: center;
+      animation: sectionIn 350ms cubic-bezier(.2,.8,.2,1) both;
+    }
+    .login-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(6,182,212,0.22), rgba(8,145,178,0.08));
+      border: 1px solid rgba(6,182,212,0.4);
+      box-shadow: var(--shadow-cyan);
+      color: var(--cyan);
+    }
+    .login-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--text-1);
+      margin-bottom: 8px;
+    }
+    .login-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-2);
+      margin-bottom: 30px;
+    }
+    .login-field {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .login-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-2);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .login-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-family: inherit;
+      color: var(--text-1);
+      font-size: 0.95rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .login-input:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+    }
+    .login-btn {
+      width: 100%;
+      appearance: none;
+      border: 0;
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 10px 20px rgba(6, 182, 212, 0.2);
+      transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 24px rgba(6, 182, 212, 0.3), var(--shadow-cyan);
+      filter: brightness(1.05);
+    }
+    .login-btn:active {
+      transform: translateY(0);
+    }
+    .login-error {
+      color: var(--red);
+      font-size: 0.9rem;
+      margin-top: 12px;
+      min-height: 20px;
+      display: none;
+    }
+    .login-suggestions {
+      margin-top: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: left;
+    }
+    .login-suggestions-title {
+      font-size: 0.78rem;
+      color: var(--text-2);
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .login-suggestions-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .login-suggest-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+    .login-suggest-chip:hover {
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--cyan);
+      border-color: rgba(6, 182, 212, 0.2);
+    }
+
+    /* Document Hub Pagination Control Styles */
+    .pagination-controls {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
   </style>
 </head>
 <body>
+  <!-- Engineer Authorization Login Gate Overlay -->
+  <!-- Session Inactivity Warning Banner -->
+  <div id="sessionWarningBanner" role="alert" aria-live="assertive">
+    <span class="warn-icon">⚠️</span>
+    <div class="warn-text">
+      <strong>Session Expiring Soon</strong>
+      No activity detected — you will be logged out automatically.
+    </div>
+    <div class="warn-countdown" id="sessionCountdown">60</div>
+    <button class="warn-dismiss" onclick="dismissSessionWarning()">Stay Logged In</button>
+  </div>
+
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-logo"><i data-lucide="factory"></i></div>
+      <h2 class="login-title">IKIP Console</h2>
+      <p class="login-subtitle">Engineer Access Authorization</p>
+      
+      <div class="login-field">
+        <label class="login-label">Engineer ID</label>
+        <input type="text" id="loginEngId" class="login-input" placeholder="e.g. PR-01" required />
+      </div>
+      
+      <div class="login-field">
+        <label class="login-label">Password</label>
+        <input type="password" id="loginPassword" class="login-input" placeholder="••••••••" required value="password123" />
+      </div>
+      
+      <button type="button" id="loginBtn" class="login-btn">Authenticate & Enter</button>
+      <div id="loginError" class="login-error">Invalid Engineer Credentials.</div>
+      
+      <div class="login-suggestions">
+        <div class="login-suggestions-title">Active Shift Profiles</div>
+        <div class="login-suggestions-list">
+          <span class="login-suggest-chip" onclick="fillLogin('PR-01')">Arun (PR-01)</span>
+          <span class="login-suggest-chip" onclick="fillLogin('PR-02')">Neha (PR-02)</span>
+          <span class="login-suggest-chip" onclick="fillLogin('PR-03')">Rakesh (PR-03)</span>
+          <span class="login-suggest-chip" onclick="fillLogin('PR-05')">Sandeep (PR-05)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="mobile-overlay" id="overlay"></div>
   <div class="app">
     <aside class="sidebar" id="sidebar">
@@ -1669,7 +1927,7 @@
         <button data-view="compliance"><i data-lucide="shield-check"></i><span>Compliance Center</span></button>
         <button data-view="lessons"><i data-lucide="book-open-text"></i><span>Lessons Learned</span></button>
       </nav>
-      <div class="sidebar-footer glass">
+      <div class="sidebar-footer glass" id="sidebarFooter">
         <div style="font-weight:700; margin-bottom:8px;">Bharat Petrochemicals</div>
         <div style="color:var(--text-2); font-size:0.92rem;">Jamnagar Refinery · Unified intelligence across documents, assets, incidents, and regulations.</div>
         <div class="status-line"><span class="pulse"></span> Live refinery memory online</div>
@@ -1751,10 +2009,7 @@
             <div class="card-head"><h3>Recent Alerts</h3><div class="card-meta">Live refinery event stream</div></div>
             <div class="feed" id="alertFeed"></div>
           </div>
-          <div class="glass panel">
-            <div class="card-head"><h3>Knowledge Graph Preview</h3><div class="card-meta">15-20 entity snapshot</div></div>
-            <div id="previewGraph" class="mini-graph"></div>
-          </div>
+
         </div>
 
         <div class="glass panel">
@@ -1797,6 +2052,8 @@
           <div>
             <div class="pipeline" id="pipeline"></div>
             <div class="doc-grid" id="documentGrid"></div>
+            <!-- Pagination controls below grid -->
+            <div class="pagination-controls" id="documentsPagination"></div>
           </div>
         </div>
       </section>
@@ -1974,8 +2231,19 @@
       auditTimer: null,
       activeFilters: new Set(['Equipment', 'Documents', 'Personnel', 'Regulations', 'Incidents']),
       documentModalMode: null,
-      documentModalDocId: null
+      documentModalDocId: null,
+      documentsPage: 1
     };
+
+    // Global engineer roster for login authentication
+    const ENGINEER_ROSTER = [
+      ['PR-01', 'Arun Deshmukh', 'Senior Reliability Engineer'],
+      ['PR-02', 'Neha Iyer', 'Shift Superintendent'],
+      ['PR-03', 'Rakesh Patil', 'Mechanical Inspector'],
+      ['PR-04', 'Farah Khan', 'HSE Lead'],
+      ['PR-05', 'Sandeep Kulkarni', 'Maintenance Planner'],
+      ['PR-06', 'Priya Nair', 'Process Engineer']
+    ];
 
     const storageKeys = {
       documents: 'ikip.documentCards.v1',
@@ -2622,7 +2890,22 @@
 
     function renderDocuments() {
       const host = document.getElementById('documentGrid');
-      host.innerHTML = documentCards.map(doc => `
+      const paginationHost = document.getElementById('documentsPagination');
+      
+      const page = state.documentsPage || 1;
+      const perPage = 4;
+      const totalDocs = documentCards.length;
+      const totalPages = Math.ceil(totalDocs / perPage) || 1;
+      
+      if (state.documentsPage > totalPages) {
+        state.documentsPage = totalPages;
+      }
+      
+      const start = (state.documentsPage - 1) * perPage;
+      const end = start + perPage;
+      const paginatedDocs = documentCards.slice(start, end);
+      
+      host.innerHTML = paginatedDocs.map(doc => `
         <article class="glass doc-card" data-document-id="${doc.id}">
           <div class="doc-type"><i data-lucide="folder-open"></i>${doc.type}</div>
           <div class="doc-title">${doc.title}</div>
@@ -2639,6 +2922,34 @@
           </div>
         </article>
       `).join('');
+
+      if (paginationHost) {
+        paginationHost.innerHTML = `
+          <button class="doc-action-btn" type="button" id="prevDocsBtn" ${state.documentsPage === 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''}>
+            <i data-lucide="chevron-left"></i>Prev
+          </button>
+          <span style="font-family:'JetBrains Mono', monospace; font-size:0.92rem; color:var(--text-1); min-width: 100px; text-align: center;">
+            Page ${state.documentsPage} / ${totalPages}
+          </span>
+          <button class="doc-action-btn" type="button" id="nextDocsBtn" ${state.documentsPage === totalPages ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''}>
+            Next<i data-lucide="chevron-right"></i>
+          </button>
+        `;
+
+        document.getElementById('prevDocsBtn')?.addEventListener('click', () => {
+          if (state.documentsPage > 1) {
+            state.documentsPage--;
+            renderDocuments();
+          }
+        });
+        document.getElementById('nextDocsBtn')?.addEventListener('click', () => {
+          if (state.documentsPage < totalPages) {
+            state.documentsPage++;
+            renderDocuments();
+          }
+        });
+      }
+      
       lucide.createIcons();
     }
 
@@ -2897,10 +3208,7 @@
     }
 
     function initializeGraphs() {
-      state.previewGraph = createGraph('previewGraph', {
-        nodes: new vis.DataSet(graphData.nodes.slice(0, 19)),
-        edges: new vis.DataSet(graphData.edges.filter((_, i) => i < 22))
-      }, renderNodeDetails);
+      state.previewGraph = null;
       state.graph = createGraph('fullGraph', {
         nodes: new vis.DataSet(graphData.nodes),
         edges: new vis.DataSet(graphData.edges)
@@ -2932,9 +3240,7 @@
       if (state.graph) {
         state.graph.setData({ nodes: new vis.DataSet(filteredNodes), edges: new vis.DataSet(filteredEdges) });
       }
-      if (state.previewGraph) {
-        state.previewGraph.setData({ nodes: new vis.DataSet(filteredNodes.slice(0, 19)), edges: new vis.DataSet(filteredEdges.slice(0, 22)) });
-      }
+
       document.getElementById('statNodes').textContent = filteredNodes.length;
       document.getElementById('statEdges').textContent = filteredEdges.length;
       document.getElementById('statDensity').textContent = `${((filteredEdges.length / Math.max(1, (filteredNodes.length * (filteredNodes.length - 1)) / 2)) * 100).toFixed(2)}%`;
@@ -3364,6 +3670,7 @@
             notes: 'This record was created from a live upload and can be opened or deleted from the hub.'
           });
           
+          state.documentsPage = 1;
           renderDocuments();
           refreshDashboardMetrics(false);
           
@@ -3584,11 +3891,319 @@
     function setView(view) {
       state.currentView = view;
       views.forEach(v => document.getElementById(v).classList.toggle('active', v === view));
-      if (view === 'graph' || view === 'dashboard') setTimeout(() => { state.graph?.redraw(); state.previewGraph?.redraw(); }, 80);
+      if (view === 'graph' || view === 'dashboard') setTimeout(() => { state.graph?.redraw(); }, 80);
       if (view === 'dashboard') createChartConfigs();
     }
 
+    // ============================================================
+    // REAL-TIME SIMULATION ENGINE
+    // ============================================================
+    const liveAlertTemplates = [
+      { severity: 'info',     msg: 'AI co-pilot indexed 3 new compliance evidence documents from Shift B.' },
+      { severity: 'warning',  msg: 'Vibration reading on P-102 crossed 5.8 mm/s — trending above alarm threshold.' },
+      { severity: 'info',     msg: 'Knowledge graph density increased to {density}% after new cross-links detected.' },
+      { severity: 'critical', msg: 'Pressure spike detected at V-503 — PSV set-point gap under review.' },
+      { severity: 'info',     msg: 'OISD evidence bundle auto-packaged and queued for compliance officer review.' },
+      { severity: 'warning',  msg: 'Bearing temperature on C-204 at 91°C — approaching trip threshold of 98°C.' },
+      { severity: 'info',     msg: 'New lesson learned captured by Priya Nair — linked to E-304 gasket failure RCA.' },
+      { severity: 'warning',  msg: 'Stack emission reading for CPCB overdue — calibration window expires in 2 days.' },
+      { severity: 'info',     msg: 'Pump P-101 run-hours at 8,420 h — next overhaul milestone in 580 hours.' },
+      { severity: 'critical', msg: 'Firewater deluge valve 3F-22 failed weekly actuation test — escalated to HSE.' }
+    ];
+
+    let liveAlertIndex = 0;
+
+    function startRealTimeSim() {
+      // --- 1. Graph Node Pulse: highlight a random node every 4s ---
+      setInterval(() => {
+        if (!state.graph || !graphData.nodes.length) return;
+        const candidates = graphData.nodes.filter(n => n.type === 'Equipment');
+        if (!candidates.length) return;
+        const target = candidates[Math.floor(Math.random() * candidates.length)];
+        const origColor = nodeColor(target.type);
+        const pulseColor = { background: '#06b6d4', border: '#a5f3fc', highlight: { background: '#22d3ee', border: '#a5f3fc' } };
+
+        // Flash the node cyan for 600ms then restore
+        try {
+          state.graph.body.data.nodes.update([{ id: target.id, color: pulseColor, size: 24, borderWidth: 3 }]);
+          setTimeout(() => {
+            state.graph.body.data.nodes.update([{ id: target.id, color: origColor, size: 18, borderWidth: 1.4 }]);
+          }, 700);
+        } catch(e) {}
+      }, 4000);
+
+      // --- 2. Live Edge Injection: add a new random cross-link every 10s ---
+      setInterval(() => {
+        if (!state.graph || graphData.nodes.length < 4) return;
+        const types = ['Equipment', 'Documents', 'Personnel'];
+        const pool = graphData.nodes.filter(n => types.includes(n.type));
+        const a = pool[Math.floor(Math.random() * pool.length)];
+        const b = pool[Math.floor(Math.random() * pool.length)];
+        if (!a || !b || a.id === b.id) return;
+        const labels = ['cross_ref', 'data_link', 'ai_trace', 'correlated', 'similar_to'];
+        const lbl = labels[Math.floor(Math.random() * labels.length)];
+        const newEdge = {
+          id: `live-edge-${Date.now()}`,
+          from: a.id, to: b.id, label: lbl, arrows: 'to',
+          color: { color: 'rgba(6,182,212,0.55)' },
+          font: { color: '#94a3b8', size: 9, align: 'middle' },
+          smooth: { type: 'dynamic' },
+          dashes: true
+        };
+        graphData.edges.push(newEdge);
+        try {
+          state.graph.body.data.edges.add(newEdge);
+
+        } catch(e) {}
+        recalculateGraphDensity();
+        const densityEl = document.getElementById('statDensity');
+        const edgesEl  = document.getElementById('statEdges');
+        if (densityEl) densityEl.textContent = `${graphData.density.toFixed(2)}%`;
+        if (edgesEl)   edgesEl.textContent = graphData.edges.length;
+      }, 10000);
+
+      // --- 3. Live Alert Feed: inject a new alert every 18s ---
+      setInterval(() => {
+        const feed = document.getElementById('alertFeed');
+        if (!feed) return;
+        const tpl = liveAlertTemplates[liveAlertIndex % liveAlertTemplates.length];
+        liveAlertIndex++;
+        const now = new Date();
+        const timeStr = now.toTimeString().slice(0, 5);
+        const msg = tpl.msg.replace('{density}', graphData.density.toFixed(2));
+        const newItem = document.createElement('div');
+        newItem.className = 'alert-item';
+        newItem.style.animation = 'sectionIn 350ms cubic-bezier(.2,.8,.2,1) both';
+        newItem.innerHTML = `
+          <div class="severity ${tpl.severity}">${tpl.severity}</div>
+          <div>
+            <div class="alert-message">${msg}</div>
+            <div class="alert-time">${timeStr} · Live · Jamnagar Refinery</div>
+          </div>
+          <i data-lucide="bell-ring"></i>
+        `;
+        feed.insertBefore(newItem, feed.firstChild);
+        // Trim to last 10 items
+        while (feed.children.length > 10) feed.removeChild(feed.lastChild);
+        lucide.createIcons();
+      }, 18000);
+
+      // --- 4. KPI Micro-Ticker: small fluctuations every 6s ---
+      setInterval(() => {
+        const kpiEls = [
+          { id: 'documentsIngestedValue',  delta: () => Math.random() > 0.7 ? 1 : 0 },
+          { id: 'knowledgeEntitiesValue',  delta: () => Math.floor(Math.random() * 4) },
+          { id: 'activeEquipmentValue',    delta: () => (Math.random() > 0.85 ? (Math.random() > 0.5 ? 1 : -1) : 0) },
+        ];
+        kpiEls.forEach(({ id, delta }) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const raw = parseInt(el.textContent.replace(/[^0-9]/g, '')) || 0;
+          const next = Math.max(0, raw + delta());
+          if (next !== raw) {
+            el.textContent = next.toLocaleString('en-IN');
+            el.style.transition = 'color 300ms';
+            el.style.color = '#06b6d4';
+            setTimeout(() => el.style.color = '', 600);
+          }
+        });
+      }, 6000);
+
+      // --- 5. Chart Live Append: add a new data point every 30s ---
+      setInterval(() => {
+        const chart = state.charts.ingestion;
+        if (!chart) return;
+        const labels = chart.data.labels;
+        const data   = chart.data.datasets[0].data;
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const lastVal = data[data.length - 1] || 1800;
+        const newVal  = lastVal + Math.floor(Math.random() * 40 + 8);
+        const nextMonth = months[(months.indexOf(labels[labels.length - 1]) + 1) % 12];
+        labels.push(nextMonth);
+        data.push(newVal);
+        if (labels.length > 14) { labels.shift(); data.shift(); }
+        chart.update('active');
+      }, 30000);
+    }
+
+    function handleLogin() {
+      const idInput = document.getElementById('loginEngId').value.trim().toUpperCase();
+      const passInput = document.getElementById('loginPassword').value;
+      const errorDiv = document.getElementById('loginError');
+      
+      if (!idInput) {
+        errorDiv.textContent = "Engineer ID is required.";
+        errorDiv.style.display = "block";
+        return;
+      }
+      
+      const found = ENGINEER_ROSTER.find(p => p[0] === idInput);
+      let engineerName = "";
+      let engineerRole = "";
+      
+      if (found) {
+        engineerName = found[1];
+        engineerRole = found[2];
+      } else {
+        if (idInput.length < 3) {
+          errorDiv.textContent = "Engineer ID must be at least 3 characters.";
+          errorDiv.style.display = "block";
+          return;
+        }
+        engineerName = "Field Engineer";
+        engineerRole = "Shift Duty Officer";
+      }
+      
+      const loggedInUser = {
+        id: idInput,
+        name: engineerName,
+        role: engineerRole,
+        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+      };
+      
+      sessionStorage.setItem('loggedInEngineer', JSON.stringify(loggedInUser));
+      document.getElementById('loginOverlay').classList.add('hidden');
+      
+      updateSidebarUserUI();
+      showToast(`Engineer ${engineerName} authenticated.`);
+      startSessionTimer();
+    }
+
+    // ============================================================
+    // SESSION INACTIVITY TIMEOUT
+    // ============================================================
+    const SESSION_TIMEOUT_MS  = 15 * 60 * 1000; // 15 minutes idle → logout
+    const SESSION_WARN_MS     = 60 * 1000;       // show warning 60s before
+    let   sessionTimer        = null;
+    let   sessionWarnTimer    = null;
+    let   sessionCountdownInt = null;
+    let   sessionActive       = false;
+
+    function resetSessionTimer() {
+      if (!sessionActive) return;
+      clearTimeout(sessionTimer);
+      clearTimeout(sessionWarnTimer);
+      hideSessionWarning();
+
+      // Schedule the warning 60s before timeout
+      sessionWarnTimer = setTimeout(showSessionWarning, SESSION_TIMEOUT_MS - SESSION_WARN_MS);
+      // Schedule the auto-logout
+      sessionTimer = setTimeout(() => {
+        hideSessionWarning();
+        showToast('Session expired due to inactivity. Please log in again.');
+        handleLogout();
+      }, SESSION_TIMEOUT_MS);
+    }
+
+    function showSessionWarning() {
+      const banner = document.getElementById('sessionWarningBanner');
+      const countdown = document.getElementById('sessionCountdown');
+      if (!banner || !countdown) return;
+      banner.classList.add('visible');
+      let secs = Math.round(SESSION_WARN_MS / 1000);
+      countdown.textContent = secs;
+      clearInterval(sessionCountdownInt);
+      sessionCountdownInt = setInterval(() => {
+        secs--;
+        if (secs <= 0) { clearInterval(sessionCountdownInt); return; }
+        countdown.textContent = secs;
+        // Intensify color as it gets close
+        if (secs <= 15) countdown.style.color = '#ef4444';
+      }, 1000);
+    }
+
+    function hideSessionWarning() {
+      const banner = document.getElementById('sessionWarningBanner');
+      if (banner) banner.classList.remove('visible');
+      clearInterval(sessionCountdownInt);
+    }
+
+    function startSessionTimer() {
+      sessionActive = true;
+      const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click'];
+      events.forEach(evt => window.addEventListener(evt, resetSessionTimer, { passive: true }));
+      resetSessionTimer();
+    }
+
+    function stopSessionTimer() {
+      sessionActive = false;
+      clearTimeout(sessionTimer);
+      clearTimeout(sessionWarnTimer);
+      clearInterval(sessionCountdownInt);
+      hideSessionWarning();
+    }
+
+    window.dismissSessionWarning = function() {
+      resetSessionTimer();
+      showToast('Session extended. Stay alert!');
+    };
+
+    window.handleLogout = function() {
+      stopSessionTimer();
+      sessionStorage.removeItem('loggedInEngineer');
+      updateSidebarUserUI();
+      
+      document.getElementById('loginEngId').value = '';
+      document.getElementById('loginOverlay').classList.remove('hidden');
+      document.getElementById('loginError').style.display = 'none';
+    };
+
+    window.fillLogin = function(id) {
+      document.getElementById('loginEngId').value = id;
+      document.getElementById('loginPassword').value = 'password123';
+      handleLogin();
+    };
+
+    function updateSidebarUserUI() {
+      const userJson = sessionStorage.getItem('loggedInEngineer');
+      const footer = document.getElementById('sidebarFooter');
+      if (!footer) return;
+      
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        footer.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <div class="brand-badge" style="width:32px; height:32px; border-radius:10px; min-width: 32px; flex-shrink: 0;"><i data-lucide="user" style="width:16px;height:16px;"></i></div>
+            <div style="text-align: left; min-width: 0;">
+              <div style="font-weight:700; font-size: 0.95rem; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${user.name}</div>
+              <div style="color:var(--text-2); font-size:0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${user.role} (${user.id})</div>
+            </div>
+          </div>
+          <button class="doc-action-btn delete" type="button" onclick="handleLogout()" style="width: 100%; margin-top: 8px; justify-content: center; padding: 6px 12px; font-size: 0.85rem;">
+            <i data-lucide="log-out"></i>Logout
+          </button>
+          <div class="status-line" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 8px;"><span class="pulse"></span> Online as ${user.id}</div>
+        `;
+      } else {
+        footer.innerHTML = `
+          <div style="font-weight:700; margin-bottom:8px;">Bharat Petrochemicals</div>
+          <div style="color:var(--text-2); font-size:0.92rem;">Jamnagar Refinery · Unified intelligence across documents, assets, incidents, and regulations.</div>
+          <div class="status-line"><span class="pulse"></span> Live refinery memory online</div>
+        `;
+      }
+      lucide.createIcons();
+    }
+
     function init() {
+      // Check authentication
+      const userJson = sessionStorage.getItem('loggedInEngineer');
+      if (!userJson) {
+        document.getElementById('loginOverlay').classList.remove('hidden');
+      } else {
+        document.getElementById('loginOverlay').classList.add('hidden');
+        updateSidebarUserUI();
+        startSessionTimer();
+      }
+
+      // Login listeners
+      document.getElementById('loginBtn')?.addEventListener('click', handleLogin);
+      document.getElementById('loginPassword')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleLogin();
+      });
+      document.getElementById('loginEngId')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleLogin();
+      });
+
       renderAlerts();
       renderPipeline();
       renderDocuments();
@@ -3615,7 +4230,10 @@
       initializeGraphs();
       refreshDashboardMetrics(false);
       lucide.createIcons();
-      window.addEventListener('resize', () => { state.graph?.redraw(); state.previewGraph?.redraw(); });
+      window.addEventListener('resize', () => { state.graph?.redraw(); });
+
+      // Start real-time simulation after graphs are ready
+      setTimeout(startRealTimeSim, 3000);
 
       // Support dynamic view routing via URL query parameters (e.g., ?view=graph)
       const urlParams = new URLSearchParams(window.location.search);
