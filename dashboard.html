@@ -12,27 +12,27 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <style>
     :root {
-      --bg-0: #0a0e1a;
-      --bg-1: #111827;
-      --bg-2: #1e293b;
-      --panel: rgba(255, 255, 255, 0.05);
-      --panel-strong: rgba(255, 255, 255, 0.08);
-      --border: rgba(255, 255, 255, 0.1);
-      --text-1: #f1f5f9;
-      --text-2: #94a3b8;
-      --cyan: #06b6d4;
-      --amber: #f59e0b;
-      --emerald: #10b981;
-      --red: #ef4444;
-      --violet: #8b5cf6;
-      --blue: #3b82f6;
-      --shadow-cyan: 0 0 24px rgba(6, 182, 212, 0.28);
-      --shadow-amber: 0 0 24px rgba(245, 158, 11, 0.22);
-      --shadow-emerald: 0 0 24px rgba(16, 185, 129, 0.22);
-      --shadow-red: 0 0 24px rgba(239, 68, 68, 0.22);
-      --sidebar-width: 260px;
+      --bg-0: #F5F7FA;
+      --bg-1: #F5F7FA;
+      --bg-2: #E8ECEF;
+      --panel: #FFFFFF;
+      --panel-strong: #F4F6FA;
+      --border: #E6EFF5;
+      --text-1: #343C6A;
+      --text-2: #718EBF;
+      --cyan: #2D60FF;
+      --amber: #FEAA09;
+      --emerald: #16DBCC;
+      --red: #FF4B4A;
+      --violet: #8F3BFF;
+      --blue: #1814F3;
+      --shadow-cyan: 0 10px 20px rgba(45, 96, 255, 0.05);
+      --shadow-amber: 0 10px 20px rgba(254, 170, 9, 0.05);
+      --shadow-emerald: 0 10px 20px rgba(22, 219, 204, 0.05);
+      --shadow-red: 0 10px 20px rgba(255, 75, 74, 0.05);
+      --sidebar-width: 250px;
       --radius: 16px;
-      --radius-lg: 22px;
+      --radius-lg: 20px;
       --transition: 220ms cubic-bezier(.2,.8,.2,1);
     }
 
@@ -41,10 +41,8 @@
       height: 100%;
       margin: 0;
       font-family: Inter, system-ui, sans-serif;
-      color: var(--text-1);
-      background:
-        radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.14), transparent 22%),
-        linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-2) 100%);
+      color: #232323;
+      background: var(--bg-0);
       overflow: hidden;
     }
 
@@ -52,13 +50,9 @@
       content: "";
       position: fixed;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 42px 42px;
+      background-image: none;
       pointer-events: none;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
-      opacity: 0.5;
+      opacity: 0;
     }
 
     .app {
@@ -71,31 +65,31 @@
 
     .sidebar {
       position: relative;
-      background: linear-gradient(180deg, rgba(10, 14, 26, 0.98), rgba(15, 23, 42, 0.93));
+      background: #FFFFFF;
       border-right: 1px solid var(--border);
       padding: 22px 18px;
       display: flex;
       flex-direction: column;
       gap: 18px;
       min-width: 0;
-      box-shadow: 18px 0 60px rgba(0,0,0,0.18);
+      box-shadow: 4px 0 24px rgba(0,0,0,0.015);
     }
 
     .brand {
       padding: 14px 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      backdrop-filter: blur(12px);
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      backdrop-filter: none;
       text-decoration: none;
-      color: inherit;
+      color: #343C6A;
       display: block;
-      transition: transform 220ms ease, border-color 220ms ease;
+      transition: none;
     }
 
     .brand:hover {
-      border-color: var(--cyan);
-      transform: translateY(-2px);
+      border-color: transparent;
+      transform: none;
     }
 
     .brand-title {
@@ -103,28 +97,29 @@
       align-items: center;
       gap: 12px;
       font-weight: 800;
-      letter-spacing: 0.16em;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
+      color: #343C6A;
+      letter-spacing: 0.02em;
     }
 
     .brand-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, rgba(6,182,212,0.22), rgba(8,145,178,0.08));
-      border: 1px solid rgba(6,182,212,0.4);
-      box-shadow: var(--shadow-cyan);
-      color: var(--cyan);
+      background: #1814F3;
+      border: 0;
+      box-shadow: none;
+      color: #FFFFFF;
     }
 
     .brand-subtitle {
-      margin-top: 8px;
-      color: var(--cyan);
-      text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
-      font-size: 0.92rem;
-      letter-spacing: 0.08em;
+      margin-top: 4px;
+      color: #718EBF;
+      text-shadow: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
     }
 
     .nav {
@@ -138,45 +133,44 @@
       appearance: none;
       border: 0;
       background: transparent;
-      color: var(--text-2);
+      color: #B1B1B1;
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 13px 14px;
-      border-radius: 14px;
+      padding: 13px 18px;
+      border-radius: 0;
       cursor: pointer;
       text-align: left;
-      transition: transform var(--transition), background-color var(--transition), color var(--transition), box-shadow var(--transition);
+      transition: color var(--transition), border-color var(--transition);
       position: relative;
       overflow: hidden;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-left: 4px solid transparent;
     }
 
     .nav button::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(6,182,212,0.14), transparent 65%);
-      opacity: 0;
-      transition: opacity var(--transition);
+      display: none;
     }
 
     .nav button:hover,
     .nav button.active {
-      color: var(--text-1);
-      background: rgba(255,255,255,0.05);
-      transform: translateX(4px);
-      box-shadow: inset 3px 0 0 var(--cyan), 0 12px 36px rgba(0,0,0,0.18);
+      color: #1814F3;
+      background: transparent;
+      transform: none;
+      box-shadow: none;
+      border-left: 4px solid #1814F3;
     }
 
     .nav button:hover::before,
-    .nav button.active::before { opacity: 1; }
+    .nav button.active::before { display: none; }
 
-    .nav button i { width: 18px; height: 18px; }
+    .nav button i { width: 20px; height: 20px; color: currentColor; }
 
     .sidebar-footer {
       padding: 14px;
       border-radius: 16px;
-      background: rgba(255,255,255,0.04);
+      background: #F5F7FA;
       border: 1px solid var(--border);
     }
 
@@ -281,10 +275,10 @@
 
     .glass {
       background: var(--panel);
-      backdrop-filter: blur(12px);
+      backdrop-filter: none;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: 0 18px 46px rgba(0,0,0,0.22);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.015);
     }
 
     .grid {
@@ -301,19 +295,16 @@
       padding: 18px;
       position: relative;
       overflow: hidden;
-      min-height: 148px;
+      min-height: 120px;
       transform: translateZ(0);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.015);
     }
 
     .kpi::after {
-      content: "";
-      position: absolute;
-      inset: auto -30px -30px auto;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 65%);
-      pointer-events: none;
+      display: none;
     }
 
     .kpi-head {
@@ -324,37 +315,39 @@
     }
 
     .kpi-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 0;
       background: rgba(255,255,255,0.05);
     }
 
-    .kpi-icon.cyan { color: var(--cyan); box-shadow: var(--shadow-cyan); }
-    .kpi-icon.emerald { color: var(--emerald); box-shadow: var(--shadow-emerald); }
-    .kpi-icon.amber { color: var(--amber); box-shadow: var(--shadow-amber); }
-    .kpi-icon.violet { color: var(--violet); box-shadow: 0 0 24px rgba(139,92,246,0.22); }
+    .kpi-icon.cyan { color: var(--cyan); background: rgba(45, 96, 255, 0.1); box-shadow: none; }
+    .kpi-icon.emerald { color: var(--emerald); background: rgba(22, 219, 204, 0.1); box-shadow: none; }
+    .kpi-icon.amber { color: var(--amber); background: rgba(254, 170, 9, 0.1); box-shadow: none; }
+    .kpi-icon.violet { color: var(--violet); background: rgba(143, 59, 255, 0.1); box-shadow: none; }
 
     .kpi-label {
       margin: 12px 0 6px;
       color: var(--text-2);
       font-size: 0.95rem;
+      font-weight: 500;
     }
 
     .kpi-value {
-      font-size: clamp(1.8rem, 3vw, 2.8rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      text-shadow: 0 0 16px rgba(6,182,212,0.16);
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #343C6A;
+      text-shadow: none !important;
     }
 
-    .kpi-value.cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(6,182,212,0.45); }
-    .kpi-value.emerald { color: var(--emerald); text-shadow: 0 0 20px rgba(16,185,129,0.35); }
-    .kpi-value.amber { color: var(--amber); text-shadow: 0 0 20px rgba(245,158,11,0.35); }
-    .kpi-value.violet { color: #c4b5fd; text-shadow: 0 0 20px rgba(139,92,246,0.4); }
+    .kpi-value.cyan { color: #343C6A; text-shadow: none; }
+    .kpi-value.emerald { color: #343C6A; text-shadow: none; }
+    .kpi-value.amber { color: #343C6A; text-shadow: none; }
+    .kpi-value.violet { color: #343C6A; text-shadow: none; }
 
     .kpi-foot {
       display: flex;
@@ -370,17 +363,18 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 10px;
+      padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(16,185,129,0.12);
-      color: #86efac;
-      border: 1px solid rgba(16,185,129,0.26);
+      background: rgba(22, 219, 204, 0.15);
+      color: #10b981;
+      border: 0;
+      font-weight: 600;
     }
 
     .trend.down {
-      background: rgba(239,68,68,0.11);
-      color: #fca5a5;
-      border-color: rgba(239,68,68,0.22);
+      background: rgba(255, 75, 74, 0.15);
+      color: #ef4444;
+      border: 0;
     }
 
     .sparkline {
@@ -886,9 +880,9 @@
     .select-input,
     textarea {
       width: 100%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-1);
+      background: #FFFFFF;
+      border: 1px solid #E6EFF5;
+      color: #232323;
       border-radius: 14px;
       outline: none;
       padding: 14px 15px;
@@ -896,12 +890,16 @@
       transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
     }
 
+    .search-wrap input::placeholder, textarea::placeholder {
+      color: #718EBF;
+    }
+
     .search-wrap input:focus,
     .text-input:focus,
     .select-input:focus,
     textarea:focus {
-      border-color: rgba(6,182,212,0.4);
-      box-shadow: 0 0 0 3px rgba(6,182,212,0.12);
+      border-color: #2D60FF;
+      box-shadow: 0 0 0 3px rgba(45, 96, 255, 0.12);
     }
 
     .suggestions {
@@ -910,10 +908,10 @@
       left: 0;
       right: 0;
       z-index: 5;
-      background: rgba(15,23,42,0.98);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: #FFFFFF;
+      border: 1px solid #E6EFF5;
       border-radius: 14px;
-      box-shadow: 0 24px 54px rgba(0,0,0,0.35);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
       display: none;
       overflow: hidden;
     }
@@ -928,7 +926,7 @@
       cursor: pointer;
     }
 
-    .suggestions button:hover { background: rgba(255,255,255,0.05); }
+    .suggestions button:hover { background: #F5F7FA; }
 
     .filters {
       display: flex;
@@ -942,8 +940,8 @@
       align-items: center;
       gap: 8px;
       color: var(--text-2);
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: #FFFFFF;
+      border: 1px solid #E6EFF5;
       border-radius: 999px;
       padding: 8px 12px;
     }
@@ -965,8 +963,8 @@
       height: 560px;
       border-radius: 14px;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.06);
+      background: #FFFFFF;
+      border: 1px solid #E6EFF5;
     }
 
     .detail-panel {
@@ -985,8 +983,8 @@
       gap: 4px;
       padding: 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: #F5F7FA;
+      border: 1px solid #E6EFF5;
     }
 
     .detail-item span { color: var(--text-2); font-size: 0.84rem; }
@@ -1026,14 +1024,14 @@
     .chip {
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(139,92,246,0.12);
-      color: #ddd6fe;
-      border: 1px solid rgba(139,92,246,0.22);
+      background: rgba(45, 96, 255, 0.08);
+      color: #2D60FF;
+      border: 1px solid rgba(45, 96, 255, 0.15);
       cursor: pointer;
       transition: transform var(--transition), background-color var(--transition);
     }
 
-    .chip:hover { transform: translateY(-2px); background: rgba(139,92,246,0.18); }
+    .chip:hover { transform: translateY(-2px); background: rgba(45, 96, 255, 0.15); }
 
     .chat-log {
       padding: 18px;
@@ -1060,18 +1058,19 @@
     .bubble {
       padding: 14px 16px;
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.05);
+      border: 1px solid #E6EFF5;
+      background: #F5F7FA;
       line-height: 1.55;
+      color: #343C6A;
     }
-    .msg.user .bubble { background: rgba(15,23,42,0.88); }
-    .msg.ai .bubble { border-color: rgba(139,92,246,0.22); box-shadow: 0 0 0 1px rgba(139,92,246,0.06) inset; }
+    .msg.user .bubble { background: #1814F3; color: #FFFFFF; border: 0; }
+    .msg.ai .bubble { border-color: rgba(45, 96, 255, 0.2); background: #FFFFFF; }
     .avatar {
       width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; flex: none;
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+      background: #FFFFFF; border: 1px solid #E6EFF5;
     }
-    .avatar.ai { color: #ddd6fe; box-shadow: 0 0 20px rgba(139,92,246,0.18); }
-    .avatar.user { color: var(--cyan); }
+    .avatar.ai { color: #1814F3; background: rgba(24, 20, 243, 0.08); border-color: rgba(24, 20, 243, 0.15); }
+    .avatar.user { color: var(--cyan); background: rgba(45, 96, 255, 0.08); border-color: rgba(45, 96, 255, 0.15); }
     .typing { display: inline-flex; gap: 5px; padding: 12px 16px; }
     .typing span {
       width: 7px; height: 7px; border-radius: 50%; background: var(--text-2); animation: bounce 1.1s infinite ease-in-out;
@@ -1084,8 +1083,8 @@
       margin-top: 12px;
       padding: 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: #F5F7FA;
+      border: 1px solid #E6EFF5;
       display: grid;
       gap: 10px;
     }
@@ -1097,7 +1096,8 @@
       align-items: center;
       padding: 10px 12px;
       border-radius: 12px;
-      background: rgba(255,255,255,0.03);
+      background: #FFFFFF;
+      border: 1px solid #E6EFF5;
     }
 
     .chat-input {
@@ -1111,8 +1111,8 @@
       width: 48px;
       height: 48px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: #FFFFFF;
+      border: 1px solid #E6EFF5;
       color: var(--text-1);
       display: grid;
       place-items: center;
@@ -1459,196 +1459,177 @@
       .chat-log { min-height: 420px; }
     }
 
-    /* CMS-inspired visual refresh */
-    :root {
-      --bg-0: #f8fafc;
-      --bg-1: #eef2ff;
-      --bg-2: #e2e8f0;
-      --panel: rgba(255, 255, 255, 0.88);
-      --panel-strong: rgba(255, 255, 255, 0.96);
-      --border: rgba(148, 163, 184, 0.18);
-      --text-1: #0f172a;
-      --text-2: #64748b;
-      --cyan: #2563eb;
-      --amber: #f59e0b;
-      --emerald: #10b981;
-      --red: #ef4444;
-      --violet: #7c3aed;
-      --blue: #0f766e;
-      --shadow-cyan: 0 12px 30px rgba(37, 99, 235, 0.15);
-      --shadow-amber: 0 12px 30px rgba(245, 158, 11, 0.12);
-      --shadow-emerald: 0 12px 30px rgba(16, 185, 129, 0.12);
-      --shadow-red: 0 12px 30px rgba(239, 68, 68, 0.12);
-    }
+    /* ── Polished Light Theme Enhancements ── */
 
-    body {
-      background:
-        radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.08), transparent 24%),
-        radial-gradient(circle at 88% 18%, rgba(124, 58, 237, 0.08), transparent 22%),
-        linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
-      color: var(--text-1);
-    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F5F7FA; }
+    ::-webkit-scrollbar-thumb { background: #D2DBE3; border-radius: 3px; }
 
-    body::before {
-      opacity: 0.35;
-      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.4));
-    }
+    /* Text selection */
+    ::selection { background: rgba(24, 20, 243, 0.08); color: #1814F3; }
 
-    .app {
-      padding: 18px;
-      gap: 18px;
-    }
-
-    .sidebar {
-      background: rgba(255, 255, 255, 0.88);
-      border-right: 1px solid rgba(148, 163, 184, 0.14);
-      box-shadow: 12px 0 40px rgba(15, 23, 42, 0.06);
-    }
-
-    .brand,
-    .sidebar-footer,
-    .glass,
-    .kpi,
-    .panel,
-    .chart-card,
-    .detail-panel,
-    .graph-area,
-    .reg-card,
-    .rec-card,
-    .doc-card,
-    .pattern-card,
-    .step-card,
-    .equip-card,
-    .audit-box,
-    .source-card,
-    .msg .bubble,
-    .chat-shell,
-    .chat-log,
-    .upload-zone {
-      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
-    }
-
-    .nav button:hover,
-    .nav button.active {
-      background: rgba(37, 99, 235, 0.08);
-      box-shadow: inset 3px 0 0 var(--cyan), 0 10px 24px rgba(37, 99, 235, 0.08);
-    }
-
-    .topbar {
-      display: none;
-    }
-
-    .glass,
-    .panel,
-    .chart-card,
-    .detail-panel,
-    .graph-area,
-    .reg-card,
-    .rec-card,
-    .doc-card,
-    .pattern-card,
-    .step-card,
-    .equip-card,
-    .audit-box,
-    .chat-shell,
-    .chat-log,
-    .upload-zone {
+    /* Improve panel contrast */
+    .glass {
       background: var(--panel);
-      border-color: rgba(148, 163, 184, 0.16);
+      backdrop-filter: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.015);
+    }
+    .kpi {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.015);
     }
 
-    .section-title,
-    .kpi-value,
-    .doc-title,
-    .doc-type,
-    .card-head h3,
-    .panel h3,
-    .section-header,
-    th,
-    .brand-title {
-      color: var(--text-1);
+    /* Sidebar enhancements */
+    .sidebar {
+      background: #FFFFFF;
+      border-right: 1px solid var(--border);
+      box-shadow: 4px 0 24px rgba(0,0,0,0.015);
+    }
+    .brand {
+      background: transparent;
+      border: 0;
     }
 
-    .section-subtitle,
-    .card-meta,
-    .doc-meta,
-    .alert-time,
-    .alert-message,
-    .kpi-label,
-    .status-line,
-    .footer-text,
-    .footer-status,
-    .detail-item span,
-    .timeline-row div:last-child {
-      color: var(--text-2);
+    /* Section titles */
+    .section-title { color: #343C6A; font-weight: 700; }
+    .eyebrow { color: #718EBF; font-weight: 600; }
+    .section-subtitle { color: #718EBF; }
+
+    /* Card heads */
+    .card-head h3, .panel h3 { color: #343C6A; font-size: 1rem; font-weight: 700; }
+    .card-meta { color: #718EBF; }
+
+    /* KPI improvements */
+    .kpi-label { color: #718EBF; font-size: 0.88rem; font-weight: 500; }
+    .kpi-value { letter-spacing: -0.02em; }
+    .kpi-value.cyan { color: #343C6A; }
+
+    /* Alert feed */
+    .alert-item { background: #FFFFFF; border: 1px solid var(--border); box-shadow: 0 4px 18px rgba(0,0,0,0.015); }
+    .alert-message { color: #343C6A; font-size: 0.9rem; line-height: 1.5; }
+    .alert-time { color: #718EBF; font-size: 0.8rem; }
+
+    /* Table styling */
+    table { background: #FFFFFF; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    th { background: #F5F7FA; color: #718EBF; font-size: 0.78rem; letter-spacing: 0.08em; font-weight: 600; }
+    td { color: #343C6A; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+
+    /* Inputs */
+    .search-wrap input,
+    .text-input,
+    .select-input,
+    textarea {
+      background: #FFFFFF;
+      border: 1px solid #E6EFF5;
+      color: #232323;
+    }
+    .search-wrap input::placeholder,
+    .text-input::placeholder,
+    textarea::placeholder { color: #718EBF; }
+
+    /* Select options dark */
+    .select-input option { background: #FFFFFF; color: #232323; }
+
+    /* Document cards */
+    .doc-card { background: #FFFFFF; border: 1px solid var(--border); }
+    .doc-title { color: #343C6A; font-weight: 700; line-height: 1.3; }
+    .doc-meta { color: #718EBF; }
+    .doc-type { background: rgba(45, 96, 255, 0.1); color: #2D60FF; border: 0; }
+
+    /* Upload zone */
+    .upload-zone { background: #FFFFFF; border: 1.5px dashed var(--cyan); }
+    .upload-zone strong { color: #343C6A; }
+    .upload-zone p { color: #718EBF; }
+
+    /* Chat bubbles */
+    .bubble { background: #F5F7FA; color: #343C6A; border: 1px solid #E6EFF5; }
+    .msg.user .bubble { background: #1814F3; color: #FFFFFF; border: 0; }
+    .msg.ai .bubble { border-color: rgba(45, 96, 255, 0.2); background: #FFFFFF; }
+
+    /* Equipment cards */
+    .equip-card { background: #FFFFFF; border: 1px solid var(--border); }
+    .equip-card strong { color: #343C6A; font-size: 0.82rem; }
+    .equip-card small { color: #718EBF; }
+
+    /* Detail panel */
+    .detail-item span { color: #718EBF; }
+    .detail-item strong { color: #343C6A; }
+
+    /* Status line */
+    .status-line { color: #718EBF; }
+
+    /* Pattern cards */
+    .pattern-card { background: #FFFFFF; border: 1px solid var(--border); }
+
+    /* Fault nodes */
+    .fault-node { background: #F5F7FA; color: #343C6A; border: 1px solid var(--border); }
+
+    /* Gauge inner circle always dark */
+    .gauge::after {
+      background: #FFFFFF;
     }
 
-    .primary-btn {
-      background: linear-gradient(135deg, var(--cyan), var(--violet));
-      box-shadow: 0 16px 28px rgba(37, 99, 235, 0.18);
-    }
+    /* Progress tracks */
+    .progress-track { background: #F5F7FA; }
+    .bar-track { background: #F5F7FA; }
 
-    .ghost-btn,
-    .action-btn,
-    .icon-btn,
-    .chip,
-    .check,
-    .status-line,
-    .footer-status {
-      border-radius: 14px;
-    }
+    /* Meter */
+    .meter { background: #F5F7FA; }
 
-    .action-btn,
-    .ghost-btn,
-    .chip,
-    .check,
-    .icon-btn {
-      background: rgba(255, 255, 255, 0.86);
-      border-color: rgba(148, 163, 184, 0.16);
-      color: var(--text-1);
-    }
+    /* Mobile overlay */
+    .mobile-overlay { background: rgba(2, 6, 22, 0.45); backdrop-filter: blur(4px); }
 
-    .badge.high,
-    .badge.medium,
-    .badge.low,
-    .severity.critical,
-    .severity.warning,
-    .severity.info,
-    .status.ok,
-    .status.gap,
-    .status.risk,
-    .step-status.done,
-    .step-status.processing,
-    .step-status.pending {
-      border-width: 1px;
-    }
+    /* Chips */
+    .chip { background: rgba(45, 96, 255, 0.08); color: #2D60FF; border: 1px solid rgba(45, 96, 255, 0.15); }
+    .check { background: #FFFFFF; color: var(--text-2); border: 1px solid var(--border); }
 
-    table {
-      background: rgba(255, 255, 255, 0.7);
-    }
+    /* Action buttons */
+    .action-btn { background: #FFFFFF; border: 1px solid var(--border); color: #343C6A; }
+    .ghost-btn { background: #FFFFFF; border: 1px solid var(--border); color: #343C6A; }
+    .icon-btn { background: #FFFFFF; border: 1px solid var(--border); color: #343C6A; }
 
-    th {
-      background: rgba(248, 250, 252, 0.96);
-    }
+    /* Brand title */
+    .brand-title { color: #343C6A; }
+    .brand-subtitle { color: #718EBF; }
 
-    .graph-canvas,
-    .mini-graph {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(248, 250, 252, 0.9));
-      border-color: rgba(148, 163, 184, 0.12);
-    }
+    /* Stat block in graph section */
+    .stat strong { color: var(--cyan); }
+    .stat { color: var(--text-2); font-size: 0.85rem; }
 
-    .bubble,
-    .msg.user .bubble {
-      background: rgba(255, 255, 255, 0.92);
-    }
+    /* Audit box */
+    .audit-box { background: #F5F7FA; border: 1px solid var(--border); }
 
-    .msg.ai .bubble {
-      border-color: rgba(37, 99, 235, 0.18);
-    }
+    /* Step card text */
+    .step-card { background: #FFFFFF; border: 1px solid var(--border); color: #343C6A; }
 
-    .mobile-overlay {
-      background: rgba(15, 23, 42, 0.28);
-    }
+    /* Doc accordion */
+    .doc-accordion { background: #FFFFFF; border: 1px solid var(--border); }
+    .doc-accordion summary { color: #343C6A; }
+    .doc-accordion-title span { color: #718EBF; }
+
+    /* Timeline labels */
+    .timeline-row > div:first-child { color: #718EBF; font-size: 0.85rem; }
+    .timeline-row > div:last-child { color: #718EBF; font-size: 0.85rem; }
+
+    /* Source cards in copilot */
+    .source-card { background: #FFFFFF; border: 1px solid var(--border); }
+
+    /* Sidebar footer */
+    .sidebar-footer { background: #F5F7FA; border: 1px solid var(--border); }
+
+    /* Rec cards */
+    .rec-card { background: #FFFFFF; border: 1px solid var(--border); }
+
+    /* Reg cards */
+    .reg-card { background: #FFFFFF; border: 1px solid var(--border); }
+
+
 
     /* Login Screen Gate Styles */
     .login-overlay {
@@ -1754,12 +1735,12 @@
       font-size: 1.6rem;
       font-weight: 800;
       letter-spacing: 0.08em;
-      color: var(--text-1);
+      color: #f1f5f9;
       margin-bottom: 8px;
     }
     .login-subtitle {
       font-size: 0.95rem;
-      color: var(--text-2);
+      color: #94a3b8;
       margin-bottom: 30px;
     }
     .login-field {
@@ -1770,25 +1751,26 @@
       display: block;
       font-size: 0.85rem;
       font-weight: 600;
-      color: var(--text-2);
+      color: #94a3b8;
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .login-input {
       width: 100%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 14px;
       padding: 13px 16px;
       font-family: inherit;
-      color: var(--text-1);
+      color: #f1f5f9;
       font-size: 0.95rem;
       transition: border-color var(--transition), box-shadow var(--transition);
     }
+    .login-input::placeholder { color: #64748b; }
     .login-input:focus {
       outline: none;
-      border-color: var(--cyan);
+      border-color: #06b6d4;
       box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
     }
     .login-btn {
@@ -1881,13 +1863,19 @@
   </div>
 
   <div class="login-overlay" id="loginOverlay">
-    <div class="login-card">
-      <div class="login-logo"><i data-lucide="factory"></i></div>
-      <h2 class="login-title">IKIP Console</h2>
-      <p class="login-subtitle">Engineer Access Authorization</p>
+    <div class="login-card" style="position: relative;">
+      
+      <div style="display:flex; justify-content:center; gap:10px; margin-bottom: 24px;">
+        <button id="loginTabEng" class="filter-tab active" onclick="switchLoginMode('engineer')" style="padding: 8px 16px;">Engineer</button>
+        <button id="loginTabAdmin" class="filter-tab" onclick="switchLoginMode('admin')" style="padding: 8px 16px;">Factory Manager</button>
+      </div>
+
+      <div class="login-logo" id="loginLogo"><i data-lucide="factory"></i></div>
+      <h2 class="login-title" id="loginTitleText">IKIP Console</h2>
+      <p class="login-subtitle" id="loginSubText">Engineer Access Authorization</p>
       
       <div class="login-field">
-        <label class="login-label">Engineer ID</label>
+        <label class="login-label" id="loginIdLabel">Engineer ID</label>
         <input type="text" id="loginEngId" class="login-input" placeholder="e.g. PR-01" required />
       </div>
       
@@ -1897,9 +1885,9 @@
       </div>
       
       <button type="button" id="loginBtn" class="login-btn">Authenticate & Enter</button>
-      <div id="loginError" class="login-error">Invalid Engineer Credentials.</div>
+      <div id="loginError" class="login-error">Invalid Credentials.</div>
       
-      <div class="login-suggestions">
+      <div class="login-suggestions" id="loginChips">
         <div class="login-suggestions-title">Active Shift Profiles</div>
         <div class="login-suggestions-list">
           <span class="login-suggest-chip" onclick="fillLogin('PR-01')">Arun (PR-01)</span>
@@ -1908,8 +1896,71 @@
           <span class="login-suggest-chip" onclick="fillLogin('PR-05')">Sandeep (PR-05)</span>
         </div>
       </div>
+
+      <div class="login-suggestions" id="adminChips" style="display:none;">
+        <div class="login-suggestions-title">Available Managers</div>
+        <div class="login-suggestions-list">
+          <span class="login-suggest-chip" onclick="fillAdminLogin('MGR-01')">Rajesh (MGR-01)</span>
+          <span class="login-suggest-chip" onclick="fillAdminLogin('MGR-02')">Sunita (MGR-02)</span>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="login-overlay hidden" id="uploadMetaModal" style="z-index: 20000; display:flex; justify-content:center; align-items:center;">
+    <div class="login-card" style="width: 500px; max-width: 90%; text-align: left; padding: 30px;">
+      <h2 class="login-title" style="font-size:1.5rem; margin-bottom: 8px;">Document Details</h2>
+      <p class="login-subtitle">Please provide context for this upload.</p>
+      
+      <div class="login-field">
+        <label class="login-label">What was done?</label>
+        <textarea id="uploadWhatDone" class="login-input" style="min-height: 80px; resize: vertical;" placeholder="Briefly describe what action was taken..."></textarea>
+      </div>
+      
+      <div class="login-field">
+        <label class="login-label">How it solved the problem?</label>
+        <textarea id="uploadHowSolved" class="login-input" style="min-height: 80px; resize: vertical;" placeholder="Describe the outcome or resolution..."></textarea>
+      </div>
+      
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button type="button" class="btn-ghost" style="flex:1;" onclick="cancelUploadMeta()">Cancel</button>
+        <button type="button" class="login-btn" style="flex:1; margin-top:0;" onclick="confirmUploadMeta()">Upload</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLoginMode = 'engineer';
+    
+    function switchLoginMode(mode) {
+      currentLoginMode = mode;
+      document.getElementById('loginTabEng').classList.toggle('active', mode === 'engineer');
+      document.getElementById('loginTabAdmin').classList.toggle('active', mode === 'admin');
+      
+      if (mode === 'engineer') {
+        document.getElementById('loginSubText').textContent = 'Engineer Access Authorization';
+        document.getElementById('loginIdLabel').textContent = 'Engineer ID';
+        document.getElementById('loginEngId').placeholder = 'e.g. PR-01';
+        document.getElementById('loginChips').style.display = 'block';
+        document.getElementById('adminChips').style.display = 'none';
+        document.getElementById('loginPassword').value = 'password123';
+      } else {
+        document.getElementById('loginSubText').textContent = 'Factory Manager Authorization';
+        document.getElementById('loginIdLabel').textContent = 'Manager ID';
+        document.getElementById('loginEngId').placeholder = 'e.g. MGR-01';
+        document.getElementById('loginChips').style.display = 'none';
+        document.getElementById('adminChips').style.display = 'block';
+        document.getElementById('loginPassword').value = 'manager123';
+      }
+      document.getElementById('loginError').style.display = 'none';
+    }
+
+    function fillAdminLogin(id) {
+      document.getElementById('loginEngId').value = id;
+      document.getElementById('loginPassword').value = 'manager123';
+      document.getElementById('loginBtn').click();
+    }
+  </script>
 
   <div class="mobile-overlay" id="overlay"></div>
   <div class="app">
@@ -1926,6 +1977,9 @@
         <button data-view="maintenance"><i data-lucide="wrench"></i><span>Maintenance Intelligence</span></button>
         <button data-view="compliance"><i data-lucide="shield-check"></i><span>Compliance Center</span></button>
         <button data-view="lessons"><i data-lucide="book-open-text"></i><span>Lessons Learned</span></button>
+        <a href="admin.html" id="adminPanelLink" style="display:none;appearance:none;border:1px solid rgba(245,158,11,0.30);background:rgba(245,158,11,0.08);color:#fbbf24;display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:14px;cursor:pointer;text-align:left;font-family:inherit;font-size:.93rem;font-weight:600;margin-top:8px;text-decoration:none;transition:background 220ms;" onmouseover="this.style.background='rgba(245,158,11,0.16)'" onmouseout="this.style.background='rgba(245,158,11,0.08)'">
+          <i data-lucide="shield-alert" style="width:18px;height:18px;color:#f59e0b;"></i><span>Admin Panel</span>
+        </a>
       </nav>
       <div class="sidebar-footer glass" id="sidebarFooter">
         <div style="font-weight:700; margin-bottom:8px;">Bharat Petrochemicals</div>
@@ -2015,10 +2069,10 @@
         <div class="glass panel">
           <div class="card-head"><h3>Quick Actions</h3><div class="card-meta">Operator shortcuts</div></div>
           <div class="actions-row">
-            <button class="action-btn"><i data-lucide="upload"></i>Upload Documents</button>
-            <button class="action-btn"><i data-lucide="bot"></i>Ask AI Copilot</button>
-            <button class="action-btn"><i data-lucide="shield-check"></i>Check Compliance</button>
-            <button class="action-btn"><i data-lucide="calendar-range"></i>View Maintenance Schedule</button>
+            <button class="action-btn" onclick="triggerView('documents')"><i data-lucide="upload"></i>Upload Documents</button>
+            <button class="action-btn" onclick="triggerView('copilot')"><i data-lucide="bot"></i>Ask AI Copilot</button>
+            <button class="action-btn" onclick="triggerView('compliance')"><i data-lucide="shield-check"></i>Check Compliance</button>
+            <button class="action-btn" onclick="triggerView('maintenance')"><i data-lucide="calendar-range"></i>View Maintenance Schedule</button>
           </div>
         </div>
       </section>
@@ -2668,6 +2722,9 @@
       const complianceGauge = document.getElementById('complianceGaugeValue');
       if (complianceGauge) complianceGauge.textContent = `${metrics.complianceScore.toFixed(1)}%`;
 
+      // Always sync the ingestion chart's latest point to the real document count
+      appendIngestionChartPoint();
+
       if (animate) animateCounters();
     }
 
@@ -2703,6 +2760,8 @@
             </div>
             <div>
               <div class="doc-preview-note" style="margin-top:0;">${doc.notes}</div>
+              ${doc.whatDone ? `<div class="doc-preview-note" style="margin-top:10px;"><strong style="color:var(--text-1); display:block; margin-bottom:4px;">What was done:</strong>${doc.whatDone}</div>` : ''}
+              ${doc.howSolved ? `<div class="doc-preview-note" style="margin-top:10px;"><strong style="color:var(--text-1); display:block; margin-bottom:4px;">How it solved the problem:</strong>${doc.howSolved}</div>` : ''}
             </div>
             <div>
               <div class="doc-preview-meta" style="margin-bottom:8px;"><strong style="color:var(--text-1);">Linked assets and standards</strong></div>
@@ -2714,7 +2773,7 @@
             </div>
             <div class="doc-card-actions">
               <button class="doc-action-btn" type="button" data-document-action="open" data-document-id="${doc.id}"><i data-lucide="eye"></i>Open</button>
-              ${doc.uploaded ? `<button class="doc-action-btn delete" type="button" data-document-action="delete" data-document-id="${doc.id}"><i data-lucide="trash-2"></i>Delete</button>` : ''}
+              ${doc.uploaded ? '' : ''}
             </div>
           </div>
         </details>
@@ -3101,34 +3160,88 @@
       });
     }
 
+    // ── Build realistic 12-month ingestion history ending at actual doc count ──
+    function buildIngestionChartData() {
+      const currentCount = documentCards.length;
+      const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+      // Roll the last 12 months relative to today
+      const now = new Date();
+      const labels = [];
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        labels.push(MONTHS[d.getMonth()]);
+      }
+
+      // Generate cumulative counts: start at 0, grow to currentCount
+      // using an ease-in curve so early months grow slowly, recent months fast
+      const data = [];
+      for (let i = 0; i < 12; i++) {
+        const t = i / 11;                          // 0 → 1
+        const eased = t * t * (3 - 2 * t);        // smooth-step (S-curve)
+        data.push(Math.round(eased * currentCount));
+      }
+      // Guarantee the last point is exactly the real count
+      data[11] = currentCount;
+
+      return { labels, data };
+    }
+
+    // ── Append a single new data point when a document is added or removed ──
+    function appendIngestionChartPoint() {
+      const chart = state.charts.ingestion;
+      if (!chart) return;
+      const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const now = new Date();
+      const monthLabel = MONTHS[now.getMonth()];
+      const labels = chart.data.labels;
+      const data   = chart.data.datasets[0].data;
+      const newCount = documentCards.length;
+
+      // If the last label is already this month, update the existing point
+      if (labels[labels.length - 1] === monthLabel) {
+        data[data.length - 1] = newCount;
+      } else {
+        // New month — append a new point and trim to 14 visible months
+        labels.push(monthLabel);
+        data.push(newCount);
+        if (labels.length > 14) { labels.shift(); data.shift(); }
+      }
+      chart.update({ duration: 600, easing: 'easeOutQuart' });
+    }
+
     function createChartConfigs() {
       const lineCtx = document.getElementById('ingestionChart');
       const doughnutCtx = document.getElementById('healthChart');
       if (state.charts.ingestion) state.charts.ingestion.destroy();
       if (state.charts.health) state.charts.health.destroy();
+
+      const { labels: ingLabels, data: ingData } = buildIngestionChartData();
+
       state.charts.ingestion = new Chart(lineCtx, {
         type: 'line',
         data: {
-          labels: ['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'],
+          labels: ingLabels,
           datasets: [{
             label: 'Documents',
-            data: [820, 900, 980, 1110, 1180, 1250, 1330, 1410, 1500, 1610, 1730, 1815],
+            data: ingData,
             tension: 0.38,
             fill: true,
-            borderColor: '#06b6d4',
+            borderColor: '#1814F3',
             backgroundColor: (ctx) => {
               const { chart } = ctx;
               const { ctx: c, chartArea } = chart;
-              if (!chartArea) return 'rgba(6,182,212,0.3)';
+              if (!chartArea) return 'rgba(24, 20, 243, 0.1)';
               const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-              gradient.addColorStop(0, 'rgba(6,182,212,0.42)');
-              gradient.addColorStop(1, 'rgba(6,182,212,0.02)');
+              gradient.addColorStop(0, 'rgba(24, 20, 243, 0.25)');
+              gradient.addColorStop(1, 'rgba(24, 20, 243, 0.00)');
               return gradient;
             },
             pointRadius: 4,
             pointHoverRadius: 6,
-            pointBackgroundColor: '#e0f2fe',
-            pointBorderWidth: 0,
+            pointBackgroundColor: '#FFFFFF',
+            pointBorderColor: '#1814F3',
+            pointBorderWidth: 2,
             borderWidth: 3
           }]
         },
@@ -3137,8 +3250,12 @@
           animation: { duration: 1200, easing: 'easeOutQuart' },
           plugins: { legend: { display: false } },
           scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' } }
+            x: { ticks: { color: '#718EBF' }, grid: { color: 'rgba(113, 142, 191, 0.1)' } },
+            y: {
+              ticks: { color: '#718EBF', precision: 0 },
+              grid: { color: 'rgba(113, 142, 191, 0.1)' },
+              beginAtZero: true
+            }
           }
         }
       });
@@ -3146,13 +3263,13 @@
         type: 'doughnut',
         data: {
           labels: ['Fresh', 'Aging', 'Stale'],
-          datasets: [{ data: [65, 25, 10], backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], borderWidth: 0, hoverOffset: 8 }]
+          datasets: [{ data: [65, 25, 10], backgroundColor: ['#16DBCC', '#FEAA09', '#FF4B4A'], borderWidth: 0, hoverOffset: 8 }]
         },
         options: {
           responsive: true,
           cutout: '68%',
           animation: { animateRotate: true, duration: 1200 },
-          plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', padding: 18 } } }
+          plugins: { legend: { position: 'bottom', labels: { color: '#343C6A', padding: 18 } } }
         }
       });
     }
@@ -3163,16 +3280,16 @@
         autoResize: true,
         nodes: {
           borderWidth: 1,
-          font: { color: '#e2e8f0', face: 'Inter' },
+          font: { color: '#343C6A', face: 'Inter' },
           scaling: { min: 10, max: 26 }
         },
         edges: {
-          color: { color: 'rgba(148,163,184,0.46)' },
+          color: { color: 'rgba(113, 142, 191, 0.2)' },
           smooth: { type: 'dynamic' },
-          font: { color: '#94a3b8', size: 10, align: 'middle' }
+          font: { color: '#718EBF', size: 10, align: 'middle' }
         },
         groups: {
-          core: { color: { background: '#0f172a', border: '#06b6d4' }, shape: 'dot', size: 24 },
+          core: { color: { background: '#FFFFFF', border: '#1814F3' }, shape: 'dot', size: 24 },
           asset: { shape: 'dot' },
           people: { shape: 'triangle' },
           rule: { shape: 'diamond' },
@@ -3606,7 +3723,32 @@
       });
     }
 
+    let pendingUploadFiles = null;
+
+    function cancelUploadMeta() {
+      document.getElementById('uploadMetaModal').classList.add('hidden');
+      pendingUploadFiles = null;
+      document.getElementById('uploadWhatDone').value = '';
+      document.getElementById('uploadHowSolved').value = '';
+    }
+
+    function confirmUploadMeta() {
+      if (!pendingUploadFiles) return;
+      document.getElementById('uploadMetaModal').classList.add('hidden');
+      const whatDone = document.getElementById('uploadWhatDone').value.trim() || 'No description provided.';
+      const howSolved = document.getElementById('uploadHowSolved').value.trim() || 'No resolution provided.';
+      processUploadedFiles(pendingUploadFiles, whatDone, howSolved);
+      pendingUploadFiles = null;
+      document.getElementById('uploadWhatDone').value = '';
+      document.getElementById('uploadHowSolved').value = '';
+    }
+
     function handleUploadedFiles(files) {
+      pendingUploadFiles = files;
+      document.getElementById('uploadMetaModal').classList.remove('hidden');
+    }
+
+    function processUploadedFiles(files, whatDone, howSolved) {
       const file = files[0];
       const stepsHost = document.getElementById('pipeline');
       if (!stepsHost) return;
@@ -3649,6 +3791,12 @@
           const dateString = new Date().toISOString().split('T')[0];
           const documentId = `upload-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
           
+          let uploaderName = 'Unknown Engineer';
+          try {
+            const u = JSON.parse(sessionStorage.getItem('loggedInEngineer'));
+            if(u && u.name) uploaderName = u.name;
+          } catch(e) {}
+          
           documentCards.unshift({
             id: documentId,
             type: 'PDF Document',
@@ -3658,12 +3806,14 @@
             date: dateString,
             uploaded: true,
             summary: `Uploaded file ${file.name} ingested from the document upload zone.`,
-            owner: 'Current user',
+            owner: uploaderName,
             source: 'Manual upload',
             department: 'Document Hub',
             status: 'Uploaded',
             reviewCycle: 'On demand',
             retention: 'User managed',
+            whatDone: whatDone,
+            howSolved: howSolved,
             linkedAssets: ['Auto-linked assets'],
             regulations: ['Factory Act 1948'],
             tags: ['Upload', 'User file', file.type || 'Unknown format'],
@@ -3895,6 +4045,38 @@
       if (view === 'dashboard') createChartConfigs();
     }
 
+    window.triggerView = function(view) {
+      setView(view);
+      const btn = document.querySelector(`#nav button[data-view="${view}"]`);
+      if (btn) {
+        document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('active', b === btn));
+      }
+      if (view === 'documents') {
+        setTimeout(() => {
+          const zone = document.getElementById('uploadZone');
+          if (zone) {
+            zone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            zone.style.borderColor = '#1814F3';
+            zone.style.boxShadow = '0 0 0 4px rgba(24, 20, 243, 0.15)';
+            setTimeout(() => {
+              zone.style.borderColor = '';
+              zone.style.boxShadow = '';
+            }, 1500);
+          }
+        }, 200);
+      }
+      if (view === 'copilot') {
+        setTimeout(() => {
+          const input = document.getElementById('chatInput');
+          if (input) {
+            input.focus();
+            input.style.borderColor = '#1814F3';
+            setTimeout(() => { input.style.borderColor = ''; }, 1000);
+          }
+        }, 200);
+      }
+    }
+
     // ============================================================
     // REAL-TIME SIMULATION ENGINE
     // ============================================================
@@ -3988,12 +4170,13 @@
         lucide.createIcons();
       }, 18000);
 
-      // --- 4. KPI Micro-Ticker: small fluctuations every 6s ---
+      // --- 4. KPI Micro-Ticker: live fluctuations for graph/sensor data every 6s ---
+      // NOTE: documentsIngestedValue is intentionally excluded — document count
+      // only updates when a file is actually uploaded or deleted by the user.
       setInterval(() => {
         const kpiEls = [
-          { id: 'documentsIngestedValue',  delta: () => Math.random() > 0.7 ? 1 : 0 },
-          { id: 'knowledgeEntitiesValue',  delta: () => Math.floor(Math.random() * 4) },
-          { id: 'activeEquipmentValue',    delta: () => (Math.random() > 0.85 ? (Math.random() > 0.5 ? 1 : -1) : 0) },
+          { id: 'knowledgeEntitiesValue', delta: () => Math.floor(Math.random() * 4) },
+          { id: 'activeEquipmentValue',   delta: () => (Math.random() > 0.85 ? (Math.random() > 0.5 ? 1 : -1) : 0) },
         ];
         kpiEls.forEach(({ id, delta }) => {
           const el = document.getElementById(id);
@@ -4009,21 +4192,9 @@
         });
       }, 6000);
 
-      // --- 5. Chart Live Append: add a new data point every 30s ---
-      setInterval(() => {
-        const chart = state.charts.ingestion;
-        if (!chart) return;
-        const labels = chart.data.labels;
-        const data   = chart.data.datasets[0].data;
-        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        const lastVal = data[data.length - 1] || 1800;
-        const newVal  = lastVal + Math.floor(Math.random() * 40 + 8);
-        const nextMonth = months[(months.indexOf(labels[labels.length - 1]) + 1) % 12];
-        labels.push(nextMonth);
-        data.push(newVal);
-        if (labels.length > 14) { labels.shift(); data.shift(); }
-        chart.update('active');
-      }, 30000);
+      // --- 5. Chart is now event-driven (no auto-append) ---
+      // The ingestion chart updates only when documents are uploaded or deleted.
+      // appendIngestionChartPoint() is called from refreshDashboardMetrics().
     }
 
     function handleLogin() {
@@ -4032,11 +4203,29 @@
       const errorDiv = document.getElementById('loginError');
       
       if (!idInput) {
-        errorDiv.textContent = "Engineer ID is required.";
+        errorDiv.textContent = currentLoginMode === 'admin' ? "Manager ID is required." : "Engineer ID is required.";
         errorDiv.style.display = "block";
         return;
       }
       
+      if (currentLoginMode === 'admin') {
+        const ADMIN_CREDS = [
+          {id:'MGR-01', name:'Rajesh Sharma', role:'Factory Manager', password:'manager123'},
+          {id:'MGR-02', name:'Sunita Mehta', role:'Operations Director', password:'manager123'}
+        ];
+        const found = ADMIN_CREDS.find(m => m.id === idInput && m.password === passInput);
+        if (!found) {
+          errorDiv.textContent = "Invalid Manager Credentials.";
+          errorDiv.style.display = "block";
+          return;
+        }
+        // Store session and redirect
+        sessionStorage.setItem('ikip.adminSession.v1', JSON.stringify(found));
+        window.location.href = 'admin.html';
+        return;
+      }
+
+      // Engineer Login Logic
       const found = ENGINEER_ROSTER.find(p => p[0] === idInput);
       let engineerName = "";
       let engineerRole = "";
@@ -4064,6 +4253,23 @@
       sessionStorage.setItem('loggedInEngineer', JSON.stringify(loggedInUser));
       document.getElementById('loginOverlay').classList.add('hidden');
       
+      // Add login to shared login report
+      try {
+        const logins = JSON.parse(localStorage.getItem('ikip.loginLog.v1') || '[]');
+        logins.unshift({
+          userType: 'Engineer',
+          id: idInput,
+          name: engineerName,
+          role: engineerRole,
+          timestamp: new Date().toISOString(),
+          displayTime: new Date().toLocaleString()
+        });
+        if (logins.length > 200) logins.pop(); // Keep last 200 logins
+        localStorage.setItem('ikip.loginLog.v1', JSON.stringify(logins));
+      } catch (e) {
+        console.error("Failed to log login event", e);
+      }
+
       updateSidebarUserUI();
       showToast(`Engineer ${engineerName} authenticated.`);
       startSessionTimer();
@@ -4185,6 +4391,9 @@
     }
 
     function init() {
+      // Force login on every reload
+      sessionStorage.removeItem('loggedInEngineer');
+      
       // Check authentication
       const userJson = sessionStorage.getItem('loggedInEngineer');
       if (!userJson) {
