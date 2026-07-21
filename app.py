@@ -25,7 +25,7 @@ load_dotenv()
 ACCESS_DB_PATH = Path("data") / "employee_access.db"
 
 st.set_page_config(
-    page_title="Industrial Knowledge Intelligence Platform",
+    page_title="Industrial Knowledge Integration Platform",
     page_icon="🏭",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -411,7 +411,7 @@ def process_documents(collection) -> None:
 def ask_and_store(question: str, collection) -> None:
     client = get_api_client()
     if client is None:
-        st.error("OPENAI_API_KEY is required for question answering.")
+        st.error("Inference Service API Key is required for question answering.")
         return
 
     with st.spinner("Searching industrial knowledge base..."):
@@ -436,11 +436,11 @@ def main() -> None:
     employee_id = st.session_state.get("current_employee_id", "")
     employee_name = st.session_state.get("current_employee_name", "")
 
-    st.title("Industrial Knowledge Intelligence Platform")
+    st.title("Industrial Knowledge Integration Platform")
     st.caption(f"Logged in as {employee_name} ({employee_id})")
     st.markdown(
         "<div class='hero-card'>"
-        "<div class='small-muted'>AI brain for plant documents, logs, and P&amp;IDs</div>"
+        "<div class='small-muted'>Integrated search & compliance verification engine for plant documents, logs, and P&amp;IDs</div>"
         "<p>Ask a field question and get cited answers from the current document set.</p>"
         "</div>",
         unsafe_allow_html=True,
@@ -507,7 +507,7 @@ def main() -> None:
             except Exception as exc:
                 st.error(f"Voice transcription failed: {exc}")
     else:
-        st.caption("Voice input is available when Streamlit exposes st.audio_input and OPENAI_API_KEY is set.")
+        st.caption("Voice input is available when Streamlit exposes st.audio_input and API Key is set.")
 
     if st.session_state.last_answer:
         st.markdown("### Latest Answer")

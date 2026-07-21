@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IKIP — Industrial Knowledge Intelligence Platform</title>
+  <title>IKIP — Industrial Knowledge Integration Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1098,6 +1098,12 @@
       border-radius: 12px;
       background: #FFFFFF;
       border: 1px solid #E6EFF5;
+      transition: all 0.2s ease;
+    }
+    .source-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
     }
 
     .chat-input {
@@ -1709,14 +1715,16 @@
       background: rgba(255,255,255,0.22);
     }
     .login-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      background: rgba(17, 24, 39, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      padding: 40px;
+      border-radius: 28px;
+      padding: 44px;
       width: 440px;
-      max-width: 90%;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      max-width: 95%;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       text-align: center;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       animation: sectionIn 350ms cubic-bezier(.2,.8,.2,1) both;
     }
     .login-logo {
@@ -1726,22 +1734,23 @@
       margin: 0 auto 20px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, rgba(6,182,212,0.22), rgba(8,145,178,0.08));
-      border: 1px solid rgba(6,182,212,0.4);
-      box-shadow: var(--shadow-cyan);
+      background: linear-gradient(135deg, rgba(45, 96, 255, 0.15), rgba(143, 59, 255, 0.05));
+      border: 1px solid rgba(45, 96, 255, 0.3);
+      box-shadow: 0 8px 24px rgba(45, 96, 255, 0.15);
       color: var(--cyan);
     }
     .login-title {
-      font-size: 1.6rem;
+      font-size: 1.65rem;
       font-weight: 800;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       color: #f1f5f9;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      font-family: var(--font-outfit);
     }
     .login-subtitle {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #94a3b8;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
     }
     .login-field {
       margin-bottom: 20px;
@@ -1749,48 +1758,50 @@
     }
     .login-label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      color: #94a3b8;
+      color: #718EBF;
       margin-bottom: 8px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
     .login-input {
       width: 100%;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
       padding: 13px 16px;
       font-family: inherit;
       color: #f1f5f9;
       font-size: 0.95rem;
-      transition: border-color var(--transition), box-shadow var(--transition);
+      transition: all var(--transition);
     }
-    .login-input::placeholder { color: #64748b; }
+    .login-input::placeholder { color: #4b5563; }
     .login-input:focus {
       outline: none;
-      border-color: #06b6d4;
-      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(45, 96, 255, 0.15);
     }
     .login-btn {
       width: 100%;
       appearance: none;
       border: 0;
       background: linear-gradient(135deg, var(--cyan), var(--violet));
-      color: #fff;
+      color: #ffffff;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
       padding: 14px;
       border-radius: 14px;
       cursor: pointer;
-      margin-top: 10px;
-      box-shadow: 0 10px 20px rgba(6, 182, 212, 0.2);
-      transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+      margin-top: 8px;
+      box-shadow: 0 10px 24px rgba(45, 96, 255, 0.2);
+      transition: all var(--transition);
     }
     .login-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 24px rgba(6, 182, 212, 0.3), var(--shadow-cyan);
+      box-shadow: 0 14px 28px rgba(45, 96, 255, 0.3), 0 0 20px rgba(143, 59, 255, 0.15);
       filter: brightness(1.05);
     }
     .login-btn:active {
@@ -1798,25 +1809,27 @@
     }
     .login-error {
       color: var(--red);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       margin-top: 12px;
       min-height: 20px;
       display: none;
+      font-weight: 500;
     }
     .login-suggestions {
       margin-top: 24px;
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.01);
       border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 16px;
+      padding: 14px;
       text-align: left;
     }
     .login-suggestions-title {
-      font-size: 0.78rem;
-      color: var(--text-2);
-      font-weight: 600;
-      margin-bottom: 8px;
+      font-size: 0.74rem;
+      color: #718EBF;
+      font-weight: 700;
+      margin-bottom: 10px;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
     .login-suggestions-list {
       display: flex;
@@ -1824,19 +1837,55 @@
       gap: 6px;
     }
     .login-suggest-chip {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 4px 8px;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      color: var(--text-2);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      color: #94a3b8;
       cursor: pointer;
-      transition: background var(--transition), color var(--transition);
+      font-weight: 500;
+      transition: all var(--transition);
     }
     .login-suggest-chip:hover {
-      background: rgba(6, 182, 212, 0.1);
-      color: var(--cyan);
-      border-color: rgba(6, 182, 212, 0.2);
+      background: rgba(45, 96, 255, 0.12);
+      color: #ffffff;
+      border-color: rgba(45, 96, 255, 0.25);
+    }
+
+    /* Premium Login Tabs */
+    .login-tabs-container {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 4px;
+      border-radius: 16px;
+      margin-bottom: 28px;
+      width: 100%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
+    }
+    .login-tab-btn {
+      flex: 1;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: #718EBF;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .login-tab-btn:hover {
+      color: #f1f5f9;
+    }
+    .login-tab-btn.active {
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(45, 96, 255, 0.25);
     }
 
     /* Document Hub Pagination Control Styles */
@@ -1865,9 +1914,9 @@
   <div class="login-overlay" id="loginOverlay">
     <div class="login-card" style="position: relative;">
       
-      <div style="display:flex; justify-content:center; gap:10px; margin-bottom: 24px;">
-        <button id="loginTabEng" class="filter-tab active" onclick="switchLoginMode('engineer')" style="padding: 8px 16px;">Engineer</button>
-        <button id="loginTabAdmin" class="filter-tab" onclick="switchLoginMode('admin')" style="padding: 8px 16px;">Factory Manager</button>
+      <div class="login-tabs-container">
+        <button id="loginTabEng" class="login-tab-btn active" onclick="switchLoginMode('engineer')">Engineer</button>
+        <button id="loginTabAdmin" class="login-tab-btn" onclick="switchLoginMode('admin')">Factory Manager</button>
       </div>
 
       <div class="login-logo" id="loginLogo"><i data-lucide="factory"></i></div>
@@ -1973,13 +2022,10 @@
         <button class="active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
         <button data-view="documents"><i data-lucide="folder-archive"></i><span>Document Hub</span></button>
         <button data-view="graph"><i data-lucide="network"></i><span>Knowledge Graph</span></button>
-        <button data-view="copilot"><i data-lucide="bot"></i><span>AI Copilot</span></button>
+        <button data-view="copilot"><i data-lucide="compass"></i><span>Expert Navigator</span></button>
         <button data-view="maintenance"><i data-lucide="wrench"></i><span>Maintenance Intelligence</span></button>
         <button data-view="compliance"><i data-lucide="shield-check"></i><span>Compliance Center</span></button>
         <button data-view="lessons"><i data-lucide="book-open-text"></i><span>Lessons Learned</span></button>
-        <a href="admin.html" id="adminPanelLink" style="display:none;appearance:none;border:1px solid rgba(245,158,11,0.30);background:rgba(245,158,11,0.08);color:#fbbf24;display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:14px;cursor:pointer;text-align:left;font-family:inherit;font-size:.93rem;font-weight:600;margin-top:8px;text-decoration:none;transition:background 220ms;" onmouseover="this.style.background='rgba(245,158,11,0.16)'" onmouseout="this.style.background='rgba(245,158,11,0.08)'">
-          <i data-lucide="shield-alert" style="width:18px;height:18px;color:#f59e0b;"></i><span>Admin Panel</span>
-        </a>
       </nav>
       <div class="sidebar-footer glass" id="sidebarFooter">
         <div style="font-weight:700; margin-bottom:8px;">Bharat Petrochemicals</div>
@@ -2070,7 +2116,7 @@
           <div class="card-head"><h3>Quick Actions</h3><div class="card-meta">Operator shortcuts</div></div>
           <div class="actions-row">
             <button class="action-btn" onclick="triggerView('documents')"><i data-lucide="upload"></i>Upload Documents</button>
-            <button class="action-btn" onclick="triggerView('copilot')"><i data-lucide="bot"></i>Ask AI Copilot</button>
+            <button class="action-btn" onclick="triggerView('copilot')"><i data-lucide="compass"></i>Ask Expert Navigator</button>
             <button class="action-btn" onclick="triggerView('compliance')"><i data-lucide="shield-check"></i>Check Compliance</button>
             <button class="action-btn" onclick="triggerView('maintenance')"><i data-lucide="calendar-range"></i>View Maintenance Schedule</button>
           </div>
@@ -2148,8 +2194,8 @@
       <section class="section" id="copilot">
         <div class="section-header">
           <div>
-            <div class="eyebrow">AI decision support</div>
-            <h2 class="section-title">AI Copilot</h2>
+            <div class="eyebrow">Decision support</div>
+            <h2 class="section-title">Expert Navigator</h2>
             <p class="section-subtitle">Ask operational questions and receive grounded responses with citations from refinery documents and maintenance records.</p>
           </div>
         </div>
@@ -2188,7 +2234,7 @@
             <div id="faultTree" class="fault-tree"></div>
           </div>
           <div class="glass panel">
-            <div class="card-head"><h3>AI Recommendations</h3><div class="card-meta">Priority-ranked actions</div></div>
+            <div class="card-head"><h3>Operational Recommendations</h3><div class="card-meta">Priority-ranked actions</div></div>
             <div class="rec-grid" id="recommendations"></div>
           </div>
         </div>
@@ -2242,7 +2288,7 @@
             </div>
           </div>
           <div class="glass panel">
-            <div class="card-head"><h3>Similar Incident Finder</h3><div class="card-meta">AI matching</div></div>
+            <div class="card-head"><h3>Similar Incident Finder</h3><div class="card-meta">Pattern correlation</div></div>
             <select class="select-input" id="incidentSelect"></select>
             <div id="similarIncidents" class="detail-list"></div>
             <div class="card-head" style="margin-top:18px;"><h3>Knowledge Capture</h3><div class="card-meta">Retiring engineer note</div></div>
@@ -2309,7 +2355,7 @@
       dashboard: 'Dashboard',
       documents: 'Document Hub',
       graph: 'Knowledge Graph',
-      copilot: 'AI Copilot',
+      copilot: 'Expert Navigator',
       maintenance: 'Maintenance Intelligence',
       compliance: 'Compliance Center',
       lessons: 'Lessons Learned'
@@ -2327,75 +2373,161 @@
     const documentCardSeed = [
       {
         id: 'doc-pid-p101', type: 'P&ID Drawing', title: 'P-101 Suction and Discharge Loop', entities: 142, confidence: 98, date: '2026-06-28', uploaded: false,
+        repairDate: '2026-06-28', nextInspectionDate: '2026-12-28',
         summary: 'Suction strainer, discharge isolation, and bypass routing for the P-101 pump train.',
-        owner: 'Process Engineering', source: 'Drawing archive', department: 'Utilities', status: 'Authoritative', reviewCycle: 'Annually', retention: 'Permanent',
+        owner: 'Process Engineering', repairEngineer: 'Arun Deshmukh (Senior Reliability Engineer)', source: 'Drawing archive', department: 'Utilities', status: 'Authoritative', reviewCycle: 'Annually', retention: 'Permanent',
+        rootCause: 'Suction-side fouling and line restriction causing cavitation during high throughput.',
+        whatDone: 'Inspected pump casing, cleaned suction strainer basket, and verified P&ID valve line-up.',
+        howSolved: 'Restored design suction head pressure and eliminated cavitation noise.',
         linkedAssets: ['P-101', 'P-102', 'E-301'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['P&ID', 'Pump Train', 'Critical'], notes: 'Use this sheet to confirm line-up before start-up and maintenance isolation.'
       },
       {
         id: 'doc-sop-c201', type: 'SOP', title: 'Start-up Procedure for C-201', entities: 88, confidence: 96, date: '2026-05-19', uploaded: false,
+        repairDate: '2026-05-19', nextInspectionDate: '2026-11-19',
         summary: 'Stepwise start-up sequence with oil checks, permissives, and load ramp guidance.',
-        owner: 'Operations', source: 'SOP library', department: 'Compression', status: 'Controlled', reviewCycle: 'Quarterly', retention: '5 years',
+        owner: 'Operations', repairEngineer: 'Sandeep Kulkarni (Maintenance Planner)', source: 'SOP library', department: 'Compression', status: 'Controlled', reviewCycle: 'Quarterly', retention: '5 years',
+        rootCause: 'Inconsistent warm-up ramps leading to lube oil temperature dips during cold restarts.',
+        whatDone: 'Revised start-up sequence, added oil permissive interlocks, and retrained shift operators.',
+        howSolved: 'Prevented low oil pressure trips during startup ramp-ups.',
         linkedAssets: ['C-201', 'C-202'], regulations: ['Factory Act 1948'], tags: ['Start-up', 'Commissioning', 'Operations'], notes: 'Matches the operating envelope used during turnaround restarts.'
       },
       {
         id: 'doc-wo-p104', type: 'Work Order', title: 'Bearing Replacement P-104', entities: 36, confidence: 92, date: '2026-07-09', uploaded: false,
+        repairDate: '2026-07-09', nextInspectionDate: '2026-10-09',
         summary: 'Corrective maintenance work order for bearing replacement, alignment, and post-run vibration check.',
-        owner: 'Maintenance Planning', source: 'CMMS export', department: 'Rotating Equipment', status: 'Closed', reviewCycle: 'Per event', retention: '7 years',
+        owner: 'Maintenance Planning', repairEngineer: 'Rakesh Patil (Mechanical Inspector)', source: 'CMMS export', department: 'Rotating Equipment', status: 'Closed', reviewCycle: 'Per event', retention: '7 years',
+        rootCause: 'Monsoon humidity ingress leading to drive-end bearing race pitting.',
+        whatDone: 'Replaced drive-end ball bearing, renewed mechanical seal cartridge, and laser aligned coupling.',
+        howSolved: 'Reduced overall vibration from 8.2 mm/s to 1.1 mm/s.',
         linkedAssets: ['P-104', 'P-105'], regulations: ['Factory Act 1948'], tags: ['Work Order', 'Bearing', 'Corrective'], notes: 'Includes post-job inspection and sign-off references.'
       },
       {
         id: 'doc-ir-e303', type: 'Inspection Report', title: 'Heat Exchanger E-303 NDT Review', entities: 64, confidence: 95, date: '2026-06-03', uploaded: false,
+        repairDate: '2026-06-03', nextInspectionDate: '2026-12-03',
         summary: 'NDT findings, thickness readings, and repair recommendation for E-303 channel head inspection.',
-        owner: 'Mechanical Integrity', source: 'Inspection archive', department: 'Heat Transfer', status: 'Reviewed', reviewCycle: 'Semiannual', retention: '10 years',
+        owner: 'Mechanical Integrity', repairEngineer: 'Priya Nair (Process Engineer)', source: 'Inspection archive', department: 'Heat Transfer', status: 'Reviewed', reviewCycle: 'Semiannual', retention: '10 years',
+        rootCause: 'Thermal stress fatigue cracking and scale buildup on channel head tube sheet.',
+        whatDone: 'Ultrasonic thickness scanning, high-pressure water jet bundle cleaning, and plugged 2 leaking tubes.',
+        howSolved: 'Restored heat transfer efficiency to 94% and secured PESO safety approval.',
         linkedAssets: ['E-303', 'E-304'], regulations: ['PESO Rules'], tags: ['NDT', 'Inspection', 'Thickness'], notes: 'Use this report when planning bundle cleaning or repair scopes.'
       },
       {
         id: 'doc-inc-unit3', type: 'Incident Report', title: 'Unit 3 Leak and Isolation Event', entities: 53, confidence: 90, date: '2025-11-17', uploaded: false,
+        repairDate: '2025-11-17', nextInspectionDate: '2026-11-17',
         summary: 'Incident chronology, isolation failures, and corrective actions for a Unit 3 hydrocarbon leak.',
-        owner: 'HSE', source: 'Incident register', department: 'Safety', status: 'Actioned', reviewCycle: 'Per incident', retention: '10 years',
+        owner: 'HSE', repairEngineer: 'Farah Khan (HSE Lead)', source: 'Incident register', department: 'Safety', status: 'Actioned', reviewCycle: 'Per incident', retention: '10 years',
+        rootCause: 'Incomplete double-block isolation verification prior to hot-work flange unbolting.',
+        whatDone: 'Replaced channel head spiral gasket, hydraulic-torqued studs, and revised PTW checklist.',
+        howSolved: 'Eliminated hydrocarbon seepage and enforced dual supervisor sign-off.',
         linkedAssets: ['E-304', 'Unit 3'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['Incident', 'Safety', 'RCA'], notes: 'Root cause emphasizes verification discipline before hot work.'
       },
       {
         id: 'doc-oem-sulzer', type: 'OEM Manual', title: 'Sulzer Pump PM Guide Rev 8', entities: 115, confidence: 97, date: '2024-09-11', uploaded: false,
+        repairDate: '2024-09-11', nextInspectionDate: '2026-09-11',
         summary: 'Vendor preventive maintenance guidance for overhaul intervals, bearing checks, and seal handling.',
-        owner: 'Reliability', source: 'OEM library', department: 'Rotating Equipment', status: 'Reference', reviewCycle: 'On revision', retention: 'Permanent',
+        owner: 'Reliability', repairEngineer: 'Rakesh Patil (Mechanical Inspector)', source: 'OEM library', department: 'Rotating Equipment', status: 'Reference', reviewCycle: 'On revision', retention: 'Permanent',
+        rootCause: 'Normal mechanical seal face carbon wear over 12,000 running hours.',
+        whatDone: 'Replaced mechanical seal cartridge assembly and reset impeller running clearance.',
+        howSolved: 'Restored zero-leakage standard and extended overhaul interval by 18 months.',
         linkedAssets: ['P-101', 'P-104'], regulations: ['OISD-116'], tags: ['OEM', 'Pump', 'PM'], notes: 'Useful for torque values and seal replacement steps.'
       },
       {
         id: 'doc-reg-oisd', type: 'Regulatory Filing', title: 'OISD-116 Fire Audit Bundle', entities: 79, confidence: 94, date: '2026-02-22', uploaded: false,
+        repairDate: '2026-02-22', nextInspectionDate: '2027-02-22',
         summary: 'Inspection evidence pack containing firewater checks, drill logs, and sign-off sheets.',
-        owner: 'Compliance', source: 'Audit archive', department: 'Safety', status: 'Certified', reviewCycle: 'Annual', retention: '7 years',
+        owner: 'Compliance', repairEngineer: 'Farah Khan (HSE Lead)', source: 'Audit archive', department: 'Safety', status: 'Certified', reviewCycle: 'Annual', retention: '7 years',
+        rootCause: 'Firewater line pressure drop caused by seat erosion on header valve 3F-22.',
+        whatDone: 'Overhauled firewater pump 3F valve trim, flushed header lines, and re-certified audit package.',
+        howSolved: 'Met OISD-116 10-bar pressure delivery benchmark across all hydrants.',
         linkedAssets: ['Firewater Loop', 'P-104'], regulations: ['OISD-116', 'Factory Act 1948'], tags: ['Audit', 'Fire Safety', 'Evidence'], notes: 'Open this when preparing regulator submissions.'
       },
       {
         id: 'doc-email-handover', type: 'Email Archive', title: 'Shift Handover - Refinery South Block', entities: 24, confidence: 88, date: '2026-07-11', uploaded: false,
+        repairDate: '2026-07-11', nextInspectionDate: '2026-10-11',
         summary: 'Shift-to-shift notes covering alarms, minor leaks, and maintenance reminders for South Block.',
-        owner: 'Operations', source: 'Mail archive', department: 'South Block', status: 'Current', reviewCycle: 'Daily', retention: '1 year',
+        owner: 'Operations', repairEngineer: 'Neha Iyer (Shift Superintendent)', source: 'Mail archive', department: 'South Block', status: 'Current', reviewCycle: 'Daily', retention: '1 year',
+        rootCause: 'Gland packing loosening on E-304 isolation valve during shift handover.',
+        whatDone: 'Tightened gland follower bolts, verified packing compression, and logged parameter trend.',
+        howSolved: 'Prevented minor drip from escalating into reportable process leak.',
         linkedAssets: ['P-101', 'E-304'], regulations: ['Factory Act 1948'], tags: ['Handover', 'Email', 'Operations'], notes: 'Useful for tracing recent warnings that did not escalate to incidents.'
       },
       {
         id: 'doc-maint-datasheet', type: 'Maintenance Log', title: 'P-104 Vibration Trend Log', entities: 61, confidence: 93, date: '2026-07-14', uploaded: false,
+        repairDate: '2026-07-14', nextInspectionDate: '2026-08-14',
         summary: 'Trending log with vibration, temperature, and alignment readings across the latest running cycle.',
-        owner: 'Condition Monitoring', source: 'Sensor export', department: 'Rotating Equipment', status: 'Live', reviewCycle: 'Weekly', retention: '3 years',
+        owner: 'Condition Monitoring', repairEngineer: 'Arun Deshmukh (Senior Reliability Engineer)', source: 'Sensor export', department: 'Rotating Equipment', status: 'Live', reviewCycle: 'Weekly', retention: '3 years',
+        rootCause: 'Unbalanced motor shaft coupling causing 2X RPM vibration frequency spike.',
+        whatDone: 'Rebalanced coupling hub, replaced elastomeric insert, and re-torqued hold-down bolts.',
+        howSolved: 'Normalized spectrum FFT peaks and stabilized running temperature at 52°C.',
         linkedAssets: ['P-104'], regulations: ['Factory Act 1948'], tags: ['Trend', 'Condition Monitoring', 'Pump'], notes: 'Best used alongside the work order for predictive planning.'
       },
       {
         id: 'doc-safety-drill', type: 'Safety Drill Record', title: 'Confined Space Drill Attendance - Q2 2026', entities: 29, confidence: 91, date: '2026-06-30', uploaded: false,
+        repairDate: '2026-06-30', nextInspectionDate: '2026-09-30',
         summary: 'Attendance, observations, and corrective actions from the latest confined-space drill.',
-        owner: 'HSE', source: 'Training record', department: 'Safety', status: 'Completed', reviewCycle: 'Quarterly', retention: '5 years',
+        owner: 'HSE', repairEngineer: 'Farah Khan (HSE Lead)', source: 'Training record', department: 'Safety', status: 'Completed', reviewCycle: 'Quarterly', retention: '5 years',
+        rootCause: 'Communication delay between emergency rescue team and confined-space entry supervisor.',
+        whatDone: 'Issued ATEX multi-channel radios, refreshed winch rescue drill, and updated training log.',
+        howSolved: 'Reduced emergency entry-to-rescue response time from 4.2 mins to 1.8 mins.',
         linkedAssets: ['Unit 3', 'E-303'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['Drill', 'Safety', 'Training'], notes: 'Good evidence for compliance closure and toolbox talks.'
       }
     ];
 
+    function calculateFutureInspectionDate(dateStr) {
+      try {
+        const d = new Date(dateStr || Date.now());
+        if (isNaN(d.getTime())) return '2026-10-25';
+        d.setMonth(d.getMonth() + 3);
+        return d.toISOString().split('T')[0];
+      } catch {
+        return '2026-10-25';
+      }
+    }
+
     function loadDocumentCards() {
+      let cards;
       try {
         const raw = localStorage.getItem(storageKeys.documents);
-        if (!raw) return JSON.parse(JSON.stringify(documentCardSeed));
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) && parsed.length ? parsed : JSON.parse(JSON.stringify(documentCardSeed));
+        if (!raw) {
+          cards = JSON.parse(JSON.stringify(documentCardSeed));
+        } else {
+          const parsed = JSON.parse(raw);
+          cards = Array.isArray(parsed) && parsed.length ? parsed : JSON.parse(JSON.stringify(documentCardSeed));
+        }
       } catch {
-        return JSON.parse(JSON.stringify(documentCardSeed));
+        cards = JSON.parse(JSON.stringify(documentCardSeed));
       }
+
+      const fallbackEngineers = [
+        'Sandeep Kulkarni (Maintenance Planner)',
+        'Rakesh Patil (Mechanical Inspector)',
+        'Arun Deshmukh (Senior Reliability Engineer)',
+        'Priya Nair (Process Engineer)',
+        'Farah Khan (HSE Lead)',
+        'Neha Iyer (Shift Superintendent)'
+      ];
+      cards.forEach((doc, idx) => {
+        const seedMatch = documentCardSeed.find(s => s.id === doc.id);
+        if (!doc.repairEngineer) {
+          doc.repairEngineer = seedMatch ? seedMatch.repairEngineer : fallbackEngineers[idx % fallbackEngineers.length];
+        }
+        if (!doc.repairDate) {
+          doc.repairDate = seedMatch ? seedMatch.repairDate : (doc.date || '2026-06-25');
+        }
+        if (!doc.nextInspectionDate) {
+          doc.nextInspectionDate = seedMatch ? seedMatch.nextInspectionDate : calculateFutureInspectionDate(doc.repairDate);
+        }
+        if (!doc.rootCause) {
+          doc.rootCause = seedMatch ? seedMatch.rootCause : 'Thermal cycling, mechanical seal degradation, and suction strainer particle build-up over operating hours.';
+        }
+        if (!doc.whatDone && seedMatch) {
+          doc.whatDone = seedMatch.whatDone;
+        }
+        if (!doc.howSolved && seedMatch) {
+          doc.howSolved = seedMatch.howSolved;
+        }
+      });
+      return cards;
     }
 
     let documentCards = loadDocumentCards();
@@ -2738,6 +2870,11 @@
 
     function renderDocumentAccordion(doc, expanded = false) {
       const openAttribute = expanded ? ' open' : '';
+      const repairEng = doc.repairEngineer || 'Sandeep Kulkarni (Maintenance Planner)';
+      const rCause = doc.rootCause || 'Suction-side fouling, mechanical seal wear, and thermal expansion strain over operating hours.';
+      const rDate = doc.repairDate || doc.date || '2026-06-25';
+      const nextInspDate = doc.nextInspectionDate || calculateFutureInspectionDate(rDate);
+
       return `
         <details class="doc-accordion"${openAttribute} data-document-id="${doc.id}">
           <summary>
@@ -2750,20 +2887,48 @@
           <div class="doc-accordion-body">
             <div class="doc-info-grid">
               <div class="doc-info-item">Owner<strong>${doc.owner}</strong></div>
+              <div class="doc-info-item" style="background:rgba(45,96,255,0.06); border:1px solid rgba(45,96,255,0.18);">Repair engineer<strong style="color:var(--cyan);">${repairEng}</strong></div>
+              <div class="doc-info-item">Repair date<strong>${rDate}</strong></div>
+              <div class="doc-info-item" style="background:rgba(22,219,204,0.06); border:1px solid rgba(22,219,204,0.20);">Next inspection<strong style="color:#059669;">${nextInspDate}</strong></div>
               <div class="doc-info-item">Source<strong>${doc.source}</strong></div>
               <div class="doc-info-item">Department<strong>${doc.department}</strong></div>
               <div class="doc-info-item">Status<strong>${doc.status}</strong></div>
               <div class="doc-info-item">Review cycle<strong>${doc.reviewCycle}</strong></div>
-              <div class="doc-info-item">Retention<strong>${doc.retention}</strong></div>
               <div class="doc-info-item">Extracted entities<strong>${doc.entities}</strong></div>
               <div class="doc-info-item">Confidence<strong>${doc.confidence}%</strong></div>
             </div>
-            <div>
-              <div class="doc-preview-note" style="margin-top:0;">${doc.notes}</div>
-              ${doc.whatDone ? `<div class="doc-preview-note" style="margin-top:10px;"><strong style="color:var(--text-1); display:block; margin-bottom:4px;">What was done:</strong>${doc.whatDone}</div>` : ''}
-              ${doc.howSolved ? `<div class="doc-preview-note" style="margin-top:10px;"><strong style="color:var(--text-1); display:block; margin-bottom:4px;">How it solved the problem:</strong>${doc.howSolved}</div>` : ''}
+            <div style="margin-top:14px; display:flex; flex-direction:column; gap:10px;">
+              <div class="doc-preview-note" style="margin-top:0; background:rgba(245,158,11,0.08); border-left:3.5px solid #f59e0b; padding:11px 14px; border-radius:10px;">
+                <strong style="color:var(--text-1); display:block; margin-bottom:4px;">
+                  <i data-lucide="alert-triangle" style="width:15px; height:15px; color:#f59e0b; vertical-align:-2px; margin-right:5px;"></i>Root Cause of Repair / Issue:
+                </strong>
+                ${rCause}
+              </div>
+
+              ${doc.whatDone ? `
+                <div class="doc-preview-note" style="margin-top:0; background:rgba(16,219,204,0.08); border-left:3.5px solid #16DBCC; padding:11px 14px; border-radius:10px;">
+                  <strong style="color:var(--text-1); display:block; margin-bottom:4px;">
+                    <i data-lucide="wrench" style="width:15px; height:15px; color:#16DBCC; vertical-align:-2px; margin-right:5px;"></i>What was done (Repair Actions):
+                  </strong>
+                  ${doc.whatDone}
+                </div>` : ''}
+
+              ${doc.howSolved ? `
+                <div class="doc-preview-note" style="margin-top:0; background:rgba(45,96,255,0.08); border-left:3.5px solid #2D60FF; padding:11px 14px; border-radius:10px;">
+                  <strong style="color:var(--text-1); display:block; margin-bottom:4px;">
+                    <i data-lucide="shield-check" style="width:15px; height:15px; color:#2D60FF; vertical-align:-2px; margin-right:5px;"></i>How it solved the problem:
+                  </strong>
+                  ${doc.howSolved}
+                </div>` : ''}
+
+              <div class="doc-preview-note" style="margin-top:0;">
+                <strong style="color:var(--text-1); display:block; margin-bottom:4px;">
+                  <i data-lucide="info" style="width:15px; height:15px; color:var(--cyan); vertical-align:-2px; margin-right:5px;"></i>Important Repair & Operational Notes:
+                </strong>
+                ${doc.notes || 'Routine maintenance and inspection record. Ensure strict adherence to isolation and PTW rules.'}
+              </div>
             </div>
-            <div>
+            <div style="margin-top:14px;">
               <div class="doc-preview-meta" style="margin-bottom:8px;"><strong style="color:var(--text-1);">Linked assets and standards</strong></div>
               <div class="doc-tag-row">
                 ${doc.linkedAssets.map(item => `<span class="doc-tag"><i data-lucide="link-2"></i>${item}</span>`).join('')}
@@ -2805,14 +2970,20 @@
 
     function documentItemTemplate(doc, compact = false) {
       const buttonLabel = compact ? 'Open' : 'Open Document';
+      const repairEng = doc.repairEngineer || 'Sandeep Kulkarni (Maintenance Planner)';
+      const rCause = doc.rootCause || 'Suction-side fouling & thermal stress';
+      const rDate = doc.repairDate || doc.date || '2026-06-25';
+      const nextInspDate = doc.nextInspectionDate || calculateFutureInspectionDate(rDate);
       return `
         <div class="doc-preview-item" data-document-id="${doc.id}">
           <div class="doc-type"><i data-lucide="folder-open"></i>${doc.type}</div>
           <div class="doc-preview-title">${doc.title}</div>
           <div class="doc-preview-meta">
-            <div>Summary: ${doc.summary}</div>
-            <div>Indexed on ${doc.date}</div>
-            <div>Owner: ${doc.owner}</div>
+            <div><strong>Summary:</strong> ${doc.summary}</div>
+            <div style="color:var(--cyan); font-weight:600;"><strong>Repair Engineer:</strong> ${repairEng}</div>
+            <div style="color:#f59e0b; font-weight:600;"><strong>Root Cause:</strong> ${rCause}</div>
+            <div><strong>Repair Date:</strong> ${rDate} &nbsp;·&nbsp; <strong>Next Inspection:</strong> <span style="color:#059669; font-weight:600;">${nextInspDate}</span></div>
+            <div>Indexed on ${doc.date} · Owner: ${doc.owner}</div>
           </div>
           <div class="doc-card-actions">
             <button class="doc-action-btn" type="button" data-document-action="open" data-document-id="${doc.id}"><i data-lucide="eye"></i>${buttonLabel}</button>
@@ -2820,6 +2991,210 @@
           </div>
         </div>
       `;
+    }
+
+    function getOrCreateSourceDocument(title, type) {
+      if (!title) return null;
+      const normTitle = title.toLowerCase().trim();
+
+      // 1. Try exact or partial match in existing documentCards
+      let found = documentCards.find(doc => {
+        const docTitle = doc.title.toLowerCase().trim();
+        return docTitle === normTitle || normTitle.includes(docTitle) || docTitle.includes(normTitle);
+      });
+      if (found) return found;
+
+      // 2. Pre-defined rich dictionary for sample data source titles
+      const knownMap = {
+        'pump p-101 failure review': {
+          id: 'doc-p101-rca', type: type || 'Incident Report', title: 'Pump P-101 Failure Review', entities: 84, confidence: 98, date: '2026-06-20', uploaded: false,
+          repairDate: '2026-06-20', nextInspectionDate: '2026-09-20',
+          summary: 'Root cause analysis investigating suction strainer fouling, low-NPSH operation, and thermal shock post-outage on P-101.',
+          owner: 'Reliability Engineering', repairEngineer: 'Arun Deshmukh (Senior Reliability Engineer)', source: 'RCA Repository', department: 'Rotating Equipment', status: 'Approved', reviewCycle: 'Per event', retention: '10 years',
+          rootCause: 'Suction strainer fouling, low-NPSH operation, and rapid post-outage warm-up shortcuts.',
+          whatDone: 'Cleaned suction strainer, replaced seal flush line valve, and enforced 20-min warm-up ramp protocol.',
+          howSolved: 'Restored design NPSH margin and eliminated suction-side turbulence vibration.',
+          linkedAssets: ['P-101', 'P-102'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['RCA', 'Pump P-101', 'Failure Review'], notes: 'Key action: Enforce 20-min warm-up ramp and weekly suction strainer dP checks.'
+        },
+        'p-101 p&id and start-up checklist': {
+          id: 'doc-pid-p101-ck', type: type || 'P&ID Drawing', title: 'P-101 P&ID and Start-up Checklist', entities: 142, confidence: 95, date: '2026-06-28', uploaded: false,
+          repairDate: '2026-06-28', nextInspectionDate: '2026-12-28',
+          summary: 'Suction strainer, discharge isolation, and bypass routing diagram with pre-commissioning checklist for P-101.',
+          owner: 'Process Engineering', repairEngineer: 'Priya Nair (Process Engineer)', source: 'Drawing Archive', department: 'Utilities', status: 'Authoritative', reviewCycle: 'Annually', retention: 'Permanent',
+          rootCause: 'Line-up mismatch during turnaround maintenance isolation.',
+          whatDone: 'Updated P&ID drawing, verified field valve positions, and added pre-start checklist tag.',
+          howSolved: 'Guaranteed zero reverse flow risk during startup.',
+          linkedAssets: ['P-101', 'E-301'], regulations: ['OISD-116', 'Factory Act 1948'], tags: ['P&ID', 'Checklist', 'Start-up'], notes: 'Use checklist items 1-14 before authorizing line-up.'
+        },
+        'operator logbook, may-june 2026': {
+          id: 'doc-log-p101', type: type || 'Email Archive', title: 'Operator Logbook, May-June 2026', entities: 41, confidence: 91, date: '2026-06-15', uploaded: false,
+          repairDate: '2026-06-15', nextInspectionDate: '2026-09-15',
+          summary: 'Shift log entries recording suction pressure drops, cavitation noise, and warm-up procedure shortcuts on P-101.',
+          owner: 'Operations', repairEngineer: 'Neha Iyer (Shift Superintendent)', source: 'Logbook Archive', department: 'South Block', status: 'Reviewed', reviewCycle: 'Monthly', retention: '3 years',
+          rootCause: 'Operator shortcut on warm-up bypass valve during rapid shift handover.',
+          whatDone: 'Audited shift log entries, retrained shift duty officers, and locked warm-up bypass position.',
+          howSolved: 'Eliminated thermal shock incidents during afternoon load shifts.',
+          linkedAssets: ['P-101'], regulations: ['Factory Act 1948'], tags: ['Shift Log', 'P-101', 'Cavitation'], notes: 'Logs highlight recurring low-NPSH alarms during high-throughput shifts.'
+        },
+        'c-201 o&m logbook 2026': {
+          id: 'doc-c201-log', type: type || 'Work Order', title: 'C-201 O&M Logbook 2026', entities: 67, confidence: 97, date: '2026-06-21', uploaded: false,
+          repairDate: '2026-06-21', nextInspectionDate: '2026-09-21',
+          summary: 'Operational logbook records for C-201 compressor train detailing lube oil pressure trips and filter swaps.',
+          owner: 'Compression Operations', repairEngineer: 'Sandeep Kulkarni (Maintenance Planner)', source: 'CMMS Export', department: 'Compression', status: 'Closed', reviewCycle: 'Quarterly', retention: '5 years',
+          rootCause: 'Lube oil filter differential pressure spike due to fine particle fouling.',
+          whatDone: 'Swapped dual oil filter elements, flushed lube oil reservoir, and reset differential pressure alarm.',
+          howSolved: 'Stabilized lube oil supply pressure at 3.4 bar.',
+          linkedAssets: ['C-201', 'C-202'], regulations: ['Factory Act 1948'], tags: ['C-201', 'Lube Oil', 'Logbook'], notes: 'Includes laser alignment check-sheets post oil filter overhaul.'
+        },
+        'compressor c-201 start-up sop': {
+          id: 'doc-c201-sop', type: type || 'SOP', title: 'Compressor C-201 Start-up SOP', entities: 88, confidence: 94, date: '2026-05-19', uploaded: false,
+          repairDate: '2026-05-19', nextInspectionDate: '2026-11-19',
+          summary: 'Stepwise start-up sequence with oil checks, permissives, anti-surge valve check, and load ramp guidance.',
+          owner: 'Operations', repairEngineer: 'Arun Deshmukh (Senior Reliability Engineer)', source: 'SOP Library', department: 'Compression', status: 'Controlled', reviewCycle: 'Quarterly', retention: '5 years',
+          rootCause: 'Cold start thermal differential causing surge valve oscillation.',
+          whatDone: 'Recalibrated anti-surge controller and published revised SOP procedures.',
+          howSolved: 'Achieved smooth load ramp-up without compressor surge.',
+          linkedAssets: ['C-201'], regulations: ['Factory Act 1948'], tags: ['SOP', 'Start-up', 'C-201'], notes: 'Matches operating envelope verified during Q2 2026 turnaround.'
+        },
+        'lube oil analysis summary q2 2026': {
+          id: 'doc-c201-oil', type: type || 'Inspection Report', title: 'Lube Oil Analysis Summary Q2 2026', entities: 52, confidence: 96, date: '2026-06-30', uploaded: false,
+          repairDate: '2026-06-30', nextInspectionDate: '2026-09-30',
+          summary: 'Spectrometry and particle count trend showing elevated iron wear particles in C-201 lube oil reservoir.',
+          owner: 'Condition Monitoring', repairEngineer: 'Rakesh Patil (Mechanical Inspector)', source: 'Lab Reports', department: 'Reliability', status: 'Action Required', reviewCycle: 'Quarterly', retention: '5 years',
+          rootCause: 'Ferrous wear particle generation from coupling sleeve wear.',
+          whatDone: 'Replaced gear coupling sleeve, refilled synthetic lube oil, and took baseline oil sample.',
+          howSolved: 'Reduced ISO cleanliness code from 21/18/14 to 15/12/09.',
+          linkedAssets: ['C-201'], regulations: ['OISD-116'], tags: ['Oil Analysis', 'C-201', 'Condition Monitoring'], notes: 'Filter upgrade scheduled for next maintenance window.'
+        },
+        'unit 3 incident register 2025': {
+          id: 'doc-u3-inc', type: type || 'Incident Report', title: 'Unit 3 Incident Register 2025', entities: 53, confidence: 96, date: '2025-11-17', uploaded: false,
+          repairDate: '2025-11-17', nextInspectionDate: '2026-11-17',
+          summary: 'Annual compilation of reportable safety events, flange leaks, and permit mismatches across Unit 3.',
+          owner: 'HSE', repairEngineer: 'Farah Khan (HSE Lead)', source: 'Incident Database', department: 'Safety', status: 'Actioned', reviewCycle: 'Annual', retention: '10 years',
+          rootCause: 'Flange gasket thermal degradation and incomplete bolt torque verification.',
+          whatDone: 'Installed spiral-wound graphite gasket and enforced calibrated hydraulic torqueing.',
+          howSolved: 'Eliminated flange seepage across all Unit 3 exchangers.',
+          linkedAssets: ['E-304', 'Unit 3'], regulations: ['Factory Act 1948', 'OISD-116'], tags: ['Incident Register', 'Unit 3', 'HSE'], notes: 'Isolation verification gap highlighted across 2 major events.'
+        },
+        'shift handover book - south block': {
+          id: 'doc-sh-sb', type: type || 'Email Archive', title: 'Shift Handover Book - South Block', entities: 24, confidence: 88, date: '2026-07-11', uploaded: false,
+          repairDate: '2026-07-11', nextInspectionDate: '2026-10-11',
+          summary: 'Shift-to-shift handover records summarizing active alarms, temporary bypasses, and maintenance activities.',
+          owner: 'Operations', repairEngineer: 'Neha Iyer (Shift Superintendent)', source: 'Mail Archive', department: 'South Block', status: 'Current', reviewCycle: 'Daily', retention: '1 year',
+          rootCause: 'Minor valve packing weeping under peak pressure.',
+          whatDone: 'Adjusted valve packing gland and logged follow-up work order.',
+          howSolved: 'Maintained clean environmental log for South Block.',
+          linkedAssets: ['P-101', 'E-304'], regulations: ['Factory Act 1948'], tags: ['Shift Handover', 'South Block', 'Operations'], notes: 'Includes supervisor sign-offs for night shift transfers.'
+        },
+        'hse corrective action tracker': {
+          id: 'doc-hse-capa', type: type || 'SOP', title: 'HSE Corrective Action Tracker', entities: 59, confidence: 93, date: '2026-05-30', uploaded: false,
+          repairDate: '2026-05-30', nextInspectionDate: '2026-08-30',
+          summary: 'Status of corrective and preventive action items (CAPA) arising from internal safety audits.',
+          owner: 'HSE', repairEngineer: 'Farah Khan (HSE Lead)', source: 'CAPA Portal', department: 'Safety', status: 'Active', reviewCycle: 'Monthly', retention: '5 years',
+          rootCause: 'Permit-to-work isolation sign-off delay during concurrent maintenance activities.',
+          whatDone: 'Implemented digital PTW verification board and assigned dedicated safety supervisors.',
+          howSolved: 'Achieved 100% audit compliance for all Unit 3 hot-work permits.',
+          linkedAssets: ['Unit 3'], regulations: ['OISD-116', 'Factory Act 1948'], tags: ['CAPA', 'HSE', 'Corrective Action'], notes: 'All Unit 3 isolation findings targeted for closure by Q3.'
+        },
+        'oisd-116 audit bundle': {
+          id: 'doc-reg-oisd', type: type || 'Regulatory Filing', title: 'OISD-116 Fire Audit Bundle', entities: 79, confidence: 97, date: '2026-02-22', uploaded: false,
+          repairDate: '2026-02-22', nextInspectionDate: '2027-02-22',
+          summary: 'Audit documentation package for OISD-116 fire protection standard readiness and test records.',
+          owner: 'Compliance', repairEngineer: 'Farah Khan (HSE Lead)', source: 'Audit Archive', department: 'Safety', status: 'Certified', reviewCycle: 'Annual', retention: '7 years',
+          rootCause: 'Firewater line pressure drop caused by seat erosion on header valve 3F-22.',
+          whatDone: 'Overhauled firewater pump 3F valve trim, flushed header lines, and re-certified audit package.',
+          howSolved: 'Met OISD-116 10-bar pressure delivery benchmark across all hydrants.',
+          linkedAssets: ['Firewater Loop', 'P-104'], regulations: ['OISD-116', 'Factory Act 1948'], tags: ['OISD-116', 'Audit', 'Fire Safety'], notes: 'Submitted to regulatory authority during 2026 inspection.'
+        },
+        'firewater pump test register': {
+          id: 'doc-fw-reg', type: type || 'Inspection Report', title: 'Firewater Pump Test Register', entities: 48, confidence: 94, date: '2026-07-02', uploaded: false,
+          repairDate: '2026-07-02', nextInspectionDate: '2026-10-02',
+          summary: 'Routine weekly run log, flow pressure data, and battery charger status for firewater pumps.',
+          owner: 'Fire & Safety', repairEngineer: 'Sandeep Kulkarni (Maintenance Planner)', source: 'Test Logs', department: 'HSE', status: 'Verified', reviewCycle: 'Weekly', retention: '5 years',
+          rootCause: 'Battery charger failure on diesel firewater pump auto-start circuit.',
+          whatDone: 'Replaced battery charger unit and tested emergency auto-start response.',
+          howSolved: 'Restored automatic firewater pump start within 8 seconds.',
+          linkedAssets: ['P-104'], regulations: ['OISD-116'], tags: ['Firewater', 'Pump Test', 'Safety'], notes: 'P-104 diesel drive auto-start tested within 8 seconds.'
+        },
+        'pressure vessel compliance index': {
+          id: 'doc-pv-idx', type: type || 'Work Order', title: 'Pressure Vessel Compliance Index', entities: 83, confidence: 95, date: '2026-06-12', uploaded: false,
+          repairDate: '2026-06-12', nextInspectionDate: '2026-12-12',
+          summary: 'PESO compliance status for all refinery pressure vessels including NDT thickness and PSV pop dates.',
+          owner: 'Mechanical Integrity', repairEngineer: 'Rakesh Patil (Mechanical Inspector)', source: 'Compliance DB', department: 'Static Equipment', status: 'Active', reviewCycle: 'Annual', retention: '10 years',
+          rootCause: 'Routine calibration expiry on PSV safety valve package.',
+          whatDone: 'Bench-tested PSV set points, replaced popping disk, and issued PESO compliance certificate.',
+          howSolved: 'Ensured zero overpressure risk on V-502 vessel.',
+          linkedAssets: ['V-501', 'V-502', 'V-503'], regulations: ['PESO Rules'], tags: ['PESO', 'Pressure Vessel', 'Compliance'], notes: 'V-502 PSV package scheduled for recalibration.'
+        },
+        'refinery major incident register 2021-2026': {
+          id: 'doc-ref-inc', type: type || 'Incident Database', title: 'Refinery Major Incident Register 2021-2026', entities: 120, confidence: 97, date: '2026-07-01', uploaded: false,
+          repairDate: '2026-07-01', nextInspectionDate: '2027-01-01',
+          summary: 'Historic incident log covering all level 2 and level 3 process safety events across Jamnagar Refinery.',
+          owner: 'HSE Directorate', repairEngineer: 'Arun Deshmukh (Senior Reliability Engineer)', source: 'Central Memory', department: 'Safety & Operations', status: 'Authoritative', reviewCycle: 'Ongoing', retention: 'Permanent',
+          rootCause: 'Systemic thermal stress and isolation check gaps across historic 5-year operating dataset.',
+          whatDone: 'Compiled refinery root cause database, implemented predictive health monitoring, and standardized SOPs.',
+          howSolved: 'Reduced overall refinery process safety incidents by 42% year-over-year.',
+          linkedAssets: ['P-104', 'E-304', 'C-201'], regulations: ['OISD-116', 'Factory Act 1948'], tags: ['Incident Database', 'Process Safety', 'RCA'], notes: 'Cross-referenced with lessons learned repository.'
+        },
+        'operator lessons learned repository': {
+          id: 'doc-op-wisdom', type: type || 'Wisdom Log', title: 'Operator Lessons Learned Repository', entities: 95, confidence: 91, date: '2026-06-18', uploaded: false,
+          repairDate: '2026-06-18', nextInspectionDate: '2026-12-18',
+          summary: 'Field experiences, startup cautions, and operator tips compiled from shift superintendents.',
+          owner: 'Knowledge Cell', repairEngineer: 'Neha Iyer (Shift Superintendent)', source: 'Wisdom Log', department: 'Operations', status: 'Active', reviewCycle: 'Monthly', retention: 'Permanent',
+          rootCause: 'Operator knowledge gaps during non-routine plant turndown sequences.',
+          whatDone: 'Captured senior operator field insights into digital wisdom log and interactive Expert Navigator.',
+          howSolved: 'Accelerated onboarding and prevented repeat operational errors.',
+          linkedAssets: ['P-101', 'Unit 3', 'C-201'], regulations: ['Factory Act 1948'], tags: ['Lessons Learned', 'Operator Wisdom', 'Best Practice'], notes: 'Emphasizes warmup ramp adherence and gas check discipline.'
+        }
+      };
+
+      if (knownMap[normTitle]) {
+        const newDoc = knownMap[normTitle];
+        documentCards.unshift(newDoc);
+        renderDocuments();
+        return newDoc;
+      }
+
+      // 3. Fallback: Create dynamic document card for unmapped titles
+      const slugId = 'doc-src-' + normTitle.replace(/[^a-z0-9]+/g, '-').slice(0, 30);
+      const todayStr = new Date().toISOString().split('T')[0];
+      const dynamicDoc = {
+        id: slugId,
+        type: type || 'Technical Document',
+        title: title,
+        entities: Math.floor(Math.random() * 50) + 40,
+        confidence: 95,
+        date: todayStr,
+        repairDate: todayStr,
+        nextInspectionDate: calculateFutureInspectionDate(todayStr),
+        uploaded: false,
+        summary: `Ingested document record for "${title}". Extracted operational parameters, asset references, and safety context.`,
+        owner: 'Refinery Technical Memory',
+        repairEngineer: 'Sandeep Kulkarni (Maintenance Planner)',
+        source: 'IKIP Knowledge Hub',
+        department: 'Operations & Reliability',
+        status: 'Verified',
+        reviewCycle: 'Annually',
+        retention: '7 years',
+        rootCause: 'Operating parameter drift, mechanical strain, and thermal expansion cycling over operational service hours.',
+        whatDone: 'Inspected component assembly, recalibrated line sensors, and verified interlock loop integrity.',
+        howSolved: 'Restored standard operating envelope and cleared active warning alarms.',
+        linkedAssets: ['P-101', 'C-201', 'Unit 3'],
+        regulations: ['OISD-116', 'Factory Act 1948'],
+        tags: [type || 'Document', 'Refinery Memory'],
+        notes: 'Reference document cited in Expert Navigator decision support answers.'
+      };
+
+      documentCards.unshift(dynamicDoc);
+      renderDocuments();
+      return dynamicDoc;
+    }
+
+    function openSourceDocument(title, type) {
+      const doc = getOrCreateSourceDocument(title, type);
+      if (doc) {
+        openDocument(doc.id);
+      }
     }
 
     function openDocument(documentId) {
@@ -3022,7 +3397,7 @@
       const chat = document.getElementById('chatLog');
       chat.innerHTML = `
         <div class="msg ai">
-          <div class="avatar ai"><i data-lucide="bot"></i></div>
+          <div class="avatar ai"><i data-lucide="cpu"></i></div>
           <div class="bubble">I am connected to refinery documents, maintenance logs, and regulatory records. Ask for an equipment history, an incident summary, or a compliance explanation.</div>
         </div>
       `;
@@ -3488,7 +3863,7 @@
       `;
       const typing = `
         <div class="msg ai" id="typingMsg">
-          <div class="avatar ai"><i data-lucide="bot"></i></div>
+          <div class="avatar ai"><i data-lucide="cpu"></i></div>
           <div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>
         </div>
       `;
@@ -3505,16 +3880,23 @@
         const sourcesHtml = answer.sources.length ? `
           <div class="sources">
             <div style="font-weight:700; color:var(--text-1);">Sources cited</div>
-            ${answer.sources.map(([title, type, confidence]) => `
-              <div class="source-card">
-                <div><strong>${title}</strong><div style="color:var(--text-2); font-size:0.86rem;">${type}</div></div>
-                <div style="text-align:right; color:#c4b5fd; font-family:'JetBrains Mono', monospace;">${confidence}<br><span style="color:var(--cyan)">View Document</span></div>
-              </div>
-            `).join('')}
+            ${answer.sources.map(([title, type, confidence]) => {
+              const safeTitle = (title || '').replace(/'/g, "\\'");
+              const safeType = (type || '').replace(/'/g, "\\'");
+              return `
+                <div class="source-card" style="cursor:pointer;" data-source-title="${title}" data-source-type="${type}" onclick="openSourceDocument('${safeTitle}', '${safeType}')">
+                  <div><strong>${title}</strong><div style="color:var(--text-2); font-size:0.86rem;">${type}</div></div>
+                  <div style="text-align:right; color:#c4b5fd; font-family:'JetBrains Mono', monospace;">
+                    ${confidence}<br>
+                    <button type="button" class="doc-view-btn" onclick="event.stopPropagation(); openSourceDocument('${safeTitle}', '${safeType}')" style="background:none; border:none; color:var(--cyan); font-weight:600; cursor:pointer; padding:2px 0 0 0; font-size:0.88rem; text-decoration:underline;">View Document</button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
           </div>` : '';
         chatLog.insertAdjacentHTML('beforeend', `
           <div class="msg ai">
-            <div class="avatar ai"><i data-lucide="bot"></i></div>
+            <div class="avatar ai"><i data-lucide="cpu"></i></div>
             <div class="bubble">
               ${answer.text}
               ${tableHtml}
@@ -3528,6 +3910,19 @@
     }
 
     function setupChat() {
+      const chatLog = document.getElementById('chatLog');
+      if (chatLog) {
+        chatLog.addEventListener('click', (e) => {
+          const card = e.target.closest('.source-card');
+          if (card) {
+            const title = card.dataset.sourceTitle || card.querySelector('strong')?.textContent.trim();
+            const type = card.dataset.sourceType || card.querySelector('div[style*="font-size"]')?.textContent.trim();
+            if (title) {
+              openSourceDocument(title, type);
+            }
+          }
+        });
+      }
       document.getElementById('sendBtn').addEventListener('click', () => {
         const input = document.getElementById('chatInput');
         const question = input.value.trim();
@@ -3804,16 +4199,20 @@
             entities: entitiesCount,
             confidence,
             date: dateString,
+            repairDate: dateString,
+            nextInspectionDate: calculateFutureInspectionDate(dateString),
             uploaded: true,
             summary: `Uploaded file ${file.name} ingested from the document upload zone.`,
             owner: uploaderName,
+            repairEngineer: `${uploaderName} (Assigned Maintenance Lead)`,
             source: 'Manual upload',
             department: 'Document Hub',
             status: 'Uploaded',
             reviewCycle: 'On demand',
             retention: 'User managed',
-            whatDone: whatDone,
-            howSolved: howSolved,
+            rootCause: 'User-uploaded maintenance document ingested for root cause tracking and operational memory indexing.',
+            whatDone: whatDone || 'Uploaded technical document ingested into refinery memory.',
+            howSolved: howSolved || 'Auto-indexed parameters and linked to refinery knowledge graph.',
             linkedAssets: ['Auto-linked assets'],
             regulations: ['Factory Act 1948'],
             tags: ['Upload', 'User file', file.type || 'Unknown format'],
@@ -4081,7 +4480,7 @@
     // REAL-TIME SIMULATION ENGINE
     // ============================================================
     const liveAlertTemplates = [
-      { severity: 'info',     msg: 'AI co-pilot indexed 3 new compliance evidence documents from Shift B.' },
+      { severity: 'info',     msg: 'Expert engine indexed 3 new compliance evidence documents from Shift B.' },
       { severity: 'warning',  msg: 'Vibration reading on P-102 crossed 5.8 mm/s — trending above alarm threshold.' },
       { severity: 'info',     msg: 'Knowledge graph density increased to {density}% after new cross-links detected.' },
       { severity: 'critical', msg: 'Pressure spike detected at V-503 — PSV set-point gap under review.' },
