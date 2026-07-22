@@ -1,7 +1,9 @@
 # IKIP — Industrial Knowledge Intelligence Platform
 ## Project Brain & Architecture Guide
+**Designed and Developed by:** Aaditya Joshi & Sahil Patil
 
 Welcome to the **IKIP** (Industrial Knowledge Intelligence Platform) project brain. This document contains a detailed overview of the system architecture, file structure, workflows, data models, and configurations of this project.
+
 
 ---
 
